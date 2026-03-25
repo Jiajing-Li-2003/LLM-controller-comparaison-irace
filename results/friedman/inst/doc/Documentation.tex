@@ -1,0 +1,172 @@
+\documentclass[a4paper,11pt]{article}
+
+\usepackage[english]{babel}
+
+\usepackage[left=2.5cm, right=2.5cm]{geometry}
+
+\setlength{\parindent}{0em}
+
+\begin{document}
+
+
+ The material contained in this Documentation
+is in part also contained in the function \texttt{example.ci} of the
+package.
+
+\section{Main and interaction effect analysis}
+
+
+Organise your data in a \texttt{data.frame} X. Eg.:
+
+\begin{verbatim}
+instance algorithm class results
+inst1    alg1      boh1   40
+inst1    alg2      boh1   40
+...
+inst1    alg1      boh2   40
+inst1    alg2      boh2   40
+...
+\end{verbatim}
+
+\texttt{instance, algorithm} and \texttt{class} must be factors. Note
+that the columns names can be redefined but \texttt{class} must remain.
+
+\begin{verbatim}
+> formula <- results ~ instance * algorithm
+\end{verbatim}
+
+See R documentation for formula syntax (above all on the difference
+between the sign ``*'' and ``+'' in the formula).
+
+\bigskip
+Parametric analysis:
+\begin{verbatim}
+> aov(formula,data=X)
+\end{verbatim}
+
+No need for the library so far. Everything is already in R.
+
+\medskip
+
+Then load the library:
+
+\begin{verbatim}
+> source("lib_effects.R")
+\end{verbatim}
+
+ 
+Nonparametric analysis (by ranks):
+\begin{verbatim}
+>  Friedman.test(formula,data=X)
+\end{verbatim}
+
+Nonparametric permutation analysis :
+\begin{verbatim}
+> permut.aov(formula,data=X,method="same",B=IN.PERM,type="csp")    
+\end{verbatim}
+
+Values \texttt{eff1} \texttt{eff2} \texttt{inter} represent main inteeractions and
+intereaction effects, respectively.
+
+\section{Post-hoc analysis}
+
+The packages \texttt{lattice} e \texttt{Hmisc} must be installed.
+
+Organise your data in a \texttt{data.frame} X. Eg.:
+
+\begin{verbatim}
+instance algorithm class results
+inst1    alg1      boh1   40
+inst1    alg2      boh1   40
+...
+inst1    alg1      boh2   40
+inst1    alg2      boh2   40
+...
+\end{verbatim}
+
+instance, algorithm and class must be factors.
+
+Then from R, load the library:
+
+\begin{verbatim}
+> source("lib_posthoc.R")
+\end{verbatim}
+
+for a parametric analysis:
+
+\begin{verbatim}
+> R <-AP.SCI(results~algorithm*instance,data=X,method="Parametric",test="Tukey")
+> plot.ci(R)
+\end{verbatim}
+
+Note that, in the formula above \texttt{algorithm * instance} accounts
+also for a significant interaction while \texttt{algorithm + instance}
+does not account for interaction.
+
+\smallskip
+
+In the nonparametric case:
+
+\begin{verbatim}
+> R<-AP.SCI(results~algorithm+instance,data=X,method="Ranks",test="Conover")
+> plot.ci(R)
+\end{verbatim}
+
+Interaction cannot be handled in this case. The output will be in a file
+named \texttt{plot.ci.eps}. For
+improving graphical layout edit the function \texttt{plot.ci.xclass}.
+
+
+
+\bigskip
+
+If instead the analysis includes more than one class of instances that
+for some reason one wants to maintain distinct:
+
+\begin{verbatim}
+> R <- AP.SCI.wrapper.class(results~algorithm*instance,data=X,
+                            method="Parametric",test="Tukey")
+> plot.ci.xclass(R)
+\end{verbatim}
+
+or
+
+\begin{verbatim}
+> R <- AP.SCI.wrapper.class(results~algorithm+instance,data=X,
+                            method="Ranks",test="Conover")
+> plot.ci.xclass(R)
+\end{verbatim}
+
+The output will be in a file named \texttt{plot.ci.xclass.eps}. For
+improving graphical layout edit the function \texttt{plot.ci.xclass}.
+
+
+
+\subsection{Complete nomenclature}
+
+\begin{description}
+\item[\texttt{formula}:] ...
+\item[\texttt{method}:] \texttt{"Parametric", "Ranks", "Permutations"}
+\item[\texttt{test}:] Parametric case: \texttt{"Tukey", "LSD",
+    "LSDBonferroni", "Sheffe"}\\ Nonparametric case:
+  \texttt{"Conover","Sheskin","Permutations"}, i.e.,  Friedman test from
+  Conover or Sheskin or permutation test on ranks.
+\item[\texttt{alpha}:] is the family or experiment wise error rate. 
+\item[\texttt{adj.method}:] only in Permutation method.
+  \texttt{"simul.Bonferroni", ``none'' "Bonferroni"}
+\item[\texttt{type}:] \texttt{"csp","usp"} Constrained and Unconstrained
+  Synchrnised Permutations
+\item[\texttt{B}:] only in Permutation method. Numer of Monte Carlo
+  Samples from the permutation space.
+\end{description}
+
+\medskip
+Values 
+\begin{description}
+\item \texttt{lower} and \texttt{upper}
+\end{description}
+
+ %   plot.hsu(Y,file=paste(ex,"-csp-",wh,sep=""),"CSP",dev="eps")
+    
+
+\end{document}
