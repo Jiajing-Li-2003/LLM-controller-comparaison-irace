@@ -9,24 +9,37 @@ import json
 
 # ─── Contexte donné au LLM ────────────────────────────────────────────────────
 SYSTEM_PROMPT = """
-Tu es un traducteur strict de texte vers une configuration FSM pour ARGoS3.
+Tu es un traducteur strict vers le format FSM d'ARGoS3/AutoMoDe.
+Réponds UNIQUEMENT avec la ligne "FSM:".
 
-RÈGLES ABSOLUES :
-1. Réponds UNIQUEMENT avec la ligne commençant par "FSM:".
-2. L'état Stop (--sX 1) ne prend QUE le paramètre --cleX. N'ajoute JAMAIS --rwmX à un état Stop.
+FORMAT OBLIGATOIRE :
+FSM: --nstates N --s0 B0 [params0] [--n0 T --n0x0 D --c0x0 C --p0x0 P --w0x0 W] --s1 B1 [params1] [--n1 T --n1x0 D --c1x0 C --p1x0 P --w1x0 W]
 
-CORRESPONDANCES DES TRANSITIONS (--nIxJ) :
-- "sol noir" = 0
-- "sol gris" = 1
-- "sol blanc" = 2
+COMPORTEMENTS (--sI BI) :
+  0 = Exploration  → DOIT avoir --rwmI [1..100] ET --cleI [0..3]
+  1 = Stop         → DOIT avoir --cleI [0..3]
 
-EXEMPLES PARFAITS (à imiter scrupuleusement) :
+COULEURS LED (--cleI) : 0=aucune 1=rouge 2=vert 3=bleu
 
-Phrase : "les robots explorent et s'arrêtent sur le sol noir"
-FSM: --nstates 2 --s0 0 --rwm0 10 --cle0 0 --s1 1 --cle1 0 --n0x1 0 --p0x1 1.0
+TRANSITIONS (de l'état I vers état J) :
+  --nI T         = nombre de transitions partant de l'état I (0 s'il n'y en a aucune)
+  --nIx0 0       = destination (0 signifie l'autre état)
+  --cIx0 TYPE    = type de condition : 
+                   0 = sol noir
+                   1 = sol gris
+                   2 = sol blanc
+                   3 = NbVoisins >= seuil
+                   4 = NbVoisins < seuil
+  --pIx0 P       = probabilité (toujours 1.0 par défaut)
+  --wIx0 W       = LE SEUIL EXACT. Si l'utilisateur demande "4 voisins", alors W=4. N'utilise jamais ce nombre dans --cIx0 !
 
-Phrase : "les robots explorent et s'arrêtent sur le sol blanc"
-FSM: --nstates 2 --s0 0 --rwm0 10 --cle0 0 --s1 1 --cle1 0 --n0x1 2 --p0x1 1.0
+EXEMPLES CORRECTS :
+
+Phrase : "les robots explorent en vert et s'arrêtent sur le sol noir en rouge"
+FSM: --nstates 2 --s0 0 --rwm0 10 --cle0 2 --n0 1 --n0x0 0 --c0x0 0 --p0x0 1.0 --s1 1 --cle1 1 --n1 0
+
+Phrase : "Les robots explorent en vert et s'arrêtent sur le sol noir en rouge. Si un robot détecte 4 voisins ou plus, il recommence à explorer."
+FSM: --nstates 2 --s0 0 --rwm0 10 --cle0 2 --n0 1 --n0x0 0 --c0x0 0 --p0x0 1.0 --s1 1 --cle1 1 --n1 1 --n1x0 0 --c1x0 3 --p1x0 1.0 --w1x0 4
 """
 # ─── Appel au LLM local (Ollama) ──────────────────────────────────────────────
 def get_fsm_from_llm(description: str) -> str:
