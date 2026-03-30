@@ -7,72 +7,94 @@ import re
 import requests
 import json
 
-# ─── Contexte donné au LLM ────────────────────────────────────────────────────
+# ─── Context provided to the LLM ──────────────────────────────────────────────
 SYSTEM_PROMPT = """
-Tu es un traducteur strict vers le format FSM d'ARGoS3/AutoMoDe.
-Réponds UNIQUEMENT avec la ligne "FSM:".
+You are an expert translator to the ARGoS3/AutoMoDe FSM format.
 
-FORMAT OBLIGATOIRE :
-FSM: --nstates N --s0 B0 [params0] [--n0 T --n0x0 D --c0x0 C --p0x0 P --w0x0 W] --s1 B1 [params1] [--n1 T --n1x0 D --c1x0 C --p1x0 P --w1x0 W]
+STEP 1: THINKING
+Analyze the request and write down the states and transitions required.
 
-COMPORTEMENTS (--sI BI) :
-  0 = Exploration  → DOIT avoir --rwmI [1..100] ET --cleI [0..3]
-  1 = Stop         → DOIT avoir --cleI [0..3]
+STEP 2: FSM GENERATION
+Output the final configuration starting strictly with "FSM: " on a single line.
 
-COULEURS LED (--cleI) : 0=aucune 1=rouge 2=vert 3=bleu
+MANDATORY FORMAT:
+FSM: --nstates N --s0 B [params0] [--n0 T --n0x0 D --c0x0 C --p0x0 P --w0x0 W] --s1 B [params1] [--n1 T --n1x0 D --c1x0 C --p1x0 P --w1x0 W]
 
-TRANSITIONS (de l'état I vers état J) :
-  --nI T         = nombre de transitions partant de l'état I (0 s'il n'y en a aucune)
-  --nIx0 0       = destination (0 signifie l'autre état)
-  --cIx0 TYPE    = type de condition : 
-                   0 = sol noir
-                   1 = sol gris
-                   2 = sol blanc
-                   3 = NbVoisins >= seuil
-                   4 = NbVoisins < seuil
-  --pIx0 P       = probabilité (toujours 1.0 par défaut)
-  --wIx0 W       = LE SEUIL EXACT. Si l'utilisateur demande "4 voisins", alors W=4. N'utilise jamais ce nombre dans --cIx0 !
+═══ BEHAVIORS (--sI B) ═══
+  0 = Exploration    → MANDATORY params: --rwmI [1..100]  --cleI [0..3]
+  1 = Stop           → MANDATORY params: --cleI [0..3]
+  2 = Phototaxis     → MANDATORY params: --cleI [0..3]
+  3 = AntiPhototaxis → MANDATORY params: --cleI [0..3]
+  4 = Attraction     → MANDATORY params: --attI [1..10]   --cleI [0..3]
+  5 = Repulsion      → MANDATORY params: --repI [1..10]   --cleI [0..3]
 
-EXEMPLES CORRECTS :
+═══ LED COLORS (--cleI) ═══
+  0=none  1=red  2=green  3=blue
 
-Phrase : "les robots explorent en vert et s'arrêtent sur le sol noir en rouge"
-FSM: --nstates 2 --s0 0 --rwm0 10 --cle0 2 --n0 1 --n0x0 0 --c0x0 0 --p0x0 1.0 --s1 1 --cle1 1 --n1 0
+═══ TRANSITIONS (from state I to state J) ═══
+  --nI T       = number of transitions leaving state I (0 = none)
+  --nIxK D     = destination index (0 = 1st other state, 1 = 2nd other state)
+  --cIxK C     = condition type:
+                 0=black floor   1=gray floor   2=white floor
+                 3=NeighborsCount >= W   4=NeighborsCount < W
+  --pIxK P     = trigger probability (always 1.0)
+  --wIxK W     = NEIGHBORS THRESHOLD — MANDATORY if --cIxK is 3 or 4
 
-Phrase : "Les robots explorent en vert et s'arrêtent sur le sol noir en rouge. Si un robot détecte 4 voisins ou plus, il recommence à explorer."
-FSM: --nstates 2 --s0 0 --rwm0 10 --cle0 2 --n0 1 --n0x0 0 --c0x0 0 --p0x0 1.0 --s1 1 --cle1 1 --n1 1 --n1x0 0 --c1x0 3 --p1x0 1.0 --w1x0 4
+═══ CORRECT EXAMPLES ═══
+
+Phrase: "The robots explore in green. If they see the black floor, they stop in red. Then, if a robot detects 3 neighbors or more, it moves away in blue."
+Thinking:
+- 3 states needed.
+- State 0: Exploration (green). 1 transition: black floor -> State 1.
+- State 1: Stop (red). 1 transition: NeighborsCount >= 3 -> State 2. (requires --w1x0 3)
+- State 2: Repulsion (blue). 0 transitions.
+FSM: --nstates 3 --s0 0 --rwm0 10 --cle0 2 --n0 1 --n0x0 0 --c0x0 0 --p0x0 1.0 --s1 1 --cle1 1 --n1 1 --n1x0 1 --c1x0 3 --p1x0 1.0 --w1x0 3 --s2 5 --rep2 5 --cle2 3 --n2 0
 """
-# ─── Appel au LLM local (Ollama) ──────────────────────────────────────────────
+# ─── Local LLM Call (Ollama) ────────────────────────────────────────────────
 def get_fsm_from_llm(description: str) -> str:
-    prompt = SYSTEM_PROMPT + "\n\nUtilisateur: " + description
+    prompt = SYSTEM_PROMPT + "\n\nUser: " + description
 
-    print(f"\n📤 Envoi au LLM local : \"{description}\"")
+    print(f"\n📤 Sending to local LLM: \"{description}\"")
 
     response = requests.post(
         "http://localhost:11434/api/generate",
         json={
-            "model": "llama3.2",
+            "model": "mistral",
             "prompt": prompt,
-            "stream": False
+            "stream": False,
+            "options": {
+                "temperature": 0.0
+            }
         }
     )
 
     raw = response.json()["response"].strip()
-    print(f"📥 Réponse brute : {raw}")
+    print(f"📥 Raw response:\n{raw}")
 
-    match = re.search(r'FSM:\s*(.+)', raw)
-    if not match:
-        raise ValueError(f"Pas de ligne FSM: dans : {raw}")
+    # Vérifie si le marqueur FSM: est bien là
+    if "FSM:" not in raw:
+        raise ValueError(f"No FSM: marker found in: {raw}")
 
-    fsm_config = match.group(1).strip()
-    print(f"✅ FSM extrait : {fsm_config}")
+    # Coupe le texte pour ne garder que ce qui est APRES "FSM:"
+    fsm_part = raw.split("FSM:")[1]
+
+    # Nettoie les balises markdown (```) si l'IA en a mis
+    fsm_part = fsm_part.replace("```", "")
+
+    # Remplace tous les sauts de ligne par des espaces et nettoie les blancs
+    fsm_config = " ".join(fsm_part.split())
+
+    if not fsm_config:
+        raise ValueError("L'extraction de la FSM a donné un résultat vide.")
+
+    print(f"✅ Extracted FSM: {fsm_config}")
     return fsm_config
-
-# ─── Mise à jour du fichier .argos ────────────────────────────────────────────
+# ─── Updating the .argos file ───────────────────────────────────────────────
 def update_argos_file(argos_path: str, fsm_config: str):
     with open(argos_path, 'r', encoding='utf-8') as f:
         content = f.read()
 
-    # Regex très permissive — gère tous les cas
+    # Very permissive Regex — handles all cases
     new_content, count = re.subn(
         r'fsm-config\s*=\s*["\'][^"\']*["\']',
         f'fsm-config="{fsm_config}"',
@@ -80,37 +102,37 @@ def update_argos_file(argos_path: str, fsm_config: str):
     )
 
     if count == 0:
-        # Debug : affiche ce qui est dans le fichier
+        # Debug: prints what is found in the file
         for line in content.split('\n'):
             if 'fsm' in line.lower() or 'params' in line.lower():
-                print(f"DEBUG ligne trouvée : {repr(line)}")
-        raise ValueError("fsm-config non trouvé dans le fichier .argos")
+                print(f"DEBUG line found: {repr(line)}")
+        raise ValueError("fsm-config not found in the .argos file")
 
     with open(argos_path, 'w', encoding='utf-8') as f:
         f.write(new_content)
 
-    print(f"📝 Fichier mis à jour : {argos_path}")
+    print(f"📝 File updated: {argos_path}")
 
-# ─── Lancement d'ARGoS ────────────────────────────────────────────────────────
+# ─── Launching ARGoS ────────────────────────────────────────────────────────
 def launch_argos(argos_path: str):
-    print(f"\n🚀 Lancement de la simulation...")
+    print(f"\n🚀 Launching the simulation...")
     subprocess.run(["argos3", "-c", argos_path])
 
-# ─── Programme principal ──────────────────────────────────────────────────────
+# ─── Main Program ───────────────────────────────────────────────────────────
 def main():
     ARGOS_FILE = "/home/ubuntu/mandarina-supp/software/argos3-installation/" \
                  "experiments-loop-functions/scenarios/mandarina/" \
                  "automode_experiments/bxo-01-11.argos"
 
-    # Phrase en argument ou en mode interactif
+    # Phrase as argument or in interactive mode
     if len(sys.argv) > 1:
         description = " ".join(sys.argv[1:])
     else:
-        print("💬 Décris le comportement des robots :")
+        print("💬 Describe the robots' behavior:")
         description = input("> ").strip()
 
     if not description:
-        print("❌ Description vide.")
+        print("❌ Empty description.")
         return
 
     fsm_config = get_fsm_from_llm(description)
