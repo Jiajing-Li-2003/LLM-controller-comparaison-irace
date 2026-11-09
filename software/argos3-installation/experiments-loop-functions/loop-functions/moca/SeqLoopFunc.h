@@ -99,6 +99,8 @@ class SeqLoopFunction: public CoreLoopFunctions {
     UInt32 m_unNumberEdges;
     UInt32 m_unNumberBoxes;
     Real m_fLenghtBoxes;
+    Real m_fDistributionRatio;   // LLM_MISSION_DISTRIBUTION_RATIO
+
     CArenaEntity* m_pcArena;
     UInt32 m_unTrnTime;
     bool m_bMaximization;

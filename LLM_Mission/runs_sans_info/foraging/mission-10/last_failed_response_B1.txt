@@ -1,0 +1,61 @@
+## Reasoning
+
+Let me analyze the mission and the champion:
+
+**Mission Analysis:**
+- Score decreases by 1 for each item from the "good" half (either BLUE or GREEN side)
+- Score increases by 1 for each item from the "bad" half
+- We want to minimize score → maximize delivery of good items, avoid bad items
+- Robots need to: navigate to source (black floor), pick up items, return to nest (white floor)
+- Red wall = nest side, Blue/Green walls = source sides
+
+**Champion Analysis:**
+- State 0: GoToColor(cyan=6), transitions on perceiving red(1) → go to state that avoids red
+- State 1: GoAwayColor(gray=1) with multiple transitions back to state 2
+- State 2: GoToColor(gray=1) with complex transitions including cyan perception
+
+The champion score of -1.15 is decent but let me think about improvements.
+
+**Key insight:** 
+- Robots should go toward the source (black floor), collect from one specific side (BLUE or GREEN), then return to nest (white floor)
+- Colors: 1=red, 2=green, 3=blue, 4=yellow, 5=magenta, 6=cyan
+- Floor: BLACK=source, WHITE=nest, GRAY=middle
+
+**Strategy:**
+1. State for exploring/going to source
+2. State for going to nest when carrying item
+3. Use floor color to detect location
+
+Let me design machines:
+
+**Machine 1 (Champion - exact copy):**
+As given.
+
+**Machine 2 (Exploit champion - tweak probabilities):**
+Small probability shifts on champion.
+
+**Machine 3 (Exploit - different color target):**
+Try GoToColor with green(2) instead of cyan(6).
+
+**Machine 4 (New topology - 3 states, clear foraging):**
+- S0: Exploration, on BLACK floor → go to S1 (collect)
+- S1: GoToColor(red=1) to return to nest, on WHITE → go to S2
+- S2: GoToColor(black floor area) using exploration, on BLACK → S1
+
+**Machine 5 (GoToColor blue walls):**
+Target blue walls specifically.
+
+Let me design the 14 machines:
+
+FSM designs:
+
+1. Champion (exact)
+2. Champion with tweaked probabilities
+3. 3-state: explore→black floor→go to red wall (nest)→explore
+4. 3-state targeting green walls (good items)
+5. 3-state targeting blue walls
+6. 2-state simple forager
+7. 4-state with item type discrimination
+8. Exploration-based with floor triggers
+9. GoToColor variations
+10-14. Various explorations

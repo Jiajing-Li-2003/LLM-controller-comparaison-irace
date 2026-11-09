@@ -265,10 +265,52 @@ src/CMakeFiles/automode.dir/modules/AutoMoDeBehaviourGoAwayColor.cpp.s: cmake_fo
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/automode.dir/modules/AutoMoDeBehaviourGoAwayColor.cpp.s"
 	cd /home/ubuntu/mandarina-supp/software/argos3-installation/automode/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ubuntu/mandarina-supp/software/argos3-installation/automode/src/modules/AutoMoDeBehaviourGoAwayColor.cpp -o CMakeFiles/automode.dir/modules/AutoMoDeBehaviourGoAwayColor.cpp.s
 
+src/CMakeFiles/automode.dir/modules/AutoMoDeBehaviourSpiral.cpp.o: src/CMakeFiles/automode.dir/flags.make
+src/CMakeFiles/automode.dir/modules/AutoMoDeBehaviourSpiral.cpp.o: ../src/modules/AutoMoDeBehaviourSpiral.cpp
+src/CMakeFiles/automode.dir/modules/AutoMoDeBehaviourSpiral.cpp.o: src/CMakeFiles/automode.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/mandarina-supp/software/argos3-installation/automode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object src/CMakeFiles/automode.dir/modules/AutoMoDeBehaviourSpiral.cpp.o"
+	cd /home/ubuntu/mandarina-supp/software/argos3-installation/automode/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/automode.dir/modules/AutoMoDeBehaviourSpiral.cpp.o -MF CMakeFiles/automode.dir/modules/AutoMoDeBehaviourSpiral.cpp.o.d -o CMakeFiles/automode.dir/modules/AutoMoDeBehaviourSpiral.cpp.o -c /home/ubuntu/mandarina-supp/software/argos3-installation/automode/src/modules/AutoMoDeBehaviourSpiral.cpp
+
+src/CMakeFiles/automode.dir/modules/AutoMoDeBehaviourSpiral.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/automode.dir/modules/AutoMoDeBehaviourSpiral.cpp.i"
+	cd /home/ubuntu/mandarina-supp/software/argos3-installation/automode/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ubuntu/mandarina-supp/software/argos3-installation/automode/src/modules/AutoMoDeBehaviourSpiral.cpp > CMakeFiles/automode.dir/modules/AutoMoDeBehaviourSpiral.cpp.i
+
+src/CMakeFiles/automode.dir/modules/AutoMoDeBehaviourSpiral.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/automode.dir/modules/AutoMoDeBehaviourSpiral.cpp.s"
+	cd /home/ubuntu/mandarina-supp/software/argos3-installation/automode/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ubuntu/mandarina-supp/software/argos3-installation/automode/src/modules/AutoMoDeBehaviourSpiral.cpp -o CMakeFiles/automode.dir/modules/AutoMoDeBehaviourSpiral.cpp.s
+
+src/CMakeFiles/automode.dir/modules/AutoMoDeBehaviourFlockCenter.cpp.o: src/CMakeFiles/automode.dir/flags.make
+src/CMakeFiles/automode.dir/modules/AutoMoDeBehaviourFlockCenter.cpp.o: ../src/modules/AutoMoDeBehaviourFlockCenter.cpp
+src/CMakeFiles/automode.dir/modules/AutoMoDeBehaviourFlockCenter.cpp.o: src/CMakeFiles/automode.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/mandarina-supp/software/argos3-installation/automode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object src/CMakeFiles/automode.dir/modules/AutoMoDeBehaviourFlockCenter.cpp.o"
+	cd /home/ubuntu/mandarina-supp/software/argos3-installation/automode/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/automode.dir/modules/AutoMoDeBehaviourFlockCenter.cpp.o -MF CMakeFiles/automode.dir/modules/AutoMoDeBehaviourFlockCenter.cpp.o.d -o CMakeFiles/automode.dir/modules/AutoMoDeBehaviourFlockCenter.cpp.o -c /home/ubuntu/mandarina-supp/software/argos3-installation/automode/src/modules/AutoMoDeBehaviourFlockCenter.cpp
+
+src/CMakeFiles/automode.dir/modules/AutoMoDeBehaviourFlockCenter.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/automode.dir/modules/AutoMoDeBehaviourFlockCenter.cpp.i"
+	cd /home/ubuntu/mandarina-supp/software/argos3-installation/automode/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ubuntu/mandarina-supp/software/argos3-installation/automode/src/modules/AutoMoDeBehaviourFlockCenter.cpp > CMakeFiles/automode.dir/modules/AutoMoDeBehaviourFlockCenter.cpp.i
+
+src/CMakeFiles/automode.dir/modules/AutoMoDeBehaviourFlockCenter.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/automode.dir/modules/AutoMoDeBehaviourFlockCenter.cpp.s"
+	cd /home/ubuntu/mandarina-supp/software/argos3-installation/automode/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ubuntu/mandarina-supp/software/argos3-installation/automode/src/modules/AutoMoDeBehaviourFlockCenter.cpp -o CMakeFiles/automode.dir/modules/AutoMoDeBehaviourFlockCenter.cpp.s
+
+src/CMakeFiles/automode.dir/modules/AutoMoDeBehaviourZigZag.cpp.o: src/CMakeFiles/automode.dir/flags.make
+src/CMakeFiles/automode.dir/modules/AutoMoDeBehaviourZigZag.cpp.o: ../src/modules/AutoMoDeBehaviourZigZag.cpp
+src/CMakeFiles/automode.dir/modules/AutoMoDeBehaviourZigZag.cpp.o: src/CMakeFiles/automode.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/mandarina-supp/software/argos3-installation/automode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building CXX object src/CMakeFiles/automode.dir/modules/AutoMoDeBehaviourZigZag.cpp.o"
+	cd /home/ubuntu/mandarina-supp/software/argos3-installation/automode/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/automode.dir/modules/AutoMoDeBehaviourZigZag.cpp.o -MF CMakeFiles/automode.dir/modules/AutoMoDeBehaviourZigZag.cpp.o.d -o CMakeFiles/automode.dir/modules/AutoMoDeBehaviourZigZag.cpp.o -c /home/ubuntu/mandarina-supp/software/argos3-installation/automode/src/modules/AutoMoDeBehaviourZigZag.cpp
+
+src/CMakeFiles/automode.dir/modules/AutoMoDeBehaviourZigZag.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/automode.dir/modules/AutoMoDeBehaviourZigZag.cpp.i"
+	cd /home/ubuntu/mandarina-supp/software/argos3-installation/automode/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ubuntu/mandarina-supp/software/argos3-installation/automode/src/modules/AutoMoDeBehaviourZigZag.cpp > CMakeFiles/automode.dir/modules/AutoMoDeBehaviourZigZag.cpp.i
+
+src/CMakeFiles/automode.dir/modules/AutoMoDeBehaviourZigZag.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/automode.dir/modules/AutoMoDeBehaviourZigZag.cpp.s"
+	cd /home/ubuntu/mandarina-supp/software/argos3-installation/automode/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ubuntu/mandarina-supp/software/argos3-installation/automode/src/modules/AutoMoDeBehaviourZigZag.cpp -o CMakeFiles/automode.dir/modules/AutoMoDeBehaviourZigZag.cpp.s
+
 src/CMakeFiles/automode.dir/modules/AutoMoDeCondition.cpp.o: src/CMakeFiles/automode.dir/flags.make
 src/CMakeFiles/automode.dir/modules/AutoMoDeCondition.cpp.o: ../src/modules/AutoMoDeCondition.cpp
 src/CMakeFiles/automode.dir/modules/AutoMoDeCondition.cpp.o: src/CMakeFiles/automode.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/mandarina-supp/software/argos3-installation/automode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object src/CMakeFiles/automode.dir/modules/AutoMoDeCondition.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/mandarina-supp/software/argos3-installation/automode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building CXX object src/CMakeFiles/automode.dir/modules/AutoMoDeCondition.cpp.o"
 	cd /home/ubuntu/mandarina-supp/software/argos3-installation/automode/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/automode.dir/modules/AutoMoDeCondition.cpp.o -MF CMakeFiles/automode.dir/modules/AutoMoDeCondition.cpp.o.d -o CMakeFiles/automode.dir/modules/AutoMoDeCondition.cpp.o -c /home/ubuntu/mandarina-supp/software/argos3-installation/automode/src/modules/AutoMoDeCondition.cpp
 
 src/CMakeFiles/automode.dir/modules/AutoMoDeCondition.cpp.i: cmake_force
@@ -282,7 +324,7 @@ src/CMakeFiles/automode.dir/modules/AutoMoDeCondition.cpp.s: cmake_force
 src/CMakeFiles/automode.dir/modules/AutoMoDeConditionBlackFloor.cpp.o: src/CMakeFiles/automode.dir/flags.make
 src/CMakeFiles/automode.dir/modules/AutoMoDeConditionBlackFloor.cpp.o: ../src/modules/AutoMoDeConditionBlackFloor.cpp
 src/CMakeFiles/automode.dir/modules/AutoMoDeConditionBlackFloor.cpp.o: src/CMakeFiles/automode.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/mandarina-supp/software/argos3-installation/automode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object src/CMakeFiles/automode.dir/modules/AutoMoDeConditionBlackFloor.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/mandarina-supp/software/argos3-installation/automode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building CXX object src/CMakeFiles/automode.dir/modules/AutoMoDeConditionBlackFloor.cpp.o"
 	cd /home/ubuntu/mandarina-supp/software/argos3-installation/automode/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/automode.dir/modules/AutoMoDeConditionBlackFloor.cpp.o -MF CMakeFiles/automode.dir/modules/AutoMoDeConditionBlackFloor.cpp.o.d -o CMakeFiles/automode.dir/modules/AutoMoDeConditionBlackFloor.cpp.o -c /home/ubuntu/mandarina-supp/software/argos3-installation/automode/src/modules/AutoMoDeConditionBlackFloor.cpp
 
 src/CMakeFiles/automode.dir/modules/AutoMoDeConditionBlackFloor.cpp.i: cmake_force
@@ -296,7 +338,7 @@ src/CMakeFiles/automode.dir/modules/AutoMoDeConditionBlackFloor.cpp.s: cmake_for
 src/CMakeFiles/automode.dir/modules/AutoMoDeConditionWhiteFloor.cpp.o: src/CMakeFiles/automode.dir/flags.make
 src/CMakeFiles/automode.dir/modules/AutoMoDeConditionWhiteFloor.cpp.o: ../src/modules/AutoMoDeConditionWhiteFloor.cpp
 src/CMakeFiles/automode.dir/modules/AutoMoDeConditionWhiteFloor.cpp.o: src/CMakeFiles/automode.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/mandarina-supp/software/argos3-installation/automode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building CXX object src/CMakeFiles/automode.dir/modules/AutoMoDeConditionWhiteFloor.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/mandarina-supp/software/argos3-installation/automode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Building CXX object src/CMakeFiles/automode.dir/modules/AutoMoDeConditionWhiteFloor.cpp.o"
 	cd /home/ubuntu/mandarina-supp/software/argos3-installation/automode/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/automode.dir/modules/AutoMoDeConditionWhiteFloor.cpp.o -MF CMakeFiles/automode.dir/modules/AutoMoDeConditionWhiteFloor.cpp.o.d -o CMakeFiles/automode.dir/modules/AutoMoDeConditionWhiteFloor.cpp.o -c /home/ubuntu/mandarina-supp/software/argos3-installation/automode/src/modules/AutoMoDeConditionWhiteFloor.cpp
 
 src/CMakeFiles/automode.dir/modules/AutoMoDeConditionWhiteFloor.cpp.i: cmake_force
@@ -310,7 +352,7 @@ src/CMakeFiles/automode.dir/modules/AutoMoDeConditionWhiteFloor.cpp.s: cmake_for
 src/CMakeFiles/automode.dir/modules/AutoMoDeConditionGrayFloor.cpp.o: src/CMakeFiles/automode.dir/flags.make
 src/CMakeFiles/automode.dir/modules/AutoMoDeConditionGrayFloor.cpp.o: ../src/modules/AutoMoDeConditionGrayFloor.cpp
 src/CMakeFiles/automode.dir/modules/AutoMoDeConditionGrayFloor.cpp.o: src/CMakeFiles/automode.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/mandarina-supp/software/argos3-installation/automode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building CXX object src/CMakeFiles/automode.dir/modules/AutoMoDeConditionGrayFloor.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/mandarina-supp/software/argos3-installation/automode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_21) "Building CXX object src/CMakeFiles/automode.dir/modules/AutoMoDeConditionGrayFloor.cpp.o"
 	cd /home/ubuntu/mandarina-supp/software/argos3-installation/automode/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/automode.dir/modules/AutoMoDeConditionGrayFloor.cpp.o -MF CMakeFiles/automode.dir/modules/AutoMoDeConditionGrayFloor.cpp.o.d -o CMakeFiles/automode.dir/modules/AutoMoDeConditionGrayFloor.cpp.o -c /home/ubuntu/mandarina-supp/software/argos3-installation/automode/src/modules/AutoMoDeConditionGrayFloor.cpp
 
 src/CMakeFiles/automode.dir/modules/AutoMoDeConditionGrayFloor.cpp.i: cmake_force
@@ -324,7 +366,7 @@ src/CMakeFiles/automode.dir/modules/AutoMoDeConditionGrayFloor.cpp.s: cmake_forc
 src/CMakeFiles/automode.dir/modules/AutoMoDeConditionNeighborsCount.cpp.o: src/CMakeFiles/automode.dir/flags.make
 src/CMakeFiles/automode.dir/modules/AutoMoDeConditionNeighborsCount.cpp.o: ../src/modules/AutoMoDeConditionNeighborsCount.cpp
 src/CMakeFiles/automode.dir/modules/AutoMoDeConditionNeighborsCount.cpp.o: src/CMakeFiles/automode.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/mandarina-supp/software/argos3-installation/automode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building CXX object src/CMakeFiles/automode.dir/modules/AutoMoDeConditionNeighborsCount.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/mandarina-supp/software/argos3-installation/automode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_22) "Building CXX object src/CMakeFiles/automode.dir/modules/AutoMoDeConditionNeighborsCount.cpp.o"
 	cd /home/ubuntu/mandarina-supp/software/argos3-installation/automode/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/automode.dir/modules/AutoMoDeConditionNeighborsCount.cpp.o -MF CMakeFiles/automode.dir/modules/AutoMoDeConditionNeighborsCount.cpp.o.d -o CMakeFiles/automode.dir/modules/AutoMoDeConditionNeighborsCount.cpp.o -c /home/ubuntu/mandarina-supp/software/argos3-installation/automode/src/modules/AutoMoDeConditionNeighborsCount.cpp
 
 src/CMakeFiles/automode.dir/modules/AutoMoDeConditionNeighborsCount.cpp.i: cmake_force
@@ -338,7 +380,7 @@ src/CMakeFiles/automode.dir/modules/AutoMoDeConditionNeighborsCount.cpp.s: cmake
 src/CMakeFiles/automode.dir/modules/AutoMoDeConditionInvertedNeighborsCount.cpp.o: src/CMakeFiles/automode.dir/flags.make
 src/CMakeFiles/automode.dir/modules/AutoMoDeConditionInvertedNeighborsCount.cpp.o: ../src/modules/AutoMoDeConditionInvertedNeighborsCount.cpp
 src/CMakeFiles/automode.dir/modules/AutoMoDeConditionInvertedNeighborsCount.cpp.o: src/CMakeFiles/automode.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/mandarina-supp/software/argos3-installation/automode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Building CXX object src/CMakeFiles/automode.dir/modules/AutoMoDeConditionInvertedNeighborsCount.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/mandarina-supp/software/argos3-installation/automode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_23) "Building CXX object src/CMakeFiles/automode.dir/modules/AutoMoDeConditionInvertedNeighborsCount.cpp.o"
 	cd /home/ubuntu/mandarina-supp/software/argos3-installation/automode/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/automode.dir/modules/AutoMoDeConditionInvertedNeighborsCount.cpp.o -MF CMakeFiles/automode.dir/modules/AutoMoDeConditionInvertedNeighborsCount.cpp.o.d -o CMakeFiles/automode.dir/modules/AutoMoDeConditionInvertedNeighborsCount.cpp.o -c /home/ubuntu/mandarina-supp/software/argos3-installation/automode/src/modules/AutoMoDeConditionInvertedNeighborsCount.cpp
 
 src/CMakeFiles/automode.dir/modules/AutoMoDeConditionInvertedNeighborsCount.cpp.i: cmake_force
@@ -352,7 +394,7 @@ src/CMakeFiles/automode.dir/modules/AutoMoDeConditionInvertedNeighborsCount.cpp.
 src/CMakeFiles/automode.dir/modules/AutoMoDeConditionFixedProbability.cpp.o: src/CMakeFiles/automode.dir/flags.make
 src/CMakeFiles/automode.dir/modules/AutoMoDeConditionFixedProbability.cpp.o: ../src/modules/AutoMoDeConditionFixedProbability.cpp
 src/CMakeFiles/automode.dir/modules/AutoMoDeConditionFixedProbability.cpp.o: src/CMakeFiles/automode.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/mandarina-supp/software/argos3-installation/automode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_21) "Building CXX object src/CMakeFiles/automode.dir/modules/AutoMoDeConditionFixedProbability.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/mandarina-supp/software/argos3-installation/automode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_24) "Building CXX object src/CMakeFiles/automode.dir/modules/AutoMoDeConditionFixedProbability.cpp.o"
 	cd /home/ubuntu/mandarina-supp/software/argos3-installation/automode/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/automode.dir/modules/AutoMoDeConditionFixedProbability.cpp.o -MF CMakeFiles/automode.dir/modules/AutoMoDeConditionFixedProbability.cpp.o.d -o CMakeFiles/automode.dir/modules/AutoMoDeConditionFixedProbability.cpp.o -c /home/ubuntu/mandarina-supp/software/argos3-installation/automode/src/modules/AutoMoDeConditionFixedProbability.cpp
 
 src/CMakeFiles/automode.dir/modules/AutoMoDeConditionFixedProbability.cpp.i: cmake_force
@@ -366,7 +408,7 @@ src/CMakeFiles/automode.dir/modules/AutoMoDeConditionFixedProbability.cpp.s: cma
 src/CMakeFiles/automode.dir/modules/AutoMoDeConditionProbColor.cpp.o: src/CMakeFiles/automode.dir/flags.make
 src/CMakeFiles/automode.dir/modules/AutoMoDeConditionProbColor.cpp.o: ../src/modules/AutoMoDeConditionProbColor.cpp
 src/CMakeFiles/automode.dir/modules/AutoMoDeConditionProbColor.cpp.o: src/CMakeFiles/automode.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/mandarina-supp/software/argos3-installation/automode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_22) "Building CXX object src/CMakeFiles/automode.dir/modules/AutoMoDeConditionProbColor.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/mandarina-supp/software/argos3-installation/automode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_25) "Building CXX object src/CMakeFiles/automode.dir/modules/AutoMoDeConditionProbColor.cpp.o"
 	cd /home/ubuntu/mandarina-supp/software/argos3-installation/automode/build/src && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/CMakeFiles/automode.dir/modules/AutoMoDeConditionProbColor.cpp.o -MF CMakeFiles/automode.dir/modules/AutoMoDeConditionProbColor.cpp.o.d -o CMakeFiles/automode.dir/modules/AutoMoDeConditionProbColor.cpp.o -c /home/ubuntu/mandarina-supp/software/argos3-installation/automode/src/modules/AutoMoDeConditionProbColor.cpp
 
 src/CMakeFiles/automode.dir/modules/AutoMoDeConditionProbColor.cpp.i: cmake_force
@@ -393,6 +435,9 @@ automode_OBJECTS = \
 "CMakeFiles/automode.dir/modules/AutoMoDeBehaviourExploration.cpp.o" \
 "CMakeFiles/automode.dir/modules/AutoMoDeBehaviourGoToColor.cpp.o" \
 "CMakeFiles/automode.dir/modules/AutoMoDeBehaviourGoAwayColor.cpp.o" \
+"CMakeFiles/automode.dir/modules/AutoMoDeBehaviourSpiral.cpp.o" \
+"CMakeFiles/automode.dir/modules/AutoMoDeBehaviourFlockCenter.cpp.o" \
+"CMakeFiles/automode.dir/modules/AutoMoDeBehaviourZigZag.cpp.o" \
 "CMakeFiles/automode.dir/modules/AutoMoDeCondition.cpp.o" \
 "CMakeFiles/automode.dir/modules/AutoMoDeConditionBlackFloor.cpp.o" \
 "CMakeFiles/automode.dir/modules/AutoMoDeConditionWhiteFloor.cpp.o" \
@@ -419,6 +464,9 @@ src/libautomode.so: src/CMakeFiles/automode.dir/modules/AutoMoDeBehaviourStop.cp
 src/libautomode.so: src/CMakeFiles/automode.dir/modules/AutoMoDeBehaviourExploration.cpp.o
 src/libautomode.so: src/CMakeFiles/automode.dir/modules/AutoMoDeBehaviourGoToColor.cpp.o
 src/libautomode.so: src/CMakeFiles/automode.dir/modules/AutoMoDeBehaviourGoAwayColor.cpp.o
+src/libautomode.so: src/CMakeFiles/automode.dir/modules/AutoMoDeBehaviourSpiral.cpp.o
+src/libautomode.so: src/CMakeFiles/automode.dir/modules/AutoMoDeBehaviourFlockCenter.cpp.o
+src/libautomode.so: src/CMakeFiles/automode.dir/modules/AutoMoDeBehaviourZigZag.cpp.o
 src/libautomode.so: src/CMakeFiles/automode.dir/modules/AutoMoDeCondition.cpp.o
 src/libautomode.so: src/CMakeFiles/automode.dir/modules/AutoMoDeConditionBlackFloor.cpp.o
 src/libautomode.so: src/CMakeFiles/automode.dir/modules/AutoMoDeConditionWhiteFloor.cpp.o
@@ -429,7 +477,7 @@ src/libautomode.so: src/CMakeFiles/automode.dir/modules/AutoMoDeConditionFixedPr
 src/libautomode.so: src/CMakeFiles/automode.dir/modules/AutoMoDeConditionProbColor.cpp.o
 src/libautomode.so: src/CMakeFiles/automode.dir/build.make
 src/libautomode.so: src/CMakeFiles/automode.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/ubuntu/mandarina-supp/software/argos3-installation/automode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_23) "Linking CXX shared library libautomode.so"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/ubuntu/mandarina-supp/software/argos3-installation/automode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_26) "Linking CXX shared library libautomode.so"
 	cd /home/ubuntu/mandarina-supp/software/argos3-installation/automode/build/src && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/automode.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

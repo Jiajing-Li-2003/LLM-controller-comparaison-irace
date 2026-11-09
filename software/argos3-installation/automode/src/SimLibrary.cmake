@@ -44,6 +44,9 @@ set(AUTOMODE_SOURCES
 	modules/AutoMoDeBehaviourExploration.cpp
     modules/AutoMoDeBehaviourGoToColor.cpp
     modules/AutoMoDeBehaviourGoAwayColor.cpp
+    modules/AutoMoDeBehaviourSpiral.cpp
+    modules/AutoMoDeBehaviourFlockCenter.cpp
+    modules/AutoMoDeBehaviourZigZag.cpp
 	# Conditions
 	modules/AutoMoDeCondition.cpp
 	modules/AutoMoDeConditionBlackFloor.cpp

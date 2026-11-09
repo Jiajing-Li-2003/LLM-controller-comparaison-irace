@@ -1,0 +1,184 @@
+## Reasoning
+
+### Analysis of Round 1
+
+The champion (-11.46) uses a 2-state FSM:
+- **State 0**: GoAwayColor (clr=2, GREEN) with cyan LEDs → avoids green side, goes toward blue
+- **State 1**: GoToColor (clr=4, YELLOW) with yellow LEDs → but wait, clr=4 is YELLOW... 
+
+Let me re-read the color codes: clr ∈ {1,2,3,4,5,6}. The wall colors are RED (nest wall), BLUE and GREEN (source halves). LED colors: 1=red, 2=green, 3=blue, 4=yellow, 5=magenta, 6=cyan.
+
+Actually, the object colors perceived by the camera correspond to the LED colors robots emit AND the wall/floor colors. The colored wall blocks are BLUE and GREEN. So:
+- clr=2 = green (GoAway green → avoids green side source)
+- clr=3 = blue (GoTo blue → goes toward blue side)
+- clr=1 = red (nest wall is red)
+
+State 0: GoAwayColor green → moves away from green walls → toward blue side or nest
+State 1: GoToColor clr=4 (yellow) → goes toward yellow objects... but what's yellow? Other robots' LEDs!
+- Transition from state 0: if perceives magenta (clr=5, l0x0=5), go to state 1 with p=0.68
+- State 1 transitions: on gray floor → state 0 (p=0.33), on white floor (nest) → state 0 (p=0.61), perceives yellow (clr=4) → stay? No, n1x2 destination=2 but with 2 states, D=2 means... wait.
+
+With 2 states, destination indices: leaving state 1, the other states are just [0]. So D must be 0. But n1x2 has D=2... Let me re-read: "With 2 states, leaving state 0 the only other state is state 1, so D must be 0." So for state 1, D=0 → state 0. All transitions from state 1 go back to state 0. n1x2 D=2 → this seems invalid but it worked...
+
+Actually wait: "destination, indexed among the OTHER states only. With 2 states, leaving state 0 the only other state is state 1, so D must be 0." So for state 1, D=0 → state 0. D=2 would be out of range... maybe the simulator wraps or ignores it. Regardless, it scored -11.46.
+
+### Strategy
+
+The key insight: we need to deliver items that DECREASE the score. One half decreases by 1, the other increases by 1. So robots should go to the "good" half only.
+
+The champion goes away from green (clr=2) and toward yellow LEDs (other robots). The transitions on white floor (nest) trigger return. This seems to create a foraging loop: go to source (avoiding green = going to blue side), deliver, return.
+
+### My machines:
+
+1. **Champion** (exact copy) - survival
+2. **Exploit**: tweak probabilities of champion
+3. **Exploit**: swap GoAwayGreen to GoToBlue (clr=3) 
+4. **Exploit**: 3-state version with explicit nest return
+5. **Explore**: GoToBlue → on white floor go back → on black floor stay
+6. **Exploit**: adjust champion's p values
+7. **Explore**: GoAwayGreen then GoToRed (nest)
+8. **Exploit**: similar topology, different colors
+9. **Explore**: 3-state with floor sensing
+10. **Exploit**: modify state 1 behavior
+11. **Explore**: 4-state explicit foraging loop
+12. **Exploit**: champion with different LED colors
+13. **Explore**: GoToBlue with nest return
+14. **Exploit**: champion topology, tune transitions
+
+Let me design carefully:
+
+**Understanding the champion**:
+- S0: GoAwayColor(green, clr=2) with cyan LEDs. If sees magenta(5) → go to S1.
+- S1: GoToColor(yellow, clr=4) with yellow LEDs. On gray→S0(p=0.33), on white→S0(p=0.61), sees yellow→... (likely invalid, treated as no-op or loops)
+
+This is interesting - robots emit yellow LEDs in S1, so they attract each other toward... wherever S1 robots are. S0 robots avoiding green would move toward blue source. When they see magenta (from S0 robots? No, S0 uses cyan)... wait, S0 uses cyan (cle0=6), S1 uses yellow (cle1=4). So magenta is from neither state. Maybe the perceive-magenta condition rarely fires and the machine mostly stays in S0 (GoAwayGreen).
+
+Actually if the condition rarely fires, robots mostly just GoAwayGreen. Going away from green walls, they'd move toward blue source or nest. On black floor (source) they pick up an item. On white floor (nest) they deliver. But there's no floor-based transition in state 0...
+
+The magenta perception (p=0.68) could fire occasionally and send them to S1 (GoToYellow = follow other S1 robots). The transitions back from S1 on gray (p=0.33) and white (p=0.61) bring them back to S0.
+
+Let me build exploitations and explorations:
+
+FSM 1 (champion exact):
+`--nstates 2 --s0 9 --vel0 1.0 --cle0 6 --clr0 2 --n0 1 --n0x0 1 --c0x0 7 --p0x0 0.6833 --l0x0 5 --s1 8 --vel1 1.0 --cle1 4 --clr1 4 --n1 3 --n1x0 3 --c1x0 1 --p1x0 0.3345 --n1x1 0 --c1x1 2 --p1x1 0.6141 --n1x2 2 --c1x2 7 --p1x2 0.0064 --l1x2 4`
+
+FSM 2 (exploit - lower p of magenta trigger, higher nest return):
+`--nstates 2 --s0 9 --vel0 1.0 --cle0 6 --clr0 2 --n0 1 --n0x0 1 --c0x0 7 --p0x0 0.5 --l0x0 5 --s1 8 --vel1 1.0 --cle1 4 --clr1 4 --n1 3 --n1x0 3 --c1x0 1 --p1x0 0.3345 --n1x1 0 --c1x1 2 --p1x1 0.7 --n1x2 2 --c1x2 7 --p1x2 0.0064 --l1x2 4`
+
+FSM 3 (exploit - GoAwayGreen + GoToBlue instead of GoToYellow):
+`--nstates 2 --s0 9 --vel0 1.0 --cle0 6 --clr0 2 --n0 2 --n0x0 1 --c0x0 7 --p0x0 0.6833 --l0x0 5 --n0x1 1 --c0x1 0 --p0x1 0.5 --s1 8 --vel1 1.0 --cle1 5 --clr1 3 --n1 2 --n1x0 0 --c1x0 2 --p1x0 0.6 --n1x1 0 --c1x1 1 --p1x1 0.3`
+
+FSM 4 (exploit - 3 states: GoAwayGreen → GoToBlue → GoToRed):
+`--nstates 3 --s0 9 --vel0 1.0 --cle0 6 --clr0 2 --n0 2 --n0x0 1 --c0x0 0 --p0x0 0.8 --n0x1 2 --c0x1 2 --p0x1 0.5 --s1 8 --vel1 1.0 --cle1 4 --clr1 3 --n1 2 --n1x0 0 --c1x0 0 --p1x0 0.9 --n1x1 2 --c1x1 2 --p1x1 0.7 --s2 8 --vel2 1.0 --cle2 5 --clr2 1 --n2 2 --n2x0 0 --c2x0 1 --p2x0 0.5 --n2x1 1 --c2x1 2 --p2x1 0.3`
+
+Wait, for state 1 with 3 states, destinations are [0,2] so D=0→s0, D=1→s2. Let me recalculate.
+
+With 3 states {0,1,2}:
+- From state 0: others are {1,2} → D=0→s1, D=1→s2
+- From state 1: others are {0,2} → D=0→s0, D=1→s2  
+- From state 2: others are {0,1} → D=0→s0, D=1→s1
+
+FSM 4 (3-state explicit foraging):
+- S0: GoAwayGreen (avoids green source) → on black floor (source, p=0.8) go to S1; on white floor (nest) go to S2
+- S1: GoToBlue (goes to blue source, picks up item) → on black floor stay? No, transition needed. On gray → go to S2 (return to nest)  
+- S2: GoToRed (goes toward red/nest wall) → on white floor → go to S0
+
+`--nstates 3 --s0 9 --vel0 1.0 --cle0 6 --clr0 2 --n0 2 --n0x0 0 --c0x0 0 --p0x0 0.8 --n0x1 1 --c0x1 2 --p0x1 0.6 --s1 8 --vel1 1.0 --cle1 4 --clr1 3 --n1 2 --n1x0 0 --c1x0 1 --p1x0 0.5 --n1x1 1 --c1x1 0 --p1x1 0.9 --s2 8 --vel2 1.0 --cle2 5 --clr2 1 --n2 2 --n2x0 0 --c2x0 2 --p2x0 0.8 --n2x1 1 --c2x1 1 --p2x1 0.4`
+
+From S1 (others={0,2}): D=0→s0, D=1→s2. On gray (between source and nest) go to s2 (D=1), on black stay... can't. On black go to s0 (D=0, but that's GoAwayGreen again...). Better: on gray go to s2 (return), on black (at source, got item) also trigger return.
+
+Let me simplify:
+
+FSM 4:
+- S0: GoToBlue (source) with magenta LEDs. On black floor → S1. On white floor → S2.
+- S1: Exploration (random walk briefly). On gray → S2.
+- S2: GoToRed (nest). On white → S0.
+
+`--nstates 3 --s0 8 --vel0 1.0 --cle0 5 --clr0 3 --n0 2 --n0x0 0 --c0x0 0 --p0x0 0.9 --n0x1 1 --c0x1 2 --p0x1 0.7 --s1 0 --rwm1 20 --cle1 6 --n1 1 --n1x0 1 --c1x0 1 --p1x0 0.7 --s2 8 --vel2 1.0 --cle2 4 --clr2 1 --n2 1 --n2x0 0 --c2x0 2 --p2x0 0.8`
+
+From S0 (others={1,2}): D=0→s1, D=1→s2. On black→s1(D=0), on white→s2(D=1). ✓
+From S1 (others={0,2}): D=0→s0, D=1→s2. On gray→s2(D=1). ✓
+From S2 (others={0,1}): D=0→s0, D=1→s1. On white→s0(D=0). ✓
+
+FSM 5 (exploit - pure GoToBlue with floor triggers):
+`--nstates 2 --s0 8 --vel0 1.0 --cle0 5 --clr0 3 --n0 2 --n0x0 1 --c0x0 0 --p0x0 0.9 --n0x1 1 --c0x1 2 --p0x1 0.5 --s1 8 --vel1 1.0 --cle1 4 --clr1 1 --n1 2 --n1x0 0 --c1x0 2 --p1x0 0.9 --n1x1 0 --c1x1 1 --p1x1 0.4`
+
+From S0 (others={1}): D=0→s1. On black→s1, on white→s1. ✓ (both go to GoToRed)
+From S1 (others={0}): D=0→s0. On white→s0, on gray→s0. ✓
+
+FSM 6 (exploit - champion with p tweaks):
+`--nstates 2 --s0 9 --vel0 1.0 --cle0 6 --clr0 2 --n0 1 --n0x0 1 --c0x0 7 --p0x0 0.75 --l0x0 5 --s1 8 --vel1 1.0 --cle1 4 --clr1 4 --n1 3 --n1x0 3 --c1x0 1 --p1x0 0.25 --n1x1 0 --c1x1 2 --p1x1 0.65 --n1x2 2 --c1x2 7 --p1x2 0.01 --l1x2 4`
+
+FSM 7 (exploit - GoAwayGreen with floor-based transitions):
+`--nstates 2 --s0 9 --vel0 1.0 --cle0 6 --clr0 2 --n0 2 --n0x0 1 --c0x0 2 --p0x0 0.7 --n0x1 1 --c0x1 0 --p0x1 0.8 --s1 8 --vel1 1.0 --cle1 4 --clr1 1 --n1 2 --n1x0 0 --c1x0 2 --p1x0 0.9 --n1x1 0 --c1x1 1 --p1x1 0.5`
+
+FSM 8 (explore - 3 state with GoAwayGreen, GoToBlue, nest):
+`--nstates 3 --s0 9 --vel0 1.0 --cle0 6 --clr0 2 --n0 2 --n0x0 0 --c0x0 0 --p0x0 0.85 --n0x1 1 --c0x1 2 --p0x1 0.6 --s1 8 --vel1 1.0 --cle1 5 --clr1 3 --n1 2 --n1x0 1 --c1x0 1 --p1x0 0.6 --n1x1 0 --c1x1 0 --p1x1 0.9 --s2 8 --vel2 1.0 --cle2 4 --clr2 1 --n2 2 --n2x0 0 --c2x0 2 --p2x0 0.85 --n2x1 1 --c2x1 1 --p2x1 0.4`
+
+From S0 (others={1,2}): D=0→s1, D=1→s2. On black→s1(GoToBlue), on white→s2(GoToRed). ✓
+From S1 (others={0,2}): D=0→s0, D=1→s2. On gray→s2(return), on black(D=1, but that's s2... hmm). 
+
+Wait: from S1, on black floor p=0.9 → D=1 → s2. That would be "at source, now go to nest" = GoToRed. That's correct!
+On gray → D=0 → s0 (GoAwayGreen). That brings them back toward blue...
+
+Let me rethink S1: At blue source (black floor), pick up item, then go to nest. On black→s2(nest). On gray→s0(or stay in S1 to keep going to blue).
+
+Actually from S1 (GoToBlue), on black floor → transition to S2 (GoToRed/nest) makes sense. On gray → stay in S1... but can't self-transition. → go to S0 (GoAwayGreen) to keep searching? That might cause oscillation.
+
+Better: from S1 on black→s2, on gray→stay (no transition, keep going to blue). But we need at least 1 transition. Let me use low prob on gray.
+
+FSM 8 revised:
+`--nstates 3 --s0 9 --vel0 1.0 --cle0 6 --clr0 2 --n0 2 --n0x0 0 --c0x0 0 --p0x0 0.85 --n0x1 1 --c0x1 2 --p0x1 0.6 --s1 8 --vel1 1.0 --cle1 5 --clr1 3 --n1 2 --n1x0 1 --c1x0 0 --p1x0 0.9 --n1x1 0 --c1x1 1 --p1x1 0.05 --s2 8 --vel2 1.0 --cle2 4 --clr2 1 --n2 2 --n2x0 0 --c2x0 2 --p2x0 0.85 --n2x1 1 --c2x1 1 --p2x1 0.4`
+
+From S1 (others={0,2}): D=0→s0, D=1→s2. On black(p=0.9)→s2(GoToRed=nest). On gray(p=0.05)→s0. ✓
+From S2 (others={0,1}): D=0→s0(GoAwayGreen), D=1→s1(GoToBlue). On white(p=0.85)→s0. On gray(p=0.4)→s1. ✓
+
+FSM 9 (explore - 4 state explicit foraging):
+- S0: Exploration (random walk in center). On gray→S1. On black→S2. On white→S3.
+- S1: GoToBlue. On black→S2.
+- S2: GoToBlue (at source). On gray→S3 (return to nest).
+- S3: GoToRed (nest). On white→S0.
+
+Simplify to 3 states for clarity:
+
+FSM 9 (3-state with GoAwayGreen, GoToBlue, GoToRed):
+`--nstates 3 --s0 9 --vel0 1.0 --cle0 6 --clr0 2 --n0 3 --n0x0 0 --c0x0 0 --p0x0 0.9 --n0x1 1 --c0x1 2 --p0x1 0.5 --n0x2 0 --c0x2 7 --p0x2 0.7 --l0x2 5 --s1 8 --vel1 1.0 --cle1 5 --clr1 3 --n1 2 --n1x0 1 --c1x0 0 --p1x0 0.9 --n1x1 0 --c1x1 1 --p1x1 0.1 --s2 8 --vel2 1.0 --cle2 4 --clr2 1 --n2 2 --n2x0 0 --c2x0 2 --p2x0 0.85 --n2x1 1 --c2x1 1 --p2x1 0.3`
+
+From S0 (others={1,2}): D=0→s1, D=1→s2. On black→s1(GoToBlue), on white→s2(GoToRed), sees magenta→s1. ✓
+
+FSM 10 (exploit champion - add black floor trigger to state 0):
+`--nstates 2 --s0 9 --vel0 1.0 --cle0 6 --clr0 2 --n0 2 --n0x0 1 --c0x0 7 --p0x0 0.6833 --l0x0 5 --n0x1 1 --c0x1 0 --p0x1 0.9 --s1 8 --vel1 1.0 --cle1 4 --clr1 4 --n1 3 --n1x0 3 --c1x0 1 --p1x0 0.3345 --n1x1 0 --c1x1 2 --p1x1 0.6141 --n1x2 2 --c1x2 7 --p1x2 0.0064 --l1x2 4`
+
+Wait, with 2 states, from S0 (others={1}): D must be 0→s1. n0x0 D=1 → out of range (only 1 other state). Let me fix: D=0 always for 2-state machines.
+
+FSM 10:
+`--nstates 2 --s0 9 --vel0 1.0 --cle0 6 --clr0 2 --n0 2 --n0x0 0 --c0x0 7 --p0x0 0.6833 --l0x0 5 --n0x1 0 --c0x1 0 --p0x1 0.9 --s1 8 --vel1 1.0 --cle1 4 --clr1 4 --n1 3 --n1x0 3 --c1x0 1 --p1x0 0.3345 --n1x1 0 --c1x1 2 --p1x1 0.6141 --n1x2 2 --c1x2 7 --p1x2 0.0064 --l1x2 4`
+
+Hmm but n1x2 D=2 with 2 states... This was in the champion and worked. Let me keep it as-is for the exact champion, but for FSM 10 I'll fix D=2 to D=0:
+
+FSM 10:
+`--nstates 2 --s0 9 --vel0 1.0 --cle0 6 --clr0 2 --n0 2 --n0x0 0 --c0x0 7 --p0x0 0.6833 --l0x0 5 --n0x1 0 --c0x1 0 --p0x1 0.9 --s1 8 --vel1 1.0 --cle1 4 --clr1 4 --n1 3 --n1x0 3 --c1x0 1 --p1x0 0.3345 --n1x1 0 --c1x1 2 --p1x1 0.6141 --n1x2 0 --c1x2 7 --p1x2 0.0064 --l1x2 4`
+
+FSM 11 (explore - GoToBlue only with high prob return on white):
+`--nstates 2 --s0 8 --vel0 1.0 --cle0 5 --clr0 3 --n0 2 --n0x0 0 --c0x0 0 --p0x0 0.95 --n0x1 0 --c0x1 2 --p0x1 0.6 --s1 8 --vel1 1.0 --cle1 4 --clr1 1 --n1 2 --n1x0 0 --c1x0 2 --p1x0 0.95 --n1x1 0 --c1x1 1 --p1x1 0.5`
+
+From S0 (others={1}): D=0→s1. On black→s1, on white→s1. Both trigger GoToRed. ✓
+From S1 (others={0}): D=0→s0. On white→s0, on gray→s0. ✓
+
+FSM 12 (exploit - champion with GoToBlue instead of GoToYellow in state 1):
+`--nstates 2 --s0 9 --vel0 1.0 --cle0 6 --clr0 2 --n0 1 --n0x0 0 --c0x0 7 --p0x0 0.6833 --l0x0 5 --s1 8 --vel1 1.0 --cle1 4 --clr1 3 --n1 3 --n1x0 3 --c1x0 1 --p1x0 0.3345 --n1x1 0 --c1x1 2 --p1x1 0.6141 --n1x2 0 --c1x2 7 --p1x2 0.0064 --l1x2 4`
+
+Wait, from S0 (others={1}): D=0→s1. n0x0 D=0→s1. ✓ (changed from n1x0 destination D=1 to D=0 since only 1 other state)
+
+Actually wait - in the champion: `--n0x0 1 --c0x0 7` - destination D=1. With 2 states (0 and 1), from state 0, others={1}, so D=0→s1. The champion has D=1 which would be out of range... unless the indexing works differently. Maybe D is just the absolute state index? Let me re-read.
+
+"With 3 states, leaving state 1 the others are [0, 2]: D=0 targets state 0, D=1 targets state 2." So D is relative index into the list of other states. With 2 states from state 0, others=[1], so D=0→s1. The champion has D=1... that seems wrong but the simulator accepted it. Maybe it wraps (D=1 mod 1 = 0 → s1)?
+
+I'll use D=0 throughout for 2-state machines to be safe, and keep the champion exactly as-is for elitism.
+
+Let me also look at what colors mean more carefully:
+- The wall on nest side is RED → clr=1
+- Wall blocks behind blue half → clr=3
+- Wall blocks behind green half → clr=2
+
+So GoToBlue (clr=3) goes to blue source, GoAwayGreen (clr=2) avoids green source and the red nest wall would

@@ -75,9 +75,11 @@ void SeqLoopFunction::Init(TConfigurationNode& t_tree) {
         GetNodeAttributeOrDefault(cParametersNode, "number_edges",         m_unNumberEdges,     (UInt32) 3);
         GetNodeAttributeOrDefault(cParametersNode, "number_boxes_per_edge",m_unNumberBoxes,     (UInt32) 1);
         GetNodeAttributeOrDefault(cParametersNode, "lenght_boxes",         m_fLenghtBoxes,      (Real)   0.25);
+        // LLM_MISSION_DISTRIBUTION_RATIO : fraction du rayon interne de l'arene
+        GetNodeAttributeOrDefault(cParametersNode, "distribution_radius_ratio", m_fDistributionRatio, (Real) 0.45);
         GetNodeAttributeOrDefault(cParametersNode, "color_order",          m_unColorOrder,      (UInt32) 0);
         GetNodeAttributeOrDefault(cParametersNode, "number_colors",        m_unNumerColors,     (UInt32) 1);
-        GetNodeAttributeOrDefault(cParametersNode, "blue_task",            m_unBlueTask,        (UInt32) 0);
+        GetNodeAttributeOrDefault(cParametersNode, "t",            m_unBlueTask,        (UInt32) 0);
         GetNodeAttributeOrDefault(cParametersNode, "red_task",             m_unRedTask,         (UInt32) 0);
         GetNodeAttributeOrDefault(cParametersNode, "eval_task",            m_unEvalTask,        (UInt32) 0);
         GetNodeAttributeOrDefault(cParametersNode, "trn_time",             m_unTrnTime,         (UInt32) 600);
@@ -758,7 +760,10 @@ CVector3 SeqLoopFunction::GetRandomPosition() {
     Real c = m_pcRng->Uniform(CRange<Real>(-1.0f, 1.0f));
     Real d = m_pcRng->Uniform(CRange<Real>(-1.0f, 1.0f));
     if (b < a) { temp = a; a = b; b = temp; }
-    m_fDistributionRadius = 0.4;
+    // LLM_MISSION_DISTRIBUTION_RATIO : le rayon suit la taille de l'arene au lieu
+    // d'etre fige a 0.4, sinon les petites arenes font demarrer les
+    // robots colles au mur et le moteur 2D en ejecte un.
+    m_fDistributionRadius = m_fDistributionRatio * GetArenaRadious();
     Real fPosX = (c * m_fDistributionRadius / 2) + m_fDistributionRadius * cos(2 * CRadians::PI.GetValue() * (a / b));
     Real fPosY = (d * m_fDistributionRadius / 2) + m_fDistributionRadius * sin(2 * CRadians::PI.GetValue() * (a / b));
     return CVector3(fPosX, fPosY, 0);

@@ -255,6 +255,9 @@ src/CMakeFiles/automode.dir/core/AutoMoDeFsmBuilder.cpp.o: \
  /home/ubuntu/mandarina-supp/software/argos3-installation/automode/src/core/../modules/AutoMoDeConditionNeighborsCount.h \
  /home/ubuntu/mandarina-supp/software/argos3-installation/automode/src/core/../modules/AutoMoDeConditionInvertedNeighborsCount.h \
  /home/ubuntu/mandarina-supp/software/argos3-installation/automode/src/core/../modules/AutoMoDeConditionProbColor.h \
+ /home/ubuntu/mandarina-supp/software/argos3-installation/automode/src/core/../modules/AutoMoDeBehaviourSpiral.h \
+ /home/ubuntu/mandarina-supp/software/argos3-installation/automode/src/core/../modules/AutoMoDeBehaviourFlockCenter.h \
+ /home/ubuntu/mandarina-supp/software/argos3-installation/automode/src/core/../modules/AutoMoDeBehaviourZigZag.h \
  /usr/include/c++/11/algorithm /usr/include/c++/11/bits/stl_algo.h \
  /usr/include/c++/11/bits/algorithmfwd.h \
  /usr/include/c++/11/bits/stl_heap.h \

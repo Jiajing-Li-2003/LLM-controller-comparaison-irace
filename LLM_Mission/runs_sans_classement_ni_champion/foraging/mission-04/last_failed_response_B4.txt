@@ -1,0 +1,341 @@
+## Reasoning
+
+I've been running for 4 rounds without feedback on scores. Let me think more carefully about what might be going wrong and what should work best.
+
+**Critical analysis:**
+
+The core loop must be:
+1. Go to source (BLACK floor) - specifically the GOOD half
+2. Pick up item (automatic when entering BLACK)
+3. Return to nest (WHITE floor) - deliver item
+4. Repeat
+
+**Potential issues with my designs:**
+- GoToColor BLUE/GREEN: robots chase the wall behind the source. But once they're IN the source (on BLACK floor), they might already have the item and should leave. The transition should be on BLACK floor → start returning, not WHITE.
+- Wait: "Entering a half of the source gives the robot an item" - so just being on BLACK gives item. Then "entering the nest with an item delivers it" - so need to reach WHITE.
+- So the cycle is: on BLACK (have item) → go to WHITE (deliver) → go back to BLACK (get item) → repeat
+
+**Revised strategy:**
+- State A: GoToColor BLUE (navigate to blue half) - when on BLACK floor, switch to return
+- State B: GoToColor RED (navigate to nest) - when on WHITE floor, switch to collect
+
+The BLACK floor trigger for returning is key! Not WHITE as the collect trigger.
+
+**Let me reconsider transitions:**
+- In collect state: transition on BLACK floor (arrived at source) → go to return state
+- In return state: transition on WHITE floor (arrived at nest) → go to collect state
+
+This is actually what I had for FSM1 and FSM2. Let me make sure these are correct and push stronger variations.
+
+**Another issue:** GoToColor moves toward nearest visible object. In the middle of the arena (GRAY), robots may not see any colored walls. Exploration might be needed to traverse the middle.
+
+**Better 3-state design:**
+- S0: Exploration (traverse middle efficiently)
+- S1: GoToColor BLUE/GREEN (when can see source walls, home in)  
+- S2: GoToColor RED (return to nest)
+
+Transitions:
+- S0→S1: perceive BLUE/GREEN (C=7)
+- S0→S2: on WHITE floor (already at nest, go collect)
+- S1→S2: on BLACK floor (got item, return)
+- S2→S0: on BLACK floor... no, on GRAY (left nest, explore toward source)
+- S2→S1: perceive BLUE/GREEN while returning? No...
+- S2→S0: on GRAY floor (left nest area)
+
+Actually the simplest that should work:
+- S0: GoToColor BLUE, BLACK→S1 (got item, return)
+- S1: GoToColor RED, WHITE→S0 (delivered, go collect)
+
+And also try with GRAY as intermediate:
+- S0: GoToColor BLUE, BLACK→S1
+- S1: GoToColor RED, GRAY→S2 (left nest, keep going)... no that's wrong direction
+
+Let me think about the GRAY floor: it's in the middle between nest (WHITE) and source (BLACK). So:
+- Robot going from nest to source: WHITE → GRAY → BLACK
+- Robot going from source to nest: BLACK → GRAY → WHITE
+
+For the return trip, GRAY means "still heading to nest, keep going"
+For the collect trip, GRAY means "heading to source, keep going"
+
+The most reliable transitions are BLACK (at source) and WHITE (at nest).
+
+**Key realization:** The 2-state machines (GoToColor target ↔ GoToColor RED) with floor color triggers should work. Let me focus on making them robust.
+
+Let me also try: GoToColor BLACK (clr=?) - wait, BLACK is not a color option. Colors are 1=red, 2=green, 3=blue, 4=yellow, 5=magenta, 6=cyan.
+
+So we can't GoToColor BLACK directly. We use floor sensor (C=0 for BLACK floor).
+
+**New approach - use exploration to cross middle:**
+- S0: Exploration (random walk, finds source/nest)
+- S1: GoToColor BLUE (once seeing blue, home in)
+- S2: GoToColor RED (return)
+
+Transitions:
+- S0→S1: perceive BLUE (C=7, l=3)
+- S0→S2: on WHITE (at nest, should go to source... but S2 is return, not source)
+
+Hmm, let me redesign:
+- S0: GoToColor RED (return to nest after getting item), WHITE→S1
+- S1: GoToColor BLUE (go collect), BLACK→S0
+
+OR with exploration:
+- S0: Exploration, perceive BLUE → S1, on WHITE → S2
+- S1: GoToColor BLUE, BLACK → S2
+- S2: GoToColor RED, WHITE → S0
+
+This makes more sense! S0 is the "going to source" exploration, S1 homes in on BLUE, S2 returns.
+
+From S0 (others=[1,2]): D=0→S1, D=1→S2
+From S1 (others=[0,2]): D=1→S2
+From S2 (others=[0,1]): D=0→S0 (on WHITE, delivered, go explore again)
+
+Wait, from S2 on WHITE should go back to collecting. S0 is exploration. So WHITE→S0 makes sense (start exploring toward source).
+
+Let me finalize 14 machines:
+
+**Machine 1** (2-state BLUE, proven design):
+S0=GoToBlue, BLACK→S1; S1=GoToRed, WHITE→S0
+
+**Machine 2** (2-state GREEN):
+S0=GoToGreen, BLACK→S1; S1=GoToRed, WHITE→S0
+
+**Machine 3** (3-state BLUE with exploration):
+S0=Explore, perceiveBlue→S1, WHITE→S2; S1=GoToBlue, BLACK→S2; S2=GoToRed, WHITE→S0
+
+Wait, from S2 on WHITE→S0 means start exploring again. But S0 also transitions on WHITE→S2... that creates a loop at nest. Let me fix:
+S0=Explore, perceiveBlue→S1; S1=GoToBlue, BLACK→S2; S2=GoToRed, WHITE→S0
+(S0 only transitions on perceiving BLUE, S2 transitions on WHITE back to explore)
+
+From S0 (others=[1,2]): D=0→S1
+From S1 (others=[0,2]): D=1→S2  
+From S2 (others=[0,1]): D=0→S0
+
+**Machine 4** (3-state GREEN with exploration):
+Same but with GREEN
+
+**Machine 5** (3-state BLUE, BLACK trigger from explore):
+S0=Explore, BLACK→S1; S1=GoToBlue, WHITE→S2; S2=GoToRed, BLACK→S0
+
+Wait this doesn't make sense. If S0=Explore and BLACK→S1, then S1 is triggered when at source. Then S1=GoToBlue and WHITE→S2 means when at nest go to S2. S2=GoToRed and BLACK→S0 means when at source go to S0. This creates: source→GoToBlue→nest→GoToRed→source→Explore→... Weird.
+
+Let me go back to basics:
+
+**The minimal working loop:**
+- Collect state: robot moves toward source/target color
+- Return state: robot moves toward nest
+
+Trigger to switch from collect to return: reached source = BLACK floor
+Trigger to switch from return to collect: reached nest = WHITE floor
+
+So:
+- S_collect: some movement toward source, BLACK→S_return
+- S_return: GoToColor RED, WHITE→S_collect
+
+For S_collect, options:
+- GoToColor BLUE (directly target blue half)
+- GoToColor GREEN (directly target green half)  
+- Exploration (random walk to source)
+- Combination
+
+**Machine designs:**
+
+1. S0=GoToBlue, BLACK→S1; S1=GoToRed, WHITE→S0
+2. S0=GoToGreen, BLACK→S1; S1=GoToRed, WHITE→S0
+3. S0=Explore(rwm=10), BLACK→S1; S1=GoToRed, WHITE→S0 (no color preference, random)
+4. S0=GoToBlue, BLACK→S1; S1=GoToRed, WHITE→S0, GRAY→S2; S2=GoToBlue, BLACK→S1 (3-state)
+
+Actually let me just write out the 14 machines properly now:
+
+For the 3-state "Explore+GoToBlue+GoToRed":
+- S0: Explore, perceiveBlue(C=7,l=3)→S1
+- S1: GoToBlue, BLACK(C=0)→S2  
+- S2: GoToRed, WHITE(C=2)→S0
+
+Destinations:
+- From S0 (others=[1,2]): perceiveBlue→D=0(S1)
+- From S1 (others=[0,2]): BLACK→D=1(S2)
+- From S2 (others=[0,1]): WHITE→D=0(S0)
+
+For the 3-state "Explore+GoToBlue+GoToRed" with BLACK from explore:
+- S0: Explore, BLACK→S1
+- S1: GoToBlue, WHITE→S2 ... no this is wrong again
+
+OK, the issue is that after exploration finds BLACK, we want to keep collecting (GoToBlue ensures we're in right half), then when WHITE is detected we've delivered.
+
+Actually: S0=Explore BLACK→S1 means "explore until at source". S1=GoToBlue means "now navigate to blue half specifically" - but we're already on BLACK! GoToBlue would just keep us in the blue half. WHITE→S2 means "when we reach nest, return delivered". S2=GoToRed means... go to red/nest again? That's wrong.
+
+I think the confusion is about what happens when. Let me be very clear:
+
+The item is picked up AUTOMATICALLY when entering BLACK. The item is delivered AUTOMATICALLY when entering WHITE with item.
+
+So the robot just needs to:
+1. Reach BLACK (any part) - gets item
+2. Reach WHITE - delivers item
+3. Repeat
+
+But to get GOOD items (score -1 not +1), it needs to be in the CORRECT half of BLACK. The CORRECT half has either BLUE or GREEN wall behind it.
+
+So the ideal behavior:
+1. Navigate to specific half (GoToColor BLUE or GREEN) until on BLACK
+2. Navigate to nest (GoToColor RED) until on WHITE
+3. Repeat
+
+The 2-state machine is exactly this:
+- S0: GoToColor BLUE/GREEN, if BLACK→S1
+- S1: GoToColor RED, if WHITE→S0
+
+This should work! The question is whether BLUE is good or GREEN is good. Let me keep both.
+
+Let me write clean 14 machines:
+
+FSM 1: 2-state GoToBlue (collect) / GoToRed (return)
+FSM 2: 2-state GoToGreen (collect) / GoToRed (return)
+FSM 3: 3-state Explore / GoToBlue / GoToRed (perceive-triggered)
+FSM 4: 3-state Explore / GoToGreen / GoToRed (perceive-triggered)
+FSM 5: 3-state Explore(2trans) / GoToBlue / GoToRed
+FSM 6: 3-state Explore(2trans) / GoToGreen / GoToRed
+FSM 7: 2-state GoAwayGreen / GoToRed
+FSM 8: 2-state GoAwayBlue / GoToRed
+FSM 9: 4-state BLUE avoidance
+FSM 10: 4-state GREEN avoidance
+FSM 11: 2-state GoToBlue/GoToRed with extra prob transition
+FSM 12: 2-state GoToGreen/GoToRed with extra prob transition
+FSM 13: 3-state GoToBlue start / GoToRed / Explore
+FSM 14: 3-state GoToGreen start / GoToRed / Explore
+
+For FSM 13 (starts in GoToBlue, not Explore):
+- S0: GoToBlue, BLACK→S1, WHITE→S2 (if somehow at nest)
+- S1: GoToRed, WHITE→S0 (delivered, go collect again... but S0 is GoToBlue so OK)
+- S2: GoToRed, BLACK→S0 (? redundant with S1)
+
+Better:
+- S0: GoToBlue, BLACK→S1
+- S1: GoToRed, WHITE→S0
+- S2: Exploration (fallback), perceiveBlue→S0, BLACK→S1
+
+But how to get to S2? Add random transition from S0 or S1.
+
+From S0 (others=[1,2]): BLACK→D=0(S1), random→D=1(S2)
+From S1 (others=[0,2]): WHITE→D=0(S0)
+From S2 (others=[0,1]): perceiveBlue→D=0(S0), BLACK→D=1(S1)
+
+FSM 13: --nstates 3 --s0 8 --vel0 1.0 --clr0 3 --cle0 5 --n0 2 --n0x0 0 --c0x0 0 --p0x0 0.9 --n0x1 1 --c0x1 5 --p0x1 0.005 --s1 8 --vel1 1.0 --clr1 1 --cle1 6 --n1 1 --n1x0 0 --c1x0 2 --p1x0 0.9 --s2 0 --rwm2 15 --cle2 0 --n2 2 --n2x0 0 --c2x0 7 --l2x0 3 --p2x0 0.8 --n2x1 1 --c2x1 0 --p2x1 0.8
+
+FSM 14: Same with GREEN:
+FSM 14: --nstates 3 --s0 8 --vel0 1.0 --clr0 2 --cle0 4 --n0 2 --n0x0 0 --c0x0 0 --p0x0 0.9 --n0x1 1 --c0x1 5 --p0x1 0.005 --s1 8 --vel1 1.0 --clr1 1 --cle1 6 --n1 1 --n1x0 0 --c1x0 2 --p1x0 0.9 --s2 0 --rwm2 15 --cle2 0 --n2 2 --n2x0 0 --c2x0 7 --l2x0 2 --p2x0 0.8 --n2x1 1 --c2x1 0 --p2x1 0.8
+
+Now let me write all 14 cleanly and double-check the destination encoding:
+
+**2 states:** from S0: D=0→S1; from S1: D=0→S0
+
+**3 states:** 
+- from S0: D=0→S1, D=1→S2
+- from S1: D=0→S0, D=1→S2
+- from S2: D=0→S0, D=1→S1
+
+**4 states:**
+- from S0: D=0→S1, D=1→S2, D=2→S3
+- from S1: D=0→S0, D=1→S2, D=2→S3
+- from S2: D=0→S0, D=1→S1, D=2→S3
+- from S3: D=0→S0, D=1→S1, D=2→S2
+
+FSM 1 (2-state, GoToBlue→GoToRed):
+- S0: GoToBlue, BLACK(C=0)→S1
+- S1: GoToRed, WHITE(C=2)→S0
+
+FSM 2 (2-state, GoToGreen→GoToRed):
+- S0: GoToGreen, BLACK→S1
+- S1: GoToRed, WHITE→S0
+
+FSM 3 (3-state, Explore→GoToBlue→GoToRed, perceive trigger):
+- S0: Explore(rwm=10), perceiveBlue(C=7,l=3)→S1
+- S1: GoToBlue, BLACK→S2
+- S2: GoToRed, WHITE→S0
+
+From S0: D=0→S1
+From S1: D=1→S2
+From S2: D=0→S0
+
+FSM 4 (3-state, Explore→GoToGreen→GoToRed, perceive trigger):
+- S0: Explore(rwm=10), perceiveGreen(C=7,l=2)→S1
+- S1: GoToGreen, BLACK→S2
+- S2: GoToRed, WHITE→S0
+
+FSM 5 (3-state, Explore(2trans)→GoToBlue→GoToRed):
+- S0: Explore(rwm=20), perceiveBlue→S1, WHITE→S2
+- S1: GoToBlue, BLACK→S2
+- S2: GoToRed, WHITE→S0, perceiveBlue→S1
+
+Wait, from S2 WHITE→S0 and perceiveBlue→S1:
+From S2: D=0→S0, D=1→S1
+
+FSM 5: --nstates 3 --s0 0 --rwm0 20 --cle0 0 --n0 2 --n0x0 0 --c0x0 7 --l0x0 3 --p0x0 0.8 --n0x1 1 --c0x1 2 --p0x1 0.5 --s1 8 --vel1 1.0 --clr1 3 --cle1 5 --n1 1 --n1x0 1 --c1x0 0 --p1x0 0.9 --s2 8 --vel2 1.0 --clr2 1 --cle2 6 --n2 2 --n2x0 0 --c2x0 2 --p2x0 0.9 --n2x1 1 --c2x1 7 --l2x1 3 --p2x1 0.7
+
+Hmm, from S0 with WHITE→S2: D=1→S2. From S2 with WHITE→S0: D=0→S0. OK.
+
+Actually wait - S0 is explore, if WHITE (at nest) go to S2 (GoToRed)? That doesn't make sense - if already at nest, GoToRed will keep you at nest.
+
+Let me fix: S0=Explore, if perceiveBlue→S1; S1=GoToBlue, if BLACK→S2; S2=GoToRed, if WHITE→S0.
+
+Simple and clean. Let me use that for FSMs 3 and 4.
+
+For FSM 5, let me try: S0=GoToBlue(collect), BLACK→S1, WHITE→S1(if somehow at nest already go return); S1=GoToRed(return), WHITE→S0; S2=Explore (rarely entered)
+
+Actually, let me just make FSM5 a 2-state with 2 transitions:
+- S0: GoToBlue, BLACK→S1, random(p=0.001)→S1
+- S1: GoToRed, WHITE→S0, random(p=0.001)→S0
+
+This is basically same as FSM1. Not useful.
+
+Let me try a genuinely different topology for FSM5:
+- S0: GoToBlue, BLACK→S1
+- S1: GoToRed, WHITE→S0, perceiveGreen→S2 (if see green while returning, something wrong?)
+- S2: GoAwayGreen, BLACK→S1
+
+This is a 3-state BLUE-favoring machine. Destinations:
+From S0 (others=[1,2]): D=0→S1
+From S1 (others=[0,2]): D=0→S0, D=1→S2
+From S2 (others=[0,1]): D=1→S1
+
+FSM 5: --nstates 3 --s0 8 --vel0 1.0 --clr0 3 --cle0 5 --n0 1 --n0x0 0 --c0x0 0 --p0x0 0.9 --s1 8 --vel1 1.0 --clr1 1 --cle1 6 --n1 2 --n1x0 0 --c1x0 2 --p1x0 0.9 --n1x1 1 --c1x1 7 --l1x1 2 --p1x1 0.6 --s2 9 --vel2 1.0 --clr2 2 --cle2 0 --n2 1 --n2x0 1 --c2x0 0 --p2x0 0.8
+
+FSM 6 (same with GREEN):
+FSM 6: --nstates 3 --s0 8 --vel0 1.0 --clr0 2 --cle0 4 --n0 1 --n0x0 0 --c0x0 0 --p0x0 0.9 --s1 8 --vel1 1.0 --clr1 1 --cle1 6 --n1 2 --n1x0 0 --c1x0 2 --p1x0 0.9 --n1x1 1 --c1x1 7 --l1x1 3 --p1x1 0.6 --s2 9 --vel2 1.0 --clr2 3 --cle2 0 --n2 1 --n2x0 1 --c2x0 0 --p2x0 0.8
+
+FSM 7 (2-state GoAwayGreen→GoToRed):
+FSM 7: --nstates 2 --s0 9 --vel0 1.0 --clr0 2 --cle0 5 --n0 1 --n0x0 0 --c0x0 0 --p0x0 0.9 --s1 8 --vel1 1.0 --clr1 1 --cle1 6 --n1 1 --n1x0 0 --c1x0 2 --p1x0 0.9
+
+FSM 8 (2-state GoAwayBlue→GoToRed):
+FSM 8: --nstates 2 --s0 9 --vel0 1.0 --clr0 3 --cle0 4 --n0 1 --n0x0 0 --c0x0 0 --p0x0 0.9 --s1 8 --vel1 1.0 --clr1 1 --cle1 6 --n1 1 --n1x0 0 --c1x0 2 --p1x0 0.9
+
+FSM 9 (4-state BLUE targeting with GoAway GREEN fallback):
+- S0: GoToBlue, BLACK→S1, perceiveGreen→S3
+- S1: GoToRed, WHITE→S0, perceiveGreen→S3
+- S2: Explore, perceiveBlue→S0, BLACK→S1
+- S3: GoAwayGreen, BLACK→S1
+
+From S0 (others=[1,2,3]): D=0→S1, D=2→S3
+From S1 (others=[0,2,3]): D=0→S0, D=2→S3
+From S2 (others=[0,1,3]): D=0→S0, D=1→S1
+From S3 (others=[0,1,2]): D=1→S1
+
+FSM 9: --nstates 4 --s0 8 --vel0 1.0 --clr0 3 --cle0 5 --n0 2 --n0x0 0 --c0x0 0 --p0x0 0.9 --n0x1 2 --c0x1 7 --l0x1 2 --p0x1 0.7 --s1 8 --vel1 1.0 --clr1 1 --cle1 6 --n1 2 --n1x0 0 --c1x0 2 --p1x0 0.9 --n1x1 2 --c1x1 7 --l1x1 2 --p1x1 0.5 --s2 0 --rwm2 10 --cle2 0 --n2 2 --n2x0 0 --c2x0 7 --l2x0 3 --p2x0 0.8 --n2x1 1 --c2x1 0 --p2x1 0.8 --s3 9 --vel3 1.0 --clr3 2 --cle3 0 --n3 1 --n3x0 1 --c3x0 0 --p3x0 0.85
+
+FSM 10 (4-state GREEN targeting with GoAway BLUE fallback):
+- S0: GoToGreen, BLACK→S1, perceiveBlue→S3
+- S1: GoToRed, WHITE→S0, perceiveBlue→S3
+- S2: Explore, perceiveGreen→S0, BLACK→S1
+- S3: GoAwayBlue, BLACK→S1
+
+From S0: D=0→S1, D=2→S3
+From S1: D=0→S0, D=2→S3
+From S2: D=0→S0, D=1→S1
+From S3: D=1→S1
+
+FSM 10: --nstates 4 --s0 8 --vel0 1.0 --clr0 2 --cle0 4 --n0 2 --n0x0 0 --c0x0 0 --p0x0 0.9 --n0x1 2 --c0x1 7 --l0x1 3 --p0x1 0.7 --s1 8 --vel1 1.0 --clr1 1 --cle1 6 --n1 2 --n1x0 0 --c1x0 2 --p1x0 0.9 --n1x1 2 --c1x1 7 --l1x1 3 --p1x1 0.5 --s2 0 --rwm2 10 --cle2 0 --n2 2 --n2x0 0 --c2x0 7 --l2x0 2 --p2x0 0.8 --n2x1 1 --c2x1 0 --p2x1 0.8 --s3 9 --vel3 1.0 --clr3 3 --cle3 0 --n3 1 --n3x0 1 --c3x0 0 --p3x0 0.85
+
+FSM 11 (2-state GoToBlue, higher prob):
+FSM 11: --nstates 2 --s0 8 --vel0 1.0 --clr0 3 --cle0 5 --n0 2 --n0x0 0 --c0x0 0 --p0x0 0.95 --n0x1 0 --c0x1 7 --l0x1 1 --p0x1 0.9 --s1 8 --vel1 1.0 --clr1 1 --cle1 6 --n1 2 --n1x0 0 --c1x0 2 --p1x0 0.95 --n1x1 0 --c1x1 7 --l1x1 3 --p1x1 0.7
+
+FSM 12 (2-state GoToGreen, higher prob):
+FSM 12: --nstates 2 --s0 8 --vel0 1.0 --clr0 2 --cle0 4 --n0 2 --n0x0 0 --c0x0 0 --p0x0 0.95 --n0x1 0 --c0x1 

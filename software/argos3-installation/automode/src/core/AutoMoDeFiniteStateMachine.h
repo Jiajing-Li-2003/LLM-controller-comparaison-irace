@@ -37,6 +37,10 @@
 #include "../modules/AutoMoDeConditionInvertedNeighborsCount.h"
 #include "../modules/AutoMoDeConditionProbColor.h"
 
+#include "../modules/AutoMoDeBehaviourSpiral.h"
+#include "../modules/AutoMoDeBehaviourFlockCenter.h"
+#include "../modules/AutoMoDeBehaviourZigZag.h"
+
 #include <string>
 #include <ctime>
 #include <algorithm>
@@ -158,7 +162,7 @@ namespace argos {
 
 			/*
 			 * Pointer to the object keeping track of the successive
-			 * states of the FSM.
+			 * states of th../modulese FSM.
 			 */
 			AutoMoDeFsmHistory* m_pcHistory;
 

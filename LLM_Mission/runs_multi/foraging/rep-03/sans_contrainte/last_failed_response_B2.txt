@@ -1,0 +1,281 @@
+## Reasoning
+
+### Key observations from Round 2
+
+**Clear winners:**
+1. Champion (-1.75): 4-state with Exploration→Attraction→Repulsion→GoAwayColor(yellow/clr=4)
+2. Rank 2 (-1.34): Similar 4-state structure with extra transition from S0
+3. Rank 3 (-1.09): Similar 4-state, slightly different params
+4. Rank 4 (-1.09): **Simple 2-state** GoToColor(green/clr=2) ↔ GoToColor(red/clr=1) — surprisingly effective!
+5. Rank 5 (-1.05): 3-state with Exploration + GoToColor(green) + GoToColor(red)
+
+**Critical insights:**
+- **Green (clr=2) is the GOOD source** — machines using green do well, blue (clr=3) does poorly (rank 11: +0.51, rank 13: +1.10, rank 14: +2.20)
+- The champion's structure (Exploration→Attraction→Repulsion→GoAwayColor) works well
+- Simple 2-state GoToColor(green)↔GoToColor(red) gets -1.09, showing explicit color navigation is powerful
+- The champion doesn't explicitly use color navigation to green source — it relies on exploration + social behaviors
+
+**Strategy for Round 3:**
+- Keep champion exactly
+- Exploit champion: fine-tune parameters
+- Combine the best elements: explicit green-source navigation + the champion's repulsion/attraction structure
+- Try hybrid: 3-4 state machines combining GoToColor(green) for source, GoToColor(red) for nest, with the champion's exploration structure
+- Exploit the 2-state green↔red idea with additional states
+
+Let me design machines:
+
+**Exploitation of champion (small tweaks):**
+- Variant A: rwm0=30, att1=1.1, rep2=1.7, slightly adjusted probs
+- Variant B: rwm0=40, att1=1.5, rep2=2.2, w3x2=15.0
+
+**Hybrid: GoToColor(green) + GoToColor(red) with champion structure:**
+- 4-state: Explore → GoToColor(green) on black → GoToColor(red) on white → Repulsion when crowded
+- 3-state: GoToColor(green) → GoToColor(red) → Repulsion/exploration buffer
+
+**Improved 2-state:**
+- GoToColor(green) with transition on white floor, GoToColor(red) with transition on black floor, lower probability (more responsive)
+
+Let me also note: the champion's state 3 is GoAwayColor(yellow, clr=4). Yellow could be the LED color of state 0 (cle0=4=yellow). So robots in exploration state signal yellow, and state 3 moves away from them — this creates dispersion!
+
+Now let me also try: 4-state with GoToColor(green) replacing exploration, since green source is confirmed good.
+
+**Machine designs:**
+
+1. **Champion** (exact copy)
+2. **Champion variant A** (smaller rwm, lower att/rep)
+3. **Champion variant B** (higher rwm, more transitions)  
+4. **Champion + green navigation**: Replace state 1 attraction with GoToColor(green)
+5. **Champion variant C**: Adjust threshold params
+6. **2-state improved**: green↔red with p=0.95
+7. **2-state with repulsion buffer**: 3-state green→red→repulsion
+8. **4-state hybrid**: Explore→GoToColor(green)→GoToColor(red)→Repulsion
+9. **4-state hybrid 2**: GoToColor(green)→GoToColor(red)→Explore→Attraction
+10. **3-state**: GoToColor(green)→GoToColor(red)→Exploration with rich transitions
+11. **Champion with GoToColor(green) in state 1**: swap attraction for green navigation
+12. **Variant of rank 5**: 3-state explore+green+red with tweaked params
+13. **Champion variant D**: Adjust steepness values
+14. **New 4-state**: GoToColor(green) + GoAwayColor(red avoidance) + Repulsion + Exploration
+
+Let me now write them carefully:
+
+For the 4-state champion structure, let me re-examine the destination indices:
+- State 0 (4 states): others are [1,2,3] → D=0→1, D=1→2, D=2→3
+- State 1 (4 states): others are [0,2,3] → D=0→0, D=1→2, D=2→3
+- State 2 (4 states): others are [0,1,3] → D=0→0, D=1→1, D=2→3
+- State 3 (4 states): others are [0,1,2] → D=0→0, D=1→1, D=2→2
+
+Champion: 
+- S0(explore): few-neighbours→S2(rep), many-neighbours→S3(goaway)... wait
+
+Re-reading champion: --n0x0 2 --c0x0 4... D=2 leaving state 0 with 4 states means: others=[1,2,3], D=2→state3. So:
+- S0: transition K=0: D=2→state3, condition=4(few neighbours,p=4,w=3.6); transition K=1: D=2→state3?? 
+
+Wait, I need to re-read. With 4 states, leaving state 0, the other states are [1,2,3] indexed 0,1,2. So D=0→state1, D=1→state2, D=2→state3.
+
+Champion S0: --n0x0 2 --c0x0 4 → D=2→state3, condition=few neighbours. --n0x1 2 --c0x1 3 → D=2→state3, condition=many neighbours. Both go to state 3!
+
+S1(attraction): --n1x0 2 --c1x0 2 → D=2→state3... wait, leaving state 1, others=[0,2,3], D=2→state3. So white floor → state3.
+
+S2(repulsion): --n2x0 2 --c2x0 0 → D=2→state3... leaving state 2, others=[0,1,3], D=2→state3. Black floor → state3. --n2x1 2 --c2x1 3 → D=2→state3... many neighbours → state3. --n2x2 2 --c2x2 0 → D=2→state3... black floor → state3.
+
+S3(GoAwayColor yellow): --n3x0 2 --c3x0 2 → leaving state 3, others=[0,1,2], D=2→state2. White floor→state2(rep). --n3x1 1 --c3x1 7 → D=1→state1(att). See yellow→state1(att). --n3x2 2 --c3x2 3 → D=2→state2(rep). Many neighbours→state2(rep).
+
+So the flow is: S0(explore) → mostly S3(GoAwayColor yellow) → S1(attraction) or S2(repulsion). S2(repulsion) → S3. S1(attraction) → S3.
+
+This is strange but works. The GoAwayColor(yellow) in state 3 moves away from yellow-LED robots (S0 has yellow LED). So robots in exploration mode repel others in state 3.
+
+The transitions from S0 (few neighbours OR many neighbours → S3) mean robots almost always go to S3 quickly. Then in S3, they navigate while avoiding yellow robots.
+
+Actually, from S3: white floor → S2(repulsion), see yellow → S1(attraction), many neighbours → S2(repulsion).
+
+So: S3(main navigation) → S2(repulsion when crowded/at nest) → S3 again, or S1(attraction when sees yellow) → S3.
+
+This seems like: robots mostly stay in S3 (GoAwayColor yellow), which actually navigates them somewhere. What does GoAwayColor(yellow/clr=4) do? It moves away from yellow objects. If S0 robots have yellow LEDs, this means S3 robots move away from S0 robots. But also if there are no yellow objects, GoAwayColor might behave differently.
+
+Actually, I wonder if clr=4 refers to a wall color or just robot LEDs. In the arena, the floor colors are black/gray/white. Wall colors are red, blue, green. So clr=4(yellow) would only match yellow robot LEDs.
+
+This means GoAwayColor(yellow) moves away from exploration-state robots. This creates useful dispersal.
+
+Now let me build my 14 machines:
+
+**Machine 1**: Champion (exact)
+
+**Machine 2**: Champion variant - slightly reduced rwm, tweaked thresholds
+- rwm0=30, att1=1.1, rep2=1.7, p2x0=0.25, p2x2=0.5, p3x0=0.22, p3x1=0.55, w3x2=12.0
+
+**Machine 3**: Champion variant - increase exploration influence
+- rwm0=45, att1=1.5, rep2=2.1, w0x0=4.0, w0x1=5.0, w2x1=12.0, w3x2=14.0
+
+**Machine 4**: Champion + extra transition from S1 (attraction can also go to S2)
+Add transition from S1: on black floor → S2 (repulsion)
+
+**Machine 5**: 4-state with GoToColor(green) replacing GoAwayColor(yellow):
+- S0: Explore → black→S1, white→S2
+- S1: GoToColor(green, clr=2) → white→S2, gray→S0  
+- S2: GoToColor(red, clr=1) → black→S1, gray→S0
+- S3: Repulsion → gray→S0, black→S1
+
+Wait, for 4 states this gets complex. Let me do:
+- S0: Explore (yellow LED) → few-neigh→S3, many-neigh→S2
+- S1: GoToColor(green, clr=2) (magenta LED) → white→S2
+- S2: Repulsion (cyan LED) → black→S3, many-neigh→S3
+- S3: GoToColor(red, clr=1) (off LED) → black→S1, white→S2
+
+Hmm, let me think about destinations more carefully.
+
+For 4 states, leaving state 0: D=0→S1, D=1→S2, D=2→S3
+Leaving state 1: D=0→S0, D=1→S2, D=2→S3
+Leaving state 2: D=0→S0, D=1→S1, D=2→S3
+Leaving state 3: D=0→S0, D=1→S1, D=2→S2
+
+**Machine 5** (4-state hybrid combining green navigation with champion structure):
+- S0: Explore (cle=4 yellow) → black floor→S1, white floor→S3
+- S1: GoToColor(green, clr=2) (cle=5 magenta) → white→S3, gray→S0
+- S2: Repulsion (cle=6 cyan) → black→S1, gray→S0, many-neigh→S3... 
+
+Actually let me try something cleaner:
+
+**Machine 5**: 3-state improved green forager:
+- S0: GoToColor(green, clr=2) → white floor→S1 (delivered, go back)
+- S1: GoToColor(red, clr=1) → black floor→S0 (at source, pick up)
+- S2: Exploration buffer → on black→S0, on white→S1
+
+For 3-state:
+Leaving S0: others=[1,2], D=0→S1, D=1→S2
+Leaving S1: others=[0,2], D=0→S0, D=1→S2
+Leaving S2: others=[0,1], D=0→S0, D=1→S1
+
+**Machine 5**:
+S0=GoToColor(green), S1=GoToColor(red), S2=Exploration
+- S0: white→S1 (p=0.95), gray→S2 (p=0.3)
+- S1: black→S0 (p=0.95), gray→S2 (p=0.3)
+- S2: black→S0 (p=0.8), white→S1 (p=0.8)
+
+**Machine 6**: 2-state green↔red (same as rank 4 but tweaked):
+- p=0.95 both ways
+
+**Machine 7**: 2-state green↔red with additional gray transition:
+- S0: GoToColor(green): white→S1 (p=0.95), gray→S1 (p=0.1) [slight chance to turn back on gray]
+- S1: GoToColor(red): black→S0 (p=0.95), gray→S0 (p=0.1)
+
+Wait, for 2-state only 1 destination possible. So:
+- S0: white→S1, and another condition also→S1? Both go same place so just 2 transitions.
+
+**Machine 7**: 2-state green↔red with 2 transitions each:
+- S0(GoToColor green): white→S1 (p=0.95), fixed prob→S1 (p=0.005)
+- S1(GoToColor red): black→S0 (p=0.95), fixed prob→S0 (p=0.005)
+
+**Machine 8**: 4-state: GoToColor(green)→GoToColor(red)→Repulsion→Exploration:
+S0=GoToColor(green), S1=GoToColor(red), S2=Repulsion, S3=Exploration
+- S0: white→S1 (p=0.9), gray→S3 (p=0.3)
+- S1: black→S0 (p=0.9), gray→S3 (p=0.3)
+- S2: gray→S3 (p=0.5), black→S0 (p=0.7)
+- S3: black→S0 (p=0.8), white→S1 (p=0.8)
+
+Destinations for 4-state:
+S0 leaving: D=0→S1, D=1→S2, D=2→S3
+S1 leaving: D=0→S0, D=1→S2, D=2→S3
+S2 leaving: D=0→S0, D=1→S1, D=2→S3
+S3 leaving: D=0→S0, D=1→S1, D=2→S2
+
+**Machine 8**:
+- S0(GoToColor green, cle=5): white→S1(D=0, p=0.9), gray→S3(D=2, p=0.3)
+- S1(GoToColor red, cle=6): black→S0(D=0, p=0.9), gray→S3(D=2, p=0.3)
+- S2(Repulsion, cle=4): gray→S3(D=2, p=0.5), black→S0(D=0, p=0.7)
+- S3(Exploration, cle=4): black→S0(D=0, p=0.8), white→S1(D=1, p=0.8)
+
+**Machine 9**: Champion with GoToColor(green) in state 3 instead of GoAwayColor(yellow):
+Replace S3: GoAwayColor(yellow) with GoToColor(green)
+- S3: GoToColor(green, clr=2) → white→S2(D=2), see green→S1(D=1), many-neigh→S2(D=2)
+
+Wait, that changes the meaning significantly. In champion, S3 avoids yellow robots. If I replace with GoToColor(green), robots navigate to green source.
+
+**Machine 9**:
+- S0: Explore (yellow LED) → few-neigh→S3, many-neigh→S3
+- S1: Attraction → white→S3
+- S2: Repulsion → black→S3, many-neigh→S3, black→S3
+- S3: GoToColor(green, clr=2) → white→S2, see green→S1, many-neigh→S2
+
+Hmm but this always goes to green and never returns. Need a return path.
+
+Let me try:
+**Machine 9**: 4-state with green navigation + red return:
+- S0: Explore → black→S1, white→S2
+- S1: GoToColor(green) → white→S2, gray→S0
+- S2: GoToColor(red) → black→S1, gray→S0
+- S3: Repulsion → gray→S0, black→S1
+
+S0 leaving: D=0→S1, D=1→S2, D=2→S3
+S1 leaving: D=0→S0, D=1→S2, D=2→S3
+S2 leaving: D=0→S0, D=1→S1, D=2→S3
+S3 leaving: D=0→S0, D=1→S1, D=2→S2
+
+**Machine 9**:
+- S0(Explore, rwm=30, cle=4): black→S1(D=0, p=0.8), white→S2(D=1, p=0.8)
+- S1(GoToColor green, cle=5): white→S2(D=1, p=0.9), gray→S0(D=0, p=0.4)
+- S2(GoToColor red, cle=6): black→S1(D=1, p=0.9), gray→S0(D=0, p=0.4)
+- S3(Repulsion, cle=4, rep=2.0): gray→S0(D=0, p=0.5), black→S1(D=1, p=0.7)
+
+**Machine 10**: Champion variant with lower p0x0 (fewer-neighbours threshold):
+- p0x0=3 (was 4), w0x0=3.0, p0x1=7 (was 8), w0x1=4.0
+- Other params same as champion
+
+**Machine 11**: Champion variant with increased steepness:
+- w0x0=5.0, w0x1=6.0, w2x1=14.0, w3x2=16.0
+
+**Machine 12**: 3-state improved (variant of rank 5):
+- S0: Explore (rwm=25) → black→S1(D=0, p=0.85), white→S2(D=1, p=0.85)
+- S1: GoToColor(green, clr=2) → white→S2(D=1, p=0.95), gray→S0(D=0, p=0.3)
+- S2: GoToColor(red, clr=1) → black→S1(D=1, p=0.95), gray→S0(D=0, p=0.3)
+
+**Machine 13**: Champion with added transition from S2 to S1:
+- S2(repulsion): add transition to S1 via white floor
+- Keep other transitions
+
+**Machine 14**: New exploration - 4-state with attraction + green navigation:
+- S0: Attraction → black→S1, white→S2, few-neigh→S3
+- S1: GoToColor(green) → white→S2, gray→S0
+- S2: GoToColor(red) → black→S1, gray→S0
+- S3: Exploration → black→S1, white→S2
+
+Now let me write all 14 carefully. I need to be very careful about destination indices.
+
+**Recapping destination rule:**
+With N states, leaving state I, the "others" list is [0,1,...,N-1] minus I, in order. D indexes into this list.
+
+So for 4 states:
+- Leaving S0: others=[1,2,3], D=0→1, D=1→2, D=2→3
+- Leaving S1: others=[0,2,3], D=0→0, D=1→2, D=2→3
+- Leaving S2: others=[0,1,3], D=0→0, D=1→1, D=2→3
+- Leaving S3: others=[0,1,2], D=0→0, D=1→1, D=2→2
+
+For 3 states:
+- Leaving S0: others=[1,2], D=0→1, D=1→2
+- Leaving S1: others=[0,2], D=0→0, D=1→2
+- Leaving S2: others=[0,1], D=0→0, D=1→1
+
+For 2 states:
+- Leaving S0: others=[1], D=0→1
+- Leaving S1: others=[0], D=0→0
+
+Now writing all machines:
+
+**M1**: Champion (exact copy)
+
+**M2**: Champion variant A (smaller params):
+--nstates 4 --s0 0 --rwm0 30 --cle0 4 --n0 2 --n0x0 2 --c0x0 4 --p0x0 3 --w0x0 3.0 --n0x1 2 --c0x1 3 --p0x1 7 --w0x1 4.0 --s1 4 --att1 1.1 --cle1 6 --n1 1 --n1x0 2 --c1x0 2 --p1x0 0.55 --s2 5 --rep2 1.7 --cle2 6 --n2 3 --n2x0 2 --c2x0 0 --p2x0 0.25 --n2x1 2 --c2x1 3 --p2x1 2 --w2x1 10.0 --n2x2 2 --c2x2 0 --p2x2 0.52 --s3 9 --vel3 1.0 --cle3 0 --clr3 4 --n3 3 --n3x0 2 --c3x0 2 --p3x0 0.22 --n3x1 1 --c3x1 7 --p3x1 0.55 --l3x1 4 --n3x2 2 --c3x2 3 --p3x2 5 --w3x2 12.0
+
+**M3**: Champion variant B (larger params):
+--nstates 4 --s0 0 --rwm0 45 --cle0 4 --n0 2 --n0x0 2 --c0x0 4 --p0x0 5 --w0x0 4.2 --n0x1 2 --c0x1 3 --p0x1 9 --w0x1 5.0 --s1 4 --att1 1.5 --cle1 6 --n1 1 --n1x0 2 --c1x0 2 --p1x0 0.65 --s2 5 --rep2 2.1 --cle2 6 --n2 3 --n2x0 2 --c2x0 0 --p2x0 0.33 --n2x1 2 --c2x1 3 --p2x1 2 --w2x1 12.0 --n2x2 2 --c2x2 0 --p2x2 0.62 --s3 9 --vel3 1.0 --cle3 0 --clr3 4 --n3 3 --n3x0 2 --c3x0 2 --p3x0 0.28 --n3x1 1 --c3x1 7 --p3x1 0.65 --l3x1 4 --n3x2 2 --c3x2 3 --p3x2 7 --w3x2 14.0
+
+**M4**: Champion variant C (adjusted steepness):
+--nstates 4 --s0 0 --rwm0 35 --cle0 4 --n0 2 --n0x0 2 --c0x0 4 --p0x0 4 --w0x0 5.0 --n0x1 2 --c0x1 3 --p0x1 8 --w0x1 6.0 --s1 4 --att1 1.3 --cle1 6 --n1 1 --n1x0 2 --c1x0 2 --p1x0 0.6 --s2 5 --rep2 1.9 --cle2 6 --n2 3 --n2x0 2 --c2x0 0 --p2x0 0.3 --n2x1 2 --c2x1 3 --p2x1 3 --w2x1 13.0 --n2x2 2 --c2x2 0 --p2x2 0.58 --s3 9 --vel3 1.0 --cle3 0 --clr3 4 --n3 3 --n3x0 2 --c3x0 2 --p3x0 0.26 --n3x1 1 --c3x1 7 --p3x1 0.62 --l3x1 4 --n3x2 2 --c3x2 3 --p3x2 6 --w3x2 16.0
+
+**M5**: Champion with extra S0→S1 transition (on black floor):
+--nstates 4 --s0 0 --rwm0 35 --cle0 4 --n0 3 --n0x0 2 --c0x0 4 --p0x0 4 --w0x0 3.6 --n0x1 2 --c0x1 3 --p0x1 8 --w0x1 4.5 --n0x2 0 --c0x2 0 --p0x2 0.4 --s1 4 --att1 1.3 --cle1 6 --n1 1 --n1x0 2 --c1x0 2 --p1x0 0.6 --s2 5 --rep2 1.9 --cle2 6 --n2 3 --n2x0 2 --c2x0 0 --p2x0 0.3 --n2x1 2 --c2x1 3 --p2x1 2 --w2x1 11.2 --n2x2 2 --c2x2 0 --p2x2 0.58 --s3 9 --vel3 1.0 --cle3 0 --clr3 4 --n3 3 --n3x0 2 --c3x0 2 --p3x0 0.26 --n3x1 1 --c3x1 7 --p3x1 0.62 --l3x1 4 --n3x2 2 --c3x2 3 --p3x2 6 --w3x2 13.2
+
+**M6**: 2-state GoToColor(green)↔GoToColor(red) (similar to rank 4 but p=0.95):
+--nstates 2 --s0 8 --vel0 1.0 --cle0 5 --clr0 2 --n0 1 --n0x0 0 --c0x0 2 --p0x0 0.95 --s1 8 --vel1 1.0 --cle1 4 --clr1 1 --n1 1 --n1x0 0 --c1x0 0 --p1x0 0.95
+
+**M7**: 2-state GoToColor(green)↔GoToColor(red) with 2 transitions:
+--nstates 2 --s0 8 --vel0 1.0 --cle0 5 --clr0 2 --n0 2 --n0x0 0 --c0x0 2 --p0x0 0.9 --n0x1 0 --c0x1 0 --p0x1 0.5 --s1 8 --vel1 1.0 --cle1 4 --cl

@@ -29,7 +29,7 @@ def receive_score():
         # Pour l'instant, on renvoie juste "ok"
         response_data = {
             "message": "Score bien reçu par le serveur Python !",
-            # Décommente les lignes ci-dessous plus tard si tu veux que l'IA change les tâches :
+            # Décommenter les lignes ci-dessous on veux que l'IA change les tâches :
             # "new_blue_task": 1,
             # "new_red_task": 2
         }

@@ -1,0 +1,187 @@
+## Reasoning
+
+The new champion scores -1.90. Let me analyze its structure:
+
+- **S0**: Stop (B=1), transitions: few neighbors (C=4, thresh=4) → S0 (self? No, D=0 from S0 with 4 states means state 0... wait, leaving S0, others=[1,2,3], D=0→S1, D=1→S2, D=2→S3). So: D=0→S1 on few neighbors, D=2→S2 on random prob, D=2→S2 on black floor.
+
+Wait let me re-read: `--n0x0 0` means D=0 from state 0, which targets the first "other" state. With 4 states leaving state 0: others=[1,2,3], D=0→S1, D=1→S2, D=2→S3. So:
+- S0 (Stop): few neighbors (C=4,p=4) → S1; random(p=0.7426) → S2; black floor(p=0.3783) → S2
+
+- **S1**: Repulsion (B=5, rep=3.4479), 4 transitions: random → S0(D=1→S2? No wait leaving S1, others=[0,2,3], D=0→S0, D=1→S2, D=2→S3):
+  - random(0.0752) → S0; gray floor(0.6824) → S0; random(0.1491) → S2; gray floor(0.3721) → S0
+
+- **S2**: GoAwayColor (B=9, clr=3=blue), transitions (leaving S2, others=[0,1,3], D=0→S0, D=1→S1, D=2→S3):
+  - white floor(0.4526) → S0; few neighbors(4,5.19) → S1; few neighbors(3,17.4) → S1; perceive blue(0.0993) → S3
+
+- **S3**: GoToColor (B=8, clr=2=green), transitions (leaving S3, others=[0,1,2], D=0→S0, D=1→S1):
+  - many neighbors(6,1.99) → S0; white floor(0.9188) → S1
+
+So the logic seems to be:
+1. Stop → spread out, then repulse to disperse, then go away from blue (toward green source), then go toward green wall (GoToColor green = go toward green half = collect green items), return to nest on white floor.
+
+This suggests **green items decrease score** (good). GoAwayColor blue moves away from blue half toward green half. GoToColor green helps navigate to green half. White floor triggers return.
+
+Key insight: The robot goes AWAY from blue walls → toward green half → picks up green item → GoToColor green reinforces staying near green → white floor detected → return to S1 (repulsion, spreads out) → back to stop/dispersal.
+
+**Strategy for round 3:**
+1. Keep champion exact
+2. Exploit champion: tweak rep gain, probabilities
+3. Explore: try GoToColor green directly as main foraging behavior
+4. Explore: 3-state simpler version of champion logic
+5. Explore: combine GoAwayColor blue + GoToColor red (return to nest)
+
+Let me note that D indices need careful handling. Let me verify machine 2 from round 2 (score -1.44): it has destinations pointing to state index 2 (--n0x0 2) which from state 0 with 4 states means D=2→S3. That's different from champion. So the good machines have different destination structures.
+
+Let me carefully design my machines:
+
+**Machine 1**: Champion exact copy
+
+**Machine 2**: Champion with rep1 slightly higher (3.8), different probs
+- Keep topology, tweak rep1=3.8, p0x1=0.7, p1x1=0.7
+
+**Machine 3**: Champion with rep1=3.0, p2x0=0.5
+
+**Machine 4**: Champion with additional transition from S3 - add perceive green condition
+
+**Machine 5**: Champion topology but S2=GoToColor green (clr=2) instead of GoAwayColor blue
+
+**Machine 6**: 3-state: Stop → Repulsion → GoAwayColor blue + GoToColor green
+- S0: Stop, few neighbors → S1, random → S2
+- S1: Repulsion, gray → S0, random → S2  
+- S2: GoAwayColor blue (clr=3), white floor → S0, perceive green → S1... 
+
+Actually let me try more targeted designs:
+
+**Machine 6**: 3-state foraging (stop/repulse/goaway-blue)
+- S0: Stop (B=1), transitions: few neighbors → S1, black floor → S2
+- S1: Repulsion (B=5, rep=3.5), gray floor → S0, random → S2
+- S2: GoAwayColor blue (B=9, clr=3), white floor → S0
+
+Leaving S0 (others=[1,2]): D=0→S1, D=1→S2
+Leaving S1 (others=[0,2]): D=0→S0, D=1→S2
+Leaving S2 (others=[0,1]): D=0→S0, D=1→S1
+
+**Machine 7**: 2-state: Repulsion + GoAwayColor blue
+- S0: Repulsion (B=5, rep=3.5), black floor → S1, random → S1
+- S1: GoAwayColor blue (B=9, clr=3), white floor → S0, few neighbors → S0
+
+**Machine 8**: 4-state with GoToColor green for return
+- S0: Stop, few neighbors → S1, random → S2
+- S1: Repulsion, gray → S0, random → S2
+- S2: GoAwayColor blue (B=9, clr=3), white floor → S3, perceive blue → S1... hmm
+- S3: GoToColor green (B=8, clr=2), white floor → S0
+
+Actually I need to think more carefully. The champion's S3 (GoToColor green) transitions to S1 on white floor. This suggests: at nest (white), go to S1 (repulsion) to spread out again.
+
+**Machine 9**: Champion but with S3 having more transitions
+Add transition from S3 on black floor → S2 (to re-enter source loop)
+
+**Machine 10**: Champion variant - change clr2 from 3 to 2 (go away from green, toward blue)
+This tests whether blue or green is the good half.
+
+**Machine 11**: Champion variant - change clr3 from 2 to 3 (go toward blue instead of green)
+
+**Machine 12**: 3-state simpler foraging
+- S0: Repulsion (B=5, rep=3.5), gray → S0... no, can't point to self
+- S0: Repulsion, random(0.1) → S1, black → S1
+- S1: GoAwayColor blue (B=9, clr=3), white → S2, few neighbors → S0
+- S2: GoToColor green (B=8, clr=2), white → S0, black → S1
+
+**Machine 13**: 4-state GoToColor-based
+- S0: Explore (B=0, rwm=50), black → S1, white → S2
+- S1: GoAwayColor blue (B=9, clr=3), white → S2
+- S2: GoToColor green (B=8, clr=2), black → S1
+- S3: Repulsion (B=5, rep=3.0), random → S0
+
+**Machine 14**: Champion variant with different w values in S0
+
+Let me now write all 14 machines carefully, paying attention to destination indices.
+
+For 4 states, leaving state I, others are all states except I, in order [0,1,...,I-1,I+1,...,3]:
+- Leaving S0: others=[S1,S2,S3], D=0→S1, D=1→S2, D=2→S3
+- Leaving S1: others=[S0,S2,S3], D=0→S0, D=1→S2, D=2→S3
+- Leaving S2: others=[S0,S1,S3], D=0→S0, D=1→S1, D=2→S3
+- Leaving S3: others=[S0,S1,S2], D=0→S0, D=1→S1, D=2→S2
+
+For 3 states:
+- Leaving S0: others=[S1,S2], D=0→S1, D=1→S2
+- Leaving S1: others=[S0,S2], D=0→S0, D=1→S2
+- Leaving S2: others=[S0,S1], D=0→S0, D=1→S1
+
+For 2 states:
+- Leaving S0: others=[S1], D=0→S1
+- Leaving S1: others=[S0], D=0→S0
+
+Now let me verify the champion:
+- n0x0=0 from S0: D=0→S1 ✓ (few neighbors → S1=Repulsion)
+- n0x1=2, n0x2=2 from S0: D=2→S3 (GoToColor green) - random and black floor → S3
+- n1x0=1 from S1: D=1→S2 (GoAwayColor blue) - random(0.075) → S2
+- n1x1=0, n1x3=0 from S1: D=0→S0 (Stop) - gray floor → S0
+- n1x2=2 from S1: D=2→S3 (GoToColor green) - random(0.149) → S3
+- n2x0=0 from S2: D=0→S0 (Stop) - white floor → S0
+- n2x1=1, n2x2=1 from S2: D=1→S1 (Repulsion) - few neighbors → S1
+- n2x3=2 from S2: D=2→S3 (GoToColor green) - perceive blue(0.099) → S3
+- n3x0=0 from S3: D=0→S0 (Stop) - many neighbors → S0
+- n3x1=1 from S3: D=1→S1 (Repulsion) - white floor(0.919) → S1
+
+So the flow: Stop → Repulsion (when few neighbors) → GoAwayColor blue (random) → GoToColor green (when perceive blue) → back to Repulsion on white floor (nest).
+
+The robot disperses (repulsion), then moves away from blue walls (toward green half), when it sees blue walls nearby it switches to GoToColor green (moves toward green = picks up green item), then returns to nest (white floor) → Repulsion → Stop.
+
+This is a clever foraging loop! Let me now write all machines:
+
+FSM 1 (Champion exact):
+--nstates 4 --s0 1 --cle0 6 --n0 3 --n0x0 0 --c0x0 4 --p0x0 4 --w0x0 17.0629 --n0x1 2 --c0x1 5 --p0x1 0.7426 --n0x2 2 --c0x2 0 --p0x2 0.3783 --s1 5 --rep1 3.4479 --cle1 6 --n1 4 --n1x0 1 --c1x0 5 --p1x0 0.0752 --n1x1 0 --c1x1 1 --p1x1 0.6824 --n1x2 2 --c1x2 5 --p1x2 0.1491 --n1x3 0 --c1x3 1 --p1x3 0.3721 --s2 9 --vel2 1.0 --cle2 0 --clr2 3 --n2 4 --n2x0 0 --c2x0 2 --p2x0 0.4526 --n2x1 1 --c2x1 4 --p2x1 4 --w2x1 5.1906 --n2x2 1 --c2x2 4 --p2x2 3 --w2x2 17.4083 --n2x3 2 --c2x3 7 --p2x3 0.0993 --l2x3 3 --s3 8 --vel3 1.0 --cle3 5 --clr3 2 --n3 2 --n3x0 0 --c3x0 3 --p3x0 6 --w3x0 1.9876 --n3x1 1 --c3x1 2 --p3x1 0.9188
+
+FSM 2 (Champion, rep1=3.8, slightly different probs):
+--nstates 4 --s0 1 --cle0 6 --n0 3 --n0x0 0 --c0x0 4 --p0x0 4 --w0x0 17.0629 --n0x1 2 --c0x1 5 --p0x1 0.72 --n0x2 2 --c0x2 0 --p0x2 0.38 --s1 5 --rep1 3.8 --cle1 6 --n1 4 --n1x0 1 --c1x0 5 --p1x0 0.08 --n1x1 0 --c1x1 1 --p1x1 0.68 --n1x2 2 --c1x2 5 --p1x2 0.15 --n1x3 0 --c1x3 1 --p1x3 0.37 --s2 9 --vel2 1.0 --cle2 0 --clr2 3 --n2 4 --n2x0 0 --c2x0 2 --p2x0 0.45 --n2x1 1 --c2x1 4 --p2x1 4 --w2x1 5.2 --n2x2 1 --c2x2 4 --p2x2 3 --w2x2 17.4 --n2x3 2 --c2x3 7 --p2x3 0.1 --l2x3 3 --s3 8 --vel3 1.0 --cle3 5 --clr3 2 --n3 2 --n3x0 0 --c3x0 3 --p3x0 6 --w3x0 2.0 --n3x1 1 --c3x1 2 --p3x1 0.92
+
+FSM 3 (Champion, rep1=3.0, p2x0=0.55, p1x0=0.06):
+--nstates 4 --s0 1 --cle0 6 --n0 3 --n0x0 0 --c0x0 4 --p0x0 4 --w0x0 17.0629 --n0x1 2 --c0x1 5 --p0x1 0.75 --n0x2 2 --c0x2 0 --p0x2 0.36 --s1 5 --rep1 3.0 --cle1 6 --n1 4 --n1x0 1 --c1x0 5 --p1x0 0.06 --n1x1 0 --c1x1 1 --p1x1 0.7 --n1x2 2 --c1x2 5 --p1x2 0.14 --n1x3 0 --c1x3 1 --p1x3 0.36 --s2 9 --vel2 1.0 --cle2 0 --clr2 3 --n2 4 --n2x0 0 --c2x0 2 --p2x0 0.55 --n2x1 1 --c2x1 4 --p2x1 4 --w2x1 5.2 --n2x2 1 --c2x2 4 --p2x2 3 --w2x2 17.4 --n2x3 2 --c2x3 7 --p2x3 0.1 --l2x3 3 --s3 8 --vel3 1.0 --cle3 5 --clr3 2 --n3 2 --n3x0 0 --c3x0 3 --p3x0 6 --w3x0 2.0 --n3x1 1 --c3x1 2 --p3x1 0.92
+
+FSM 4 (Champion with extra transition from S3 on black → S2):
+--nstates 4 --s0 1 --cle0 6 --n0 3 --n0x0 0 --c0x0 4 --p0x0 4 --w0x0 17.0629 --n0x1 2 --c0x1 5 --p0x1 0.7426 --n0x2 2 --c0x2 0 --p0x2 0.3783 --s1 5 --rep1 3.4479 --cle1 6 --n1 4 --n1x0 1 --c1x0 5 --p1x0 0.0752 --n1x1 0 --c1x1 1 --p1x1 0.6824 --n1x2 2 --c1x2 5 --p1x2 0.1491 --n1x3 0 --c1x3 1 --p1x3 0.3721 --s2 9 --vel2 1.0 --cle2 0 --clr2 3 --n2 4 --n2x0 0 --c2x0 2 --p2x0 0.4526 --n2x1 1 --c2x1 4 --p2x1 4 --w2x1 5.1906 --n2x2 1 --c2x2 4 --p2x2 3 --w2x2 17.4083 --n2x3 2 --c2x3 7 --p2x3 0.0993 --l2x3 3 --s3 8 --vel3 1.0 --cle3 5 --clr3 2 --n3 3 --n3x0 0 --c3x0 3 --p3x0 6 --w3x0 1.9876 --n3x1 1 --c3x1 2 --p3x1 0.9188 --n3x2 2 --c3x2 0 --p3x2 0.5
+
+FSM 5 (Champion topology, S2=GoToColor green clr=2 instead of GoAwayColor blue):
+Test if going TOWARD green is better than away from blue.
+--nstates 4 --s0 1 --cle0 6 --n0 3 --n0x0 0 --c0x0 4 --p0x0 4 --w0x0 17.0629 --n0x1 2 --c0x1 5 --p0x1 0.7426 --n0x2 2 --c0x2 0 --p0x2 0.3783 --s1 5 --rep1 3.4479 --cle1 6 --n1 4 --n1x0 1 --c1x0 5 --p1x0 0.0752 --n1x1 0 --c1x1 1 --p1x1 0.6824 --n1x2 2 --c1x2 5 --p1x2 0.1491 --n1x3 0 --c1x3 1 --p1x3 0.3721 --s2 8 --vel2 1.0 --cle2 0 --clr2 2 --n2 4 --n2x0 0 --c2x0 2 --p2x0 0.4526 --n2x1 1 --c2x1 4 --p2x1 4 --w2x1 5.1906 --n2x2 1 --c2x2 4 --p2x2 3 --w2x2 17.4083 --n2x3 2 --c2x3 7 --p2x3 0.0993 --l2x3 2 --s3 8 --vel3 1.0 --cle3 5 --clr3 2 --n3 2 --n3x0 0 --c3x0 3 --p3x0 6 --w3x0 1.9876 --n3x1 1 --c3x1 2 --p3x1 0.9188
+
+FSM 6 (Champion but swap colors: go away green, go toward blue - test which half is good):
+--nstates 4 --s0 1 --cle0 6 --n0 3 --n0x0 0 --c0x0 4 --p0x0 4 --w0x0 17.0629 --n0x1 2 --c0x1 5 --p0x1 0.7426 --n0x2 2 --c0x2 0 --p0x2 0.3783 --s1 5 --rep1 3.4479 --cle1 6 --n1 4 --n1x0 1 --c1x0 5 --p1x0 0.0752 --n1x1 0 --c1x1 1 --p1x1 0.6824 --n1x2 2 --c1x2 5 --p1x2 0.1491 --n1x3 0 --c1x3 1 --p1x3 0.3721 --s2 9 --vel2 1.0 --cle2 0 --clr2 2 --n2 4 --n2x0 0 --c2x0 2 --p2x0 0.4526 --n2x1 1 --c2x1 4 --p2x1 4 --w2x1 5.1906 --n2x2 1 --c2x2 4 --p2x2 3 --w2x2 17.4083 --n2x3 2 --c2x3 7 --p2x3 0.0993 --l2x3 2 --s3 8 --vel3 1.0 --cle3 5 --clr3 3 --n3 2 --n3x0 0 --c3x0 3 --p3x0 6 --w3x0 1.9876 --n3x1 1 --c3x1 2 --p3x1 0.9188
+
+FSM 7 (3-state: Stop → Repulsion → GoAwayColor blue, simple):
+- S0: Stop, few neighbors(C=4,p=4,w=17) → S1, black floor(C=0,p=0.4) → S2
+- S1: Repulsion(rep=3.5), gray(C=1,p=0.7) → S0, random(C=5,p=0.08) → S2
+- S2: GoAwayColor blue(B=9,clr=3), white floor(C=2,p=0.9) → S1, few neighbors(C=4,p=3,w=15) → S1
+
+Leaving S0: D=0→S1, D=1→S2
+Leaving S1: D=0→S0, D=1→S2
+Leaving S2: D=0→S0, D=1→S1
+
+--nstates 3 --s0 1 --cle0 6 --n0 2 --n0x0 0 --c0x0 4 --p0x0 4 --w0x0 17.0 --n0x1 1 --c0x1 0 --p0x1 0.4 --s1 5 --rep1 3.5 --cle1 6 --n1 2 --n1x0 0 --c1x0 1 --p1x0 0.7 --n1x1 1 --c1x1 5 --p1x1 0.08 --s2 9 --vel2 1.0 --cle2 0 --clr2 3 --n2 2 --n2x0 0 --c2x0 2 --p2x0 0.9 --n2x1 1 --c2x1 4 --p2x1 3 --w2x1 15.0
+
+Wait, for S0 leaving: D=0→S1, D=1→S2. --n0x0 0 → S1, --n0x1 1 → S2. ✓
+For S1 leaving: D=0→S0, D=1→S2. --n1x0 0 → S0, --n1x1 1 → S2. ✓
+For S2 leaving: D=0→S0, D=1→S1. --n2x0 0 → S0, --n2x1 1 → S1. ✓
+
+FSM 8 (3-state with GoToColor green added):
+- S0: Stop, few neighbors → S1, random → S2
+- S1: Repulsion(rep=3.5), gray → S0, random(0.05) → S2
+- S2: GoToColor green(B=8,clr=2), white floor → S0, black floor → S1... hmm, if at source black, maybe stay? Let me think.
+
+Actually for return: once robot has item (on black, then moves away), white floor means at nest.
+- S2: GoToColor green → go to green wall → enter green half (black) → then need to return
+- Need S3 for return... 3 states might not be enough for explicit loop.
+
+Let me make S2 have: on black floor (at source, got item, now return) → S1 (repulsion to spread and drift toward nest), on white → S0 (at nest, stop and wait)
+
+FSM 8:
+--nstates 3 --s0 1 --cle0 6 --n0 2 --n0x0 0 --c0x0 4 --p0x0 4 --w0x0 17.0 --n0x1 1 --c0x1 5 --p0x1 0.7 --s1 5 --rep1 3.5 --cle1 6 --n1 2 --n1x0 0 --c1x0 1 --p1x0 0.7 --n1x1 1 --c1x1 5 --p1x1 0.08 --s2 8 --vel2 1.0 --cle2 0 --clr2 2 --n2 2 --n2x0 0 --c2x0 2 --p2x0 0.9 --n2x1 1 --c2x1 0 --p2x1 0.8
+
+FSM 9 (4-state explicit loop: Stop → Repulsion → GoAwayBlue → GoToGreen → back):
+- S0: Stop (B=1), few neighbors(C=4,p=4,w=17) → S1
+- S1: Repulsion (B=5,rep=3.5), random(0.08) → S2, gray → S0
+- S2: GoAwayColor blue (B=9,clr=3), perceive blue(C=7,l=3,p=0.1) → S3, white → S0, few neighbors → S1
+- S3: GoToColor green (B=8,clr=2), white floor → S1, black → S2
+
+Leaving S0 (4 states): D=0→S1, D=

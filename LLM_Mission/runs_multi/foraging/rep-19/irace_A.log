@@ -1,0 +1,863 @@
+#------------------------------------------------------------------------------
+# irace: An implementation in R of (Elitist) Iterated Racing
+# Version: 4.4.3.dd8d85f
+# Copyright (C) 2010-2025
+# Manuel Lopez-Ibanez     <manuel.lopez-ibanez@manchester.ac.uk>
+# Jeremie Dubois-Lacoste
+# Leslie Perez Caceres    <leslie.perez.caceres@ulb.ac.be>
+#
+# This is free software, and you are welcome to redistribute it under certain
+# conditions.  See the GNU General Public License for details. There is NO
+# WARRANTY; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+# irace builds upon previous code from the race package:
+#     race: Racing methods for the selection of the best
+#     Copyright (C) 2003 Mauro Birattari
+#------------------------------------------------------------------------------
+# installed at: /usr/local/lib/R/site-library/irace
+# called with: --scenario /home/ubuntu/mandarina-supp-mission/LLM_Mission/runs_multi/foraging/rep-19/execution-folder/scenario_A.txt --log-file /home/ubuntu/mandarina-supp-mission/LLM_Mission/runs_multi/foraging/rep-19/execution-folder/irace_A.Rdata
+# 2026-11-08 09:45:45 EST: Reading parameter file '/home/ubuntu/mandarina-supp-mission/software/argos3-installation/automode/irace-files/irace-foraging/grammars/sq-grammar.txt'.
+# 2026-11-08 09:45:45 EST: Read 14 configuration(s) from file '/home/ubuntu/mandarina-supp-mission/LLM_Mission/runs_multi/foraging/rep-19/execution-folder/seed_configs.txt'
+# 2026-11-08 09:45:46 EST: Initialization
+# Elitist race
+# Elitist new instances: 1
+# Elitist limit: 2
+# nbIterations: 10
+# minNbSurvival: 9
+# nbParameters: 157
+# seed: 260998519
+# confidence level: 0.95
+# budget: 6000
+# mu: 40
+# deterministic: FALSE
+
+# 2026-11-08 09:45:46 EST: Iteration 1 of 10
+# experimentsUsed: 0
+# remainingBudget: 6000
+# currentBudget: 600
+# nbConfigurations: 14
+# Markers:
+     x No test is performed.
+     c Configurations are discarded only due to capping.
+     - The test is performed and some configurations are discarded.
+     = The test is performed but no configuration is discarded.
+     ! The test is performed and configurations could be discarded but elite configurations are preserved.
+     . Alive configurations were already evaluated on this instance and nothing is discarded.
+     : All alive configurations are elite, but some need to be evaluated on this instance.
+
++-+-----------+-----------+-----------+----------------+-----------+--------+-----+----+------+
+| |   Instance|      Alive|       Best|       Mean best| Exp so far|  W time|  rho|KenW|  Qvar|
++-+-----------+-----------+-----------+----------------+-----------+--------+-----+----+------+
+|x|          1|         14|          2|    -6.000000000|         14|00:00:07|   NA|  NA|    NA|
+|x|          2|         14|          1|    -2.000000000|         28|00:00:07|+0.06|0.53|0.8671|
+|x|          3|         14|          1|    -2.333333333|         42|00:00:07|+0.01|0.34|0.9436|
+|x|          4|         14|          1|    -1.750000000|         56|00:00:08|+0.04|0.28|0.9911|
+|x|          5|         14|          1|    -2.000000000|         70|00:00:08|+0.01|0.21|0.9982|
+|x|          6|         14|          1|    -1.833333333|         84|00:00:08|+0.06|0.22|0.9281|
+|x|          7|         14|          1|    -1.857142857|         98|00:00:07|+0.10|0.23|0.8889|
+|x|          8|         14|          1|    -1.875000000|        112|00:00:08|+0.15|0.25|0.8336|
+|x|          9|         14|          1|    -1.888888889|        126|00:00:07|+0.16|0.26|0.8313|
+|x|         10|         14|          1|    -2.000000000|        140|00:00:08|+0.17|0.25|0.8203|
+|x|         11|         14|          1|    -2.181818182|        154|00:00:07|+0.19|0.26|0.7929|
+|x|         12|         14|          1|    -2.083333333|        168|00:00:08|+0.20|0.26|0.7862|
+|x|         13|         14|          1|    -2.153846154|        182|00:00:08|+0.21|0.27|0.7566|
+|x|         14|         14|          1|    -2.142857143|        196|00:00:07|+0.23|0.28|0.7223|
+|x|         15|         14|          1|    -1.933333333|        210|00:00:07|+0.18|0.24|0.7512|
+|x|         16|         14|          1|    -1.875000000|        224|00:00:07|+0.17|0.22|0.7681|
+|x|         17|         14|          1|    -1.941176471|        238|00:00:08|+0.17|0.22|0.7554|
+|x|         18|         14|          1|    -1.888888889|        252|00:00:07|+0.17|0.21|0.7780|
+|x|         19|         14|          1|    -1.894736842|        266|00:00:08|+0.18|0.22|0.7640|
+|x|         20|         14|          1|    -1.800000000|        280|00:00:08|+0.17|0.21|0.7700|
+|x|         21|         14|          1|    -1.761904762|        294|00:00:08|+0.17|0.21|0.7888|
+|x|         22|         14|          1|    -1.727272727|        308|00:00:07|+0.18|0.22|0.7848|
+|x|         23|         14|          1|    -1.739130435|        322|00:00:08|+0.17|0.20|0.7994|
+|x|         24|         14|          1|    -1.750000000|        336|00:00:08|+0.18|0.21|0.7908|
+|x|         25|         14|          1|    -1.760000000|        350|00:00:08|+0.19|0.22|0.7747|
+|x|         26|         14|          1|    -1.692307692|        364|00:00:08|+0.18|0.21|0.7845|
+|x|         27|         14|          1|    -1.777777778|        378|00:00:08|+0.19|0.22|0.7853|
+|x|         28|         14|          1|    -1.821428571|        392|00:00:07|+0.20|0.23|0.7789|
+|x|         29|         14|          1|    -1.827586207|        406|00:00:07|+0.19|0.22|0.7831|
+|x|         30|         14|          1|    -1.866666667|        420|00:00:08|+0.19|0.22|0.7767|
+|x|         31|         14|          1|    -1.903225806|        434|00:00:07|+0.20|0.22|0.7687|
+|x|         32|         14|          1|    -1.937500000|        448|00:00:07|+0.20|0.22|0.7669|
+|x|         33|         14|          1|    -1.909090909|        462|00:00:07|+0.20|0.23|0.7672|
+|x|         34|         14|          1|    -1.852941176|        476|00:00:07|+0.20|0.22|0.7757|
+|x|         35|         14|          1|    -1.828571429|        490|00:00:07|+0.20|0.22|0.7790|
+|x|         36|         14|          1|    -1.805555556|        504|00:00:07|+0.20|0.22|0.7843|
+|x|         37|         14|          1|    -1.810810811|        518|00:00:07|+0.20|0.22|0.7826|
+|x|         38|         14|          1|    -1.789473684|        532|00:00:07|+0.20|0.22|0.7861|
+|x|         39|         14|          1|    -1.820512821|        546|00:00:07|+0.20|0.22|0.7822|
+|-|         40|          1|          1|    -1.775000000|        560|00:00:07|   NA|  NA|    NA|
++-+-----------+-----------+-----------+----------------+-----------+--------+-----+----+------+
+Best-so-far configuration:           1    mean value:     -1.775000000
+Description of the best-so-far configuration:
+  .ID. NumStates S0 RWM0 ATT0   REP0 VEL0 CLE0 CLR0 NumConnections0 N0x0 C0x0   P0x0 B0x0 W0x0 BI0x0 WI0x0 L0x0 N0x1 C0x1   P0x1 B0x1 W0x1 BI0x1 WI0x1 L0x1 N0x2 C0x2 P0x2 B0x2 W0x2 BI0x2 WI0x2 L0x2 N0x3 C0x3 P0x3 B0x3 W0x3 BI0x3 WI0x3 L0x3 S1 RWM1 ATT1 REP1 VEL1 CLE1 CLR1 NumConnections1 N1x0 C1x0 P1x0 B1x0 W1x0 BI1x0  WI1x0 L1x0 N1x1 C1x1 P1x1 B1x1 W1x1 BI1x1 WI1x1 L1x1 N1x2 C1x2 P1x2 B1x2 W1x2 BI1x2 WI1x2 L1x2 N1x3 C1x3 P1x3 B1x3 W1x3 BI1x3 WI1x3 L1x3 S2 RWM2 ATT2 REP2 VEL2 CLE2 CLR2 NumConnections2 N2x0 C2x0 P2x0 B2x0   W2x0 BI2x0 WI2x0 L2x0 N2x1 C2x1   P2x1 B2x1 W2x1 BI2x1 WI2x1 L2x1 N2x2 C2x2   P2x2 B2x2 W2x2 BI2x2 WI2x2 L2x2 N2x3 C2x3 P2x3 B2x3 W2x3 BI2x3 WI2x3 L2x3   S3 RWM3 ATT3 REP3 VEL3 CLE3 CLR3 NumConnections3 N3x0 C3x0 P3x0 B3x0 W3x0 BI3x0 WI3x0 L3x0 N3x1 C3x1 P3x1 B3x1 W3x1 BI3x1 WI3x1 L3x1 N3x2 C3x2 P3x2 B3x2 W3x2 BI3x2 WI3x2 L3x2 N3x3 C3x3 P3x3 B3x3 W3x3 BI3x3 WI3x3 L3x3 .PARENT.
+1    1         3  5   NA   NA 3.1197 <NA>    0 <NA>               2    1    2 0.4866   NA   NA    NA    NA <NA>    0    7 0.5692   NA   NA    NA    NA    5   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  1   NA   NA   NA <NA>    0 <NA>               1    1    4   NA   NA   NA     4 15.386 <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  9   NA   NA   NA  1.0    4    2               3    3    3   NA    8 6.8115    NA    NA <NA>    3    2 0.8735   NA   NA    NA    NA <NA>    3    5 0.9674   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA> <NA>   NA   NA   NA <NA> <NA> <NA>              NA   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>       NA
+
+# 2026-11-08 09:51:01 EST: Elite configurations (first number is the configuration ID; listed from best to worst according to the sum of ranks):
+  NumStates S0 RWM0 ATT0   REP0 VEL0 CLE0 CLR0 NumConnections0 N0x0 C0x0   P0x0 B0x0 W0x0 BI0x0 WI0x0 L0x0 N0x1 C0x1   P0x1 B0x1 W0x1 BI0x1 WI0x1 L0x1 N0x2 C0x2 P0x2 B0x2 W0x2 BI0x2 WI0x2 L0x2 N0x3 C0x3 P0x3 B0x3 W0x3 BI0x3 WI0x3 L0x3 S1 RWM1 ATT1 REP1 VEL1 CLE1 CLR1 NumConnections1 N1x0 C1x0 P1x0 B1x0 W1x0 BI1x0  WI1x0 L1x0 N1x1 C1x1 P1x1 B1x1 W1x1 BI1x1 WI1x1 L1x1 N1x2 C1x2 P1x2 B1x2 W1x2 BI1x2 WI1x2 L1x2 N1x3 C1x3 P1x3 B1x3 W1x3 BI1x3 WI1x3 L1x3 S2 RWM2 ATT2 REP2 VEL2 CLE2 CLR2 NumConnections2 N2x0 C2x0 P2x0 B2x0   W2x0 BI2x0 WI2x0 L2x0 N2x1 C2x1   P2x1 B2x1 W2x1 BI2x1 WI2x1 L2x1 N2x2 C2x2   P2x2 B2x2 W2x2 BI2x2 WI2x2 L2x2 N2x3 C2x3 P2x3 B2x3 W2x3 BI2x3 WI2x3 L2x3   S3 RWM3 ATT3 REP3 VEL3 CLE3 CLR3 NumConnections3 N3x0 C3x0 P3x0 B3x0 W3x0 BI3x0 WI3x0 L3x0 N3x1 C3x1 P3x1 B3x1 W3x1 BI3x1 WI3x1 L3x1 N3x2 C3x2 P3x2 B3x2 W3x2 BI3x2 WI3x2 L3x2 N3x3 C3x3 P3x3 B3x3 W3x3 BI3x3 WI3x3 L3x3
+1         3  5   NA   NA 3.1197 <NA>    0 <NA>               2    1    2 0.4866   NA   NA    NA    NA <NA>    0    7 0.5692   NA   NA    NA    NA    5   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  1   NA   NA   NA <NA>    0 <NA>               1    1    4   NA   NA   NA     4 15.386 <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  9   NA   NA   NA  1.0    4    2               3    3    3   NA    8 6.8115    NA    NA <NA>    3    2 0.8735   NA   NA    NA    NA <NA>    3    5 0.9674   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA> <NA>   NA   NA   NA <NA> <NA> <NA>              NA   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>
+# 2026-11-08 09:51:01 EST: Iteration 2 of 10
+# experimentsUsed: 560
+# remainingBudget: 5440
+# currentBudget: 604
+# nbConfigurations: 15
+# Markers:
+     x No test is performed.
+     c Configurations are discarded only due to capping.
+     - The test is performed and some configurations are discarded.
+     = The test is performed but no configuration is discarded.
+     ! The test is performed and configurations could be discarded but elite configurations are preserved.
+     . Alive configurations were already evaluated on this instance and nothing is discarded.
+     : All alive configurations are elite, but some need to be evaluated on this instance.
+
++-+-----------+-----------+-----------+----------------+-----------+--------+-----+----+------+
+| |   Instance|      Alive|       Best|       Mean best| Exp so far|  W time|  rho|KenW|  Qvar|
++-+-----------+-----------+-----------+----------------+-----------+--------+-----+----+------+
+|x|         41|         15|          1|    -4.000000000|         15|00:00:06|   NA|  NA|    NA|
+|x|         34|         15|          1|    -2.000000000|         29|00:00:06|+0.41|0.70|0.1261|
+|x|         25|         15|          1|    -2.000000000|         43|00:00:06|+0.42|0.61|0.4382|
+|x|         26|         15|          1|    -1.500000000|         57|00:00:06|+0.48|0.61|0.3795|
+|x|         12|         15|          1|    -1.400000000|         71|00:00:06|+0.43|0.55|0.3198|
+|x|         20|         15|          1|    -1.166666667|         85|00:00:06|+0.43|0.53|0.2922|
+|x|         28|         15|          1|    -1.428571429|         99|00:00:06|+0.45|0.53|0.2879|
+|x|          2|         15|          1|    -1.500000000|        113|00:00:06|+0.42|0.49|0.2852|
+|x|         32|         15|          1|    -1.666666667|        127|00:00:06|+0.44|0.50|0.3016|
+|x|         23|         15|          1|    -1.700000000|        141|00:00:07|+0.45|0.51|0.3028|
+|x|          7|         15|          1|    -1.727272727|        155|00:00:07|+0.43|0.48|0.3377|
+|x|         30|         15|          1|    -1.833333333|        169|00:00:06|+0.41|0.46|0.3626|
+|x|         29|         15|          1|    -1.846153846|        183|00:00:06|+0.41|0.46|0.3548|
+|x|         16|         15|          1|    -1.785714286|        197|00:00:07|+0.40|0.44|0.3573|
+|x|         33|         15|          1|    -1.733333333|        211|00:00:07|+0.39|0.43|0.3500|
+|x|         19|         15|          1|    -1.750000000|        225|00:00:06|+0.40|0.43|0.3452|
+|x|         17|         15|          1|    -1.823529412|        239|00:00:06|+0.39|0.43|0.3697|
+|x|          3|         15|          1|    -1.888888889|        253|00:00:06|+0.39|0.43|0.3592|
+|x|         18|         15|          1|    -1.842105263|        267|00:00:06|+0.39|0.43|0.3532|
+|x|         39|         15|          1|    -1.900000000|        281|00:00:06|+0.40|0.43|0.3509|
+|x|         40|         15|          1|    -1.809523810|        295|00:00:07|+0.39|0.42|0.3517|
+|x|         11|         15|          1|    -1.909090909|        309|00:00:06|+0.40|0.42|0.3648|
+|x|         14|         15|          1|    -1.913043478|        323|00:00:06|+0.40|0.43|0.3560|
+|x|         15|         15|          1|    -1.791666667|        337|00:00:07|+0.38|0.41|0.3632|
+|x|         37|         15|          1|    -1.800000000|        351|00:00:07|+0.38|0.40|0.3580|
+|x|          9|         15|          1|    -1.807692308|        365|00:00:06|+0.38|0.40|0.3548|
+|x|         22|         15|          1|    -1.777777778|        379|00:00:06|+0.38|0.40|0.3567|
+|x|          4|         15|          1|    -1.714285714|        393|00:00:06|+0.38|0.40|0.3634|
+|x|         21|         15|          1|    -1.689655172|        407|00:00:06|+0.38|0.40|0.3713|
+|x|          1|         15|          1|    -1.700000000|        421|00:00:07|+0.37|0.39|0.3781|
+|x|         13|         15|          1|    -1.741935484|        435|00:00:07|+0.38|0.40|0.3721|
+|x|         24|         15|          1|    -1.750000000|        449|00:00:06|+0.38|0.40|0.3649|
+|x|          6|         15|          1|    -1.727272727|        463|00:00:07|+0.39|0.41|0.3585|
+|x|          8|         15|          1|    -1.735294118|        477|00:00:06|+0.39|0.41|0.3500|
+|x|         38|         15|          1|    -1.714285714|        491|00:00:06|+0.40|0.41|0.3528|
+|x|          5|         15|          1|    -1.750000000|        505|00:00:06|+0.40|0.42|0.3537|
+|x|         10|         15|          1|    -1.783783784|        519|00:00:07|+0.40|0.42|0.3535|
+|x|         27|         15|          1|    -1.842105263|        533|00:00:06|+0.41|0.42|0.3462|
+|x|         31|         15|          1|    -1.871794872|        547|00:00:06|+0.41|0.42|0.3421|
+|-|         36|          1|          1|    -1.850000000|        561|00:00:06|   NA|  NA|    NA|
+|.|         35|          1|          1|    -1.829268293|        561|00:00:00|   NA|  NA|    NA|
++-+-----------+-----------+-----------+----------------+-----------+--------+-----+----+------+
+Best-so-far configuration:           1    mean value:     -1.829268293
+Description of the best-so-far configuration:
+  .ID. NumStates S0 RWM0 ATT0   REP0 VEL0 CLE0 CLR0 NumConnections0 N0x0 C0x0   P0x0 B0x0 W0x0 BI0x0 WI0x0 L0x0 N0x1 C0x1   P0x1 B0x1 W0x1 BI0x1 WI0x1 L0x1 N0x2 C0x2 P0x2 B0x2 W0x2 BI0x2 WI0x2 L0x2 N0x3 C0x3 P0x3 B0x3 W0x3 BI0x3 WI0x3 L0x3 S1 RWM1 ATT1 REP1 VEL1 CLE1 CLR1 NumConnections1 N1x0 C1x0 P1x0 B1x0 W1x0 BI1x0  WI1x0 L1x0 N1x1 C1x1 P1x1 B1x1 W1x1 BI1x1 WI1x1 L1x1 N1x2 C1x2 P1x2 B1x2 W1x2 BI1x2 WI1x2 L1x2 N1x3 C1x3 P1x3 B1x3 W1x3 BI1x3 WI1x3 L1x3 S2 RWM2 ATT2 REP2 VEL2 CLE2 CLR2 NumConnections2 N2x0 C2x0 P2x0 B2x0   W2x0 BI2x0 WI2x0 L2x0 N2x1 C2x1   P2x1 B2x1 W2x1 BI2x1 WI2x1 L2x1 N2x2 C2x2   P2x2 B2x2 W2x2 BI2x2 WI2x2 L2x2 N2x3 C2x3 P2x3 B2x3 W2x3 BI2x3 WI2x3 L2x3   S3 RWM3 ATT3 REP3 VEL3 CLE3 CLR3 NumConnections3 N3x0 C3x0 P3x0 B3x0 W3x0 BI3x0 WI3x0 L3x0 N3x1 C3x1 P3x1 B3x1 W3x1 BI3x1 WI3x1 L3x1 N3x2 C3x2 P3x2 B3x2 W3x2 BI3x2 WI3x2 L3x2 N3x3 C3x3 P3x3 B3x3 W3x3 BI3x3 WI3x3 L3x3 .PARENT.
+1    1         3  5   NA   NA 3.1197 <NA>    0 <NA>               2    1    2 0.4866   NA   NA    NA    NA <NA>    0    7 0.5692   NA   NA    NA    NA    5   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  1   NA   NA   NA <NA>    0 <NA>               1    1    4   NA   NA   NA     4 15.386 <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  9   NA   NA   NA  1.0    4    2               3    3    3   NA    8 6.8115    NA    NA <NA>    3    2 0.8735   NA   NA    NA    NA <NA>    3    5 0.9674   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA> <NA>   NA   NA   NA <NA> <NA> <NA>              NA   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>       NA
+
+# 2026-11-08 09:55:34 EST: Elite configurations (first number is the configuration ID; listed from best to worst according to the sum of ranks):
+  NumStates S0 RWM0 ATT0   REP0 VEL0 CLE0 CLR0 NumConnections0 N0x0 C0x0   P0x0 B0x0 W0x0 BI0x0 WI0x0 L0x0 N0x1 C0x1   P0x1 B0x1 W0x1 BI0x1 WI0x1 L0x1 N0x2 C0x2 P0x2 B0x2 W0x2 BI0x2 WI0x2 L0x2 N0x3 C0x3 P0x3 B0x3 W0x3 BI0x3 WI0x3 L0x3 S1 RWM1 ATT1 REP1 VEL1 CLE1 CLR1 NumConnections1 N1x0 C1x0 P1x0 B1x0 W1x0 BI1x0  WI1x0 L1x0 N1x1 C1x1 P1x1 B1x1 W1x1 BI1x1 WI1x1 L1x1 N1x2 C1x2 P1x2 B1x2 W1x2 BI1x2 WI1x2 L1x2 N1x3 C1x3 P1x3 B1x3 W1x3 BI1x3 WI1x3 L1x3 S2 RWM2 ATT2 REP2 VEL2 CLE2 CLR2 NumConnections2 N2x0 C2x0 P2x0 B2x0   W2x0 BI2x0 WI2x0 L2x0 N2x1 C2x1   P2x1 B2x1 W2x1 BI2x1 WI2x1 L2x1 N2x2 C2x2   P2x2 B2x2 W2x2 BI2x2 WI2x2 L2x2 N2x3 C2x3 P2x3 B2x3 W2x3 BI2x3 WI2x3 L2x3   S3 RWM3 ATT3 REP3 VEL3 CLE3 CLR3 NumConnections3 N3x0 C3x0 P3x0 B3x0 W3x0 BI3x0 WI3x0 L3x0 N3x1 C3x1 P3x1 B3x1 W3x1 BI3x1 WI3x1 L3x1 N3x2 C3x2 P3x2 B3x2 W3x2 BI3x2 WI3x2 L3x2 N3x3 C3x3 P3x3 B3x3 W3x3 BI3x3 WI3x3 L3x3
+1         3  5   NA   NA 3.1197 <NA>    0 <NA>               2    1    2 0.4866   NA   NA    NA    NA <NA>    0    7 0.5692   NA   NA    NA    NA    5   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  1   NA   NA   NA <NA>    0 <NA>               1    1    4   NA   NA   NA     4 15.386 <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  9   NA   NA   NA  1.0    4    2               3    3    3   NA    8 6.8115    NA    NA <NA>    3    2 0.8735   NA   NA    NA    NA <NA>    3    5 0.9674   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA> <NA>   NA   NA   NA <NA> <NA> <NA>              NA   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>
+# 2026-11-08 09:55:34 EST: Iteration 3 of 10
+# experimentsUsed: 1121
+# remainingBudget: 4879
+# currentBudget: 609
+# nbConfigurations: 15
+# Markers:
+     x No test is performed.
+     c Configurations are discarded only due to capping.
+     - The test is performed and some configurations are discarded.
+     = The test is performed but no configuration is discarded.
+     ! The test is performed and configurations could be discarded but elite configurations are preserved.
+     . Alive configurations were already evaluated on this instance and nothing is discarded.
+     : All alive configurations are elite, but some need to be evaluated on this instance.
+
++-+-----------+-----------+-----------+----------------+-----------+--------+-----+----+------+
+| |   Instance|      Alive|       Best|       Mean best| Exp so far|  W time|  rho|KenW|  Qvar|
++-+-----------+-----------+-----------+----------------+-----------+--------+-----+----+------+
+|x|         42|         15|         40|    -15.00000000|         15|00:00:07|   NA|  NA|    NA|
+|x|         12|         15|         40|    -14.00000000|         29|00:00:06|+0.67|0.84|0.0487|
+|x|         37|         15|         40|    -12.33333333|         43|00:00:06|+0.48|0.66|0.2148|
+|x|         10|         15|         40|    -11.25000000|         57|00:00:06|+0.57|0.67|0.1732|
+|x|          9|         15|         40|    -11.20000000|         71|00:00:06|+0.56|0.65|0.1691|
+|x|         13|         15|         40|    -10.83333333|         85|00:00:06|+0.54|0.62|0.1685|
+|x|          2|         15|         40|    -10.57142857|         99|00:00:06|+0.53|0.60|0.1509|
+|x|         35|         15|         40|    -10.75000000|        113|00:00:06|+0.56|0.62|0.1399|
+|x|         19|         15|         40|    -10.55555556|        127|00:00:06|+0.55|0.60|0.1360|
+|x|         28|         15|         40|    -9.800000000|        141|00:00:06|+0.53|0.58|0.1720|
+|x|         20|         15|         40|    -10.09090909|        155|00:00:06|+0.52|0.56|0.1788|
+|x|         16|         15|         40|    -10.33333333|        169|00:00:06|+0.54|0.58|0.1681|
+|x|          6|         15|         40|    -10.15384615|        183|00:00:06|+0.53|0.57|0.1640|
+|x|         39|         15|         40|    -10.28571429|        197|00:00:06|+0.54|0.57|0.1576|
+|x|         22|         15|         40|    -10.13333333|        211|00:00:06|+0.54|0.57|0.1558|
+|x|          5|         15|         40|    -10.31250000|        225|00:00:06|+0.55|0.58|0.1488|
+|x|         17|         15|         40|    -10.00000000|        239|00:00:06|+0.54|0.56|0.1587|
+|x|         24|         15|         40|    -10.00000000|        253|00:00:06|+0.55|0.57|0.1509|
+|x|         36|         15|         40|    -10.00000000|        267|00:00:06|+0.55|0.57|0.1449|
+|x|          1|         15|         40|    -10.00000000|        281|00:00:06|+0.55|0.58|0.1408|
+|x|         18|         15|         40|    -10.04761905|        295|00:00:06|+0.55|0.57|0.1482|
+|x|         25|         15|         40|    -10.13636364|        309|00:00:06|+0.56|0.58|0.1428|
+|x|         11|         15|         40|    -10.17391304|        323|00:00:06|+0.56|0.58|0.1418|
+|x|         41|         15|         40|    -10.12500000|        337|00:00:06|+0.57|0.59|0.1422|
+|x|         21|         15|         40|    -10.12000000|        351|00:00:06|+0.55|0.57|0.1464|
+|x|         30|         15|         40|    -10.15384615|        365|00:00:06|+0.56|0.57|0.1438|
+|x|         34|         15|         40|    -10.33333333|        379|00:00:06|+0.55|0.57|0.1433|
+|x|          8|         15|         40|    -10.39285714|        393|00:00:06|+0.55|0.57|0.1407|
+|x|          3|         15|         40|    -10.44827586|        407|00:00:06|+0.56|0.57|0.1401|
+|x|         23|         15|         40|    -10.53333333|        421|00:00:06|+0.55|0.57|0.1376|
+|x|         40|         15|         40|    -10.48387097|        435|00:00:06|+0.55|0.57|0.1379|
+|x|         31|         15|         40|    -10.53125000|        449|00:00:06|+0.55|0.57|0.1370|
+|x|         14|         15|         40|    -10.48484848|        463|00:00:06|+0.55|0.57|0.1343|
+|x|         15|         15|         40|    -10.44117647|        477|00:00:06|+0.55|0.56|0.1328|
+|x|         33|         15|         40|    -10.28571429|        491|00:00:06|+0.55|0.56|0.1361|
+|x|         29|         15|         40|    -10.19444444|        505|00:00:06|+0.55|0.56|0.1362|
+|x|         26|         15|         40|    -10.27027027|        519|00:00:06|+0.55|0.56|0.1361|
+|x|         38|         15|         40|    -10.28947368|        533|00:00:06|+0.55|0.56|0.1358|
+|x|          4|         15|         40|    -10.25641026|        547|00:00:06|+0.55|0.56|0.1373|
+|-|         27|          2|         40|    -10.20000000|        561|00:00:06|+0.97|0.97|0.0125|
++-+-----------+-----------+-----------+----------------+-----------+--------+-----+----+------+
+Best configuration for the instances in this race: 40
+Best-so-far configuration:           1    mean value:     -1.904761905
+Description of the best-so-far configuration:
+  .ID. NumStates S0 RWM0 ATT0   REP0 VEL0 CLE0 CLR0 NumConnections0 N0x0 C0x0   P0x0 B0x0 W0x0 BI0x0 WI0x0 L0x0 N0x1 C0x1   P0x1 B0x1 W0x1 BI0x1 WI0x1 L0x1 N0x2 C0x2 P0x2 B0x2 W0x2 BI0x2 WI0x2 L0x2 N0x3 C0x3 P0x3 B0x3 W0x3 BI0x3 WI0x3 L0x3 S1 RWM1 ATT1 REP1 VEL1 CLE1 CLR1 NumConnections1 N1x0 C1x0 P1x0 B1x0 W1x0 BI1x0  WI1x0 L1x0 N1x1 C1x1 P1x1 B1x1 W1x1 BI1x1 WI1x1 L1x1 N1x2 C1x2 P1x2 B1x2 W1x2 BI1x2 WI1x2 L1x2 N1x3 C1x3 P1x3 B1x3 W1x3 BI1x3 WI1x3 L1x3 S2 RWM2 ATT2 REP2 VEL2 CLE2 CLR2 NumConnections2 N2x0 C2x0 P2x0 B2x0   W2x0 BI2x0 WI2x0 L2x0 N2x1 C2x1   P2x1 B2x1 W2x1 BI2x1 WI2x1 L2x1 N2x2 C2x2   P2x2 B2x2 W2x2 BI2x2 WI2x2 L2x2 N2x3 C2x3 P2x3 B2x3 W2x3 BI2x3 WI2x3 L2x3   S3 RWM3 ATT3 REP3 VEL3 CLE3 CLR3 NumConnections3 N3x0 C3x0 P3x0 B3x0 W3x0 BI3x0 WI3x0 L3x0 N3x1 C3x1 P3x1 B3x1 W3x1 BI3x1 WI3x1 L3x1 N3x2 C3x2 P3x2 B3x2 W3x2 BI3x2 WI3x2 L3x2 N3x3 C3x3 P3x3 B3x3 W3x3 BI3x3 WI3x3 L3x3 .PARENT.
+1    1         3  5   NA   NA 3.1197 <NA>    0 <NA>               2    1    2 0.4866   NA   NA    NA    NA <NA>    0    7 0.5692   NA   NA    NA    NA    5   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  1   NA   NA   NA <NA>    0 <NA>               1    1    4   NA   NA   NA     4 15.386 <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  9   NA   NA   NA  1.0    4    2               3    3    3   NA    8 6.8115    NA    NA <NA>    3    2 0.8735   NA   NA    NA    NA <NA>    3    5 0.9674   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA> <NA>   NA   NA   NA <NA> <NA> <NA>              NA   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>       NA
+
+# 2026-11-08 09:59:56 EST: Elite configurations (first number is the configuration ID; listed from best to worst according to the sum of ranks):
+   NumStates S0 RWM0 ATT0   REP0 VEL0 CLE0 CLR0 NumConnections0 N0x0 C0x0   P0x0 B0x0 W0x0 BI0x0 WI0x0 L0x0 N0x1 C0x1   P0x1 B0x1 W0x1 BI0x1 WI0x1 L0x1 N0x2 C0x2 P0x2 B0x2 W0x2 BI0x2 WI0x2 L0x2 N0x3 C0x3 P0x3 B0x3 W0x3 BI0x3 WI0x3 L0x3 S1 RWM1 ATT1 REP1 VEL1 CLE1 CLR1 NumConnections1 N1x0 C1x0   P1x0 B1x0 W1x0 BI1x0  WI1x0 L1x0 N1x1 C1x1 P1x1 B1x1 W1x1 BI1x1   WI1x1 L1x1 N1x2 C1x2   P1x2 B1x2 W1x2 BI1x2 WI1x2 L1x2 N1x3 C1x3 P1x3 B1x3 W1x3 BI1x3 WI1x3 L1x3 S2 RWM2 ATT2 REP2 VEL2 CLE2 CLR2 NumConnections2 N2x0 C2x0 P2x0 B2x0   W2x0 BI2x0 WI2x0 L2x0 N2x1 C2x1   P2x1 B2x1 W2x1 BI2x1 WI2x1 L2x1 N2x2 C2x2   P2x2 B2x2 W2x2 BI2x2 WI2x2 L2x2 N2x3 C2x3 P2x3 B2x3 W2x3 BI2x3 WI2x3 L2x3   S3 RWM3 ATT3   REP3 VEL3 CLE3 CLR3 NumConnections3 N3x0 C3x0   P3x0 B3x0 W3x0 BI3x0 WI3x0 L3x0 N3x1 C3x1 P3x1 B3x1    W3x1 BI3x1 WI3x1 L3x1 N3x2 C3x2 P3x2 B3x2 W3x2 BI3x2 WI3x2 L3x2 N3x3 C3x3 P3x3 B3x3 W3x3 BI3x3 WI3x3 L3x3
+1          3  5   NA   NA 3.1197 <NA>    0 <NA>               2    1    2 0.4866   NA   NA    NA    NA <NA>    0    7 0.5692   NA   NA    NA    NA    5   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  1   NA   NA   NA <NA>    0 <NA>               1    1    4     NA   NA   NA     4 15.386 <NA>   NA <NA>   NA   NA   NA    NA      NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  9   NA   NA   NA  1.0    4    2               3    3    3   NA    8 6.8115    NA    NA <NA>    3    2 0.8735   NA   NA    NA    NA <NA>    3    5 0.9674   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA> <NA>   NA   NA     NA <NA> <NA> <NA>              NA   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA      NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>
+40         4  5   NA   NA 2.7861 <NA>    0 <NA>               2    1    7 0.1362   NA   NA    NA    NA    1    0    5 0.1964   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  8   NA   NA   NA  1.0    6    5               3    2    1 0.0772   NA   NA    NA     NA <NA>    0    4   NA   NA   NA     8 12.4486 <NA>    1    1 0.5404   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  9   NA   NA   NA  1.0    6    2               2    2    3   NA    9 3.6061    NA    NA <NA>    2    2 0.8770   NA   NA    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>    5   NA   NA 3.2203 <NA>    0 <NA>               2    0    7 0.5175   NA   NA    NA    NA    6    0    3   NA    6 13.0787    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>
+# 2026-11-08 09:59:56 EST: Iteration 4 of 10
+# experimentsUsed: 1682
+# remainingBudget: 4318
+# currentBudget: 616
+# nbConfigurations: 15
+# Markers:
+     x No test is performed.
+     c Configurations are discarded only due to capping.
+     - The test is performed and some configurations are discarded.
+     = The test is performed but no configuration is discarded.
+     ! The test is performed and configurations could be discarded but elite configurations are preserved.
+     . Alive configurations were already evaluated on this instance and nothing is discarded.
+     : All alive configurations are elite, but some need to be evaluated on this instance.
+
++-+-----------+-----------+-----------+----------------+-----------+--------+-----+----+------+
+| |   Instance|      Alive|       Best|       Mean best| Exp so far|  W time|  rho|KenW|  Qvar|
++-+-----------+-----------+-----------+----------------+-----------+--------+-----+----+------+
+|x|         43|         15|         40|    -10.00000000|         15|00:00:07|   NA|  NA|    NA|
+|x|         11|         15|         40|    -10.50000000|         28|00:00:06|+0.95|0.97|0.0362|
+|x|          8|         15|         40|    -11.00000000|         41|00:00:05|+0.81|0.87|0.0462|
+|x|          9|         15|         40|    -11.00000000|         54|00:00:05|+0.79|0.85|0.0412|
+|x|          3|         15|         40|    -11.20000000|         67|00:00:05|+0.76|0.81|0.0857|
+|x|         39|         15|         40|    -11.33333333|         80|00:00:05|+0.77|0.81|0.0714|
+|x|         31|         15|         40|    -11.42857143|         93|00:00:05|+0.80|0.82|0.0732|
+|x|         23|         15|         40|    -11.62500000|        106|00:00:05|+0.80|0.83|0.0673|
+|x|         37|         15|         40|    -11.33333333|        119|00:00:05|+0.82|0.84|0.0666|
+|x|         18|         15|         40|    -11.30000000|        132|00:00:05|+0.82|0.84|0.0648|
+|x|         38|         15|         40|    -11.27272727|        145|00:00:05|+0.83|0.84|0.0605|
+|x|          1|         15|         40|    -11.16666667|        158|00:00:05|+0.84|0.85|0.0567|
+|x|         16|         15|         40|    -11.30769231|        171|00:00:06|+0.84|0.85|0.0547|
+|x|         30|         15|         40|    -11.28571429|        184|00:00:06|+0.82|0.83|0.0554|
+|x|         21|         15|         40|    -11.20000000|        197|00:00:05|+0.81|0.83|0.0558|
+|x|          7|         15|         40|    -10.93750000|        211|00:00:06|+0.82|0.83|0.0658|
+|x|         13|         15|         40|    -10.82352941|        224|00:00:06|+0.83|0.84|0.0627|
+|x|         40|         15|         40|    -10.72222222|        237|00:00:06|+0.83|0.83|0.0623|
+|x|          2|         15|         40|    -10.63157895|        250|00:00:06|+0.82|0.83|0.0602|
+|x|         33|         15|         40|    -10.35000000|        263|00:00:06|+0.83|0.84|0.0697|
+|x|         12|         15|         40|    -10.47619048|        276|00:00:06|+0.83|0.84|0.0679|
+|x|          4|         15|         40|    -10.40909091|        289|00:00:06|+0.83|0.84|0.0680|
+|x|          5|         15|         40|    -10.52173913|        302|00:00:06|+0.82|0.83|0.0666|
+|x|         41|         15|         40|    -10.45833333|        315|00:00:06|+0.82|0.83|0.0715|
+|x|         27|         15|         40|    -10.36000000|        328|00:00:06|+0.83|0.83|0.0722|
+|x|         20|         15|         40|    -10.46153846|        341|00:00:05|+0.82|0.83|0.0746|
+|x|         26|         15|         40|    -10.55555556|        354|00:00:06|+0.81|0.82|0.0741|
+|x|         15|         15|         40|    -10.50000000|        367|00:00:06|+0.80|0.80|0.0783|
+|x|         17|         15|         40|    -10.31034483|        380|00:00:06|+0.80|0.81|0.0820|
+|x|         34|         15|         40|    -10.46666667|        393|00:00:06|+0.80|0.80|0.0819|
+|x|         24|         15|         40|    -10.45161290|        406|00:00:06|+0.80|0.81|0.0801|
+|x|         35|         15|         40|    -10.50000000|        419|00:00:06|+0.80|0.80|0.0808|
+|x|         10|         15|         40|    -10.42424242|        432|00:00:06|+0.80|0.81|0.0802|
+|x|         25|         15|         40|    -10.47058824|        445|00:00:06|+0.81|0.81|0.0788|
+|x|         36|         15|         40|    -10.45714286|        458|00:00:06|+0.81|0.82|0.0778|
+|x|         42|         15|         40|    -10.58333333|        471|00:00:06|+0.82|0.82|0.0774|
+|x|         22|         15|         40|    -10.51351351|        484|00:00:06|+0.82|0.82|0.0783|
+|x|         29|         15|         40|    -10.42105263|        497|00:00:05|+0.82|0.82|0.0798|
+|x|         14|         15|         40|    -10.38461538|        510|00:00:05|+0.82|0.82|0.0787|
+|-|         32|          2|         40|    -10.32500000|        524|00:00:06|+1.00|1.00|0.0000|
+|.|         28|          2|         40|    -10.14634146|        524|00:00:00|+0.97|0.98|0.0122|
+|.|         19|          2|         40|    -10.11904762|        524|00:00:00|+0.98|0.98|0.0119|
+|.|          6|          2|         40|    -10.06976744|        524|00:00:00|+0.98|0.98|0.0116|
++-+-----------+-----------+-----------+----------------+-----------+--------+-----+----+------+
+Best-so-far configuration:          40    mean value:     -10.06976744
+Description of the best-so-far configuration:
+   .ID. NumStates S0 RWM0 ATT0   REP0 VEL0 CLE0 CLR0 NumConnections0 N0x0 C0x0   P0x0 B0x0 W0x0 BI0x0 WI0x0 L0x0 N0x1 C0x1   P0x1 B0x1 W0x1 BI0x1 WI0x1 L0x1 N0x2 C0x2 P0x2 B0x2 W0x2 BI0x2 WI0x2 L0x2 N0x3 C0x3 P0x3 B0x3 W0x3 BI0x3 WI0x3 L0x3 S1 RWM1 ATT1 REP1 VEL1 CLE1 CLR1 NumConnections1 N1x0 C1x0   P1x0 B1x0 W1x0 BI1x0 WI1x0 L1x0 N1x1 C1x1 P1x1 B1x1 W1x1 BI1x1   WI1x1 L1x1 N1x2 C1x2   P1x2 B1x2 W1x2 BI1x2 WI1x2 L1x2 N1x3 C1x3 P1x3 B1x3 W1x3 BI1x3 WI1x3 L1x3 S2 RWM2 ATT2 REP2 VEL2 CLE2 CLR2 NumConnections2 N2x0 C2x0 P2x0 B2x0   W2x0 BI2x0 WI2x0 L2x0 N2x1 C2x1  P2x1 B2x1 W2x1 BI2x1 WI2x1 L2x1 N2x2 C2x2 P2x2 B2x2 W2x2 BI2x2 WI2x2 L2x2 N2x3 C2x3 P2x3 B2x3 W2x3 BI2x3 WI2x3 L2x3 S3 RWM3 ATT3   REP3 VEL3 CLE3 CLR3 NumConnections3 N3x0 C3x0   P3x0 B3x0 W3x0 BI3x0 WI3x0 L3x0 N3x1 C3x1 P3x1 B3x1    W3x1 BI3x1 WI3x1 L3x1 N3x2 C3x2 P3x2 B3x2 W3x2 BI3x2 WI3x2 L3x2 N3x3 C3x3 P3x3 B3x3 W3x3 BI3x3 WI3x3 L3x3 .PARENT.
+40   40         4  5   NA   NA 2.7861 <NA>    0 <NA>               2    1    7 0.1362   NA   NA    NA    NA    1    0    5 0.1964   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  8   NA   NA   NA  1.0    6    5               3    2    1 0.0772   NA   NA    NA    NA <NA>    0    4   NA   NA   NA     8 12.4486 <NA>    1    1 0.5404   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  9   NA   NA   NA  1.0    6    2               2    2    3   NA    9 3.6061    NA    NA <NA>    2    2 0.877   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  5   NA   NA 3.2203 <NA>    0 <NA>               2    0    7 0.5175   NA   NA    NA    NA    6    0    3   NA    6 13.0787    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>        1
+
+# 2026-11-08 10:04:00 EST: Elite configurations (first number is the configuration ID; listed from best to worst according to the sum of ranks):
+   NumStates S0 RWM0 ATT0   REP0 VEL0 CLE0 CLR0 NumConnections0 N0x0 C0x0   P0x0 B0x0 W0x0 BI0x0 WI0x0 L0x0 N0x1 C0x1   P0x1 B0x1 W0x1 BI0x1 WI0x1 L0x1 N0x2 C0x2 P0x2 B0x2 W0x2 BI0x2 WI0x2 L0x2 N0x3 C0x3 P0x3 B0x3 W0x3 BI0x3 WI0x3 L0x3 S1 RWM1 ATT1 REP1 VEL1 CLE1 CLR1 NumConnections1 N1x0 C1x0   P1x0 B1x0 W1x0 BI1x0  WI1x0 L1x0 N1x1 C1x1 P1x1 B1x1 W1x1 BI1x1   WI1x1 L1x1 N1x2 C1x2   P1x2 B1x2 W1x2 BI1x2 WI1x2 L1x2 N1x3 C1x3 P1x3 B1x3 W1x3 BI1x3 WI1x3 L1x3 S2 RWM2 ATT2 REP2 VEL2 CLE2 CLR2 NumConnections2 N2x0 C2x0 P2x0 B2x0   W2x0 BI2x0 WI2x0 L2x0 N2x1 C2x1   P2x1 B2x1 W2x1 BI2x1 WI2x1 L2x1 N2x2 C2x2   P2x2 B2x2 W2x2 BI2x2 WI2x2 L2x2 N2x3 C2x3 P2x3 B2x3 W2x3 BI2x3 WI2x3 L2x3   S3 RWM3 ATT3   REP3 VEL3 CLE3 CLR3 NumConnections3 N3x0 C3x0   P3x0 B3x0 W3x0 BI3x0 WI3x0 L3x0 N3x1 C3x1 P3x1 B3x1    W3x1 BI3x1 WI3x1 L3x1 N3x2 C3x2 P3x2 B3x2 W3x2 BI3x2 WI3x2 L3x2 N3x3 C3x3 P3x3 B3x3 W3x3 BI3x3 WI3x3 L3x3
+40         4  5   NA   NA 2.7861 <NA>    0 <NA>               2    1    7 0.1362   NA   NA    NA    NA    1    0    5 0.1964   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  8   NA   NA   NA  1.0    6    5               3    2    1 0.0772   NA   NA    NA     NA <NA>    0    4   NA   NA   NA     8 12.4486 <NA>    1    1 0.5404   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  9   NA   NA   NA  1.0    6    2               2    2    3   NA    9 3.6061    NA    NA <NA>    2    2 0.8770   NA   NA    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>    5   NA   NA 3.2203 <NA>    0 <NA>               2    0    7 0.5175   NA   NA    NA    NA    6    0    3   NA    6 13.0787    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>
+1          3  5   NA   NA 3.1197 <NA>    0 <NA>               2    1    2 0.4866   NA   NA    NA    NA <NA>    0    7 0.5692   NA   NA    NA    NA    5   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  1   NA   NA   NA <NA>    0 <NA>               1    1    4     NA   NA   NA     4 15.386 <NA>   NA <NA>   NA   NA   NA    NA      NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  9   NA   NA   NA  1.0    4    2               3    3    3   NA    8 6.8115    NA    NA <NA>    3    2 0.8735   NA   NA    NA    NA <NA>    3    5 0.9674   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA> <NA>   NA   NA     NA <NA> <NA> <NA>              NA   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA      NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>
+# 2026-11-08 10:04:00 EST: Iteration 5 of 10
+# experimentsUsed: 2206
+# remainingBudget: 3794
+# currentBudget: 632
+# nbConfigurations: 15
+# Markers:
+     x No test is performed.
+     c Configurations are discarded only due to capping.
+     - The test is performed and some configurations are discarded.
+     = The test is performed but no configuration is discarded.
+     ! The test is performed and configurations could be discarded but elite configurations are preserved.
+     . Alive configurations were already evaluated on this instance and nothing is discarded.
+     : All alive configurations are elite, but some need to be evaluated on this instance.
+
++-+-----------+-----------+-----------+----------------+-----------+--------+-----+----+------+
+| |   Instance|      Alive|       Best|       Mean best| Exp so far|  W time|  rho|KenW|  Qvar|
++-+-----------+-----------+-----------+----------------+-----------+--------+-----+----+------+
+|x|         44|         15|         40|    -13.00000000|         15|00:00:06|   NA|  NA|    NA|
+|x|         24|         15|         40|    -11.50000000|         28|00:00:05|+0.88|0.94|0.0265|
+|x|         21|         15|         40|    -11.00000000|         41|00:00:05|+0.59|0.73|0.1259|
+|x|          9|         15|         40|    -11.00000000|         54|00:00:05|+0.63|0.72|0.1364|
+|x|         26|         15|         40|    -11.40000000|         67|00:00:05|+0.61|0.69|0.1141|
+|x|         31|         15|         40|    -11.50000000|         80|00:00:05|+0.62|0.69|0.1117|
+|x|         12|         15|         40|    -11.71428571|         93|00:00:06|+0.59|0.65|0.1009|
+|x|         19|         15|         40|    -11.37500000|        106|00:00:06|+0.58|0.63|0.1094|
+|x|         41|         15|         40|    -11.11111111|        119|00:00:06|+0.60|0.64|0.1075|
+|x|          3|         15|         40|    -11.20000000|        132|00:00:06|+0.58|0.62|0.1029|
+|x|          4|         15|         40|    -11.00000000|        145|00:00:06|+0.58|0.62|0.0998|
+|x|         13|         15|         40|    -10.83333333|        158|00:00:06|+0.58|0.62|0.0958|
+|x|         10|         15|         40|    -10.61538462|        171|00:00:06|+0.59|0.62|0.0993|
+|x|         38|         15|         40|    -10.64285714|        184|00:00:06|+0.59|0.62|0.1014|
+|x|         35|         15|         40|    -10.73333333|        197|00:00:06|+0.58|0.60|0.1001|
+|x|         14|         15|         40|    -10.62500000|        210|00:00:06|+0.59|0.61|0.0955|
+|x|         36|         15|         40|    -10.58823529|        223|00:00:06|+0.60|0.62|0.0957|
+|x|         34|         15|         40|    -10.83333333|        236|00:00:06|+0.58|0.61|0.0953|
+|x|         27|         15|         40|    -10.68421053|        249|00:00:06|+0.59|0.61|0.1013|
+|x|         43|         15|         40|    -10.65000000|        262|00:00:06|+0.59|0.61|0.1027|
+|x|         16|         15|         40|    -10.76190476|        275|00:00:06|+0.58|0.60|0.1053|
+|x|         39|         15|         40|    -10.81818182|        288|00:00:06|+0.58|0.60|0.1093|
+|x|          7|         15|         40|    -10.65217391|        301|00:00:06|+0.57|0.59|0.1215|
+|x|         33|         15|         40|    -10.41666667|        314|00:00:06|+0.57|0.59|0.1301|
+|x|         42|         15|         40|    -10.60000000|        327|00:00:06|+0.57|0.59|0.1299|
+|x|          6|         15|         40|    -10.50000000|        340|00:00:06|+0.57|0.59|0.1288|
+|x|          1|         15|         40|    -10.48148148|        353|00:00:06|+0.57|0.59|0.1452|
+|x|         28|         15|         40|    -10.21428571|        366|00:00:06|+0.58|0.59|0.1556|
+|x|         30|         15|         40|    -10.24137931|        379|00:00:06|+0.58|0.59|0.1565|
+|x|         20|         15|         40|    -10.33333333|        392|00:00:06|+0.57|0.59|0.1534|
+|x|          5|         15|         40|    -10.41935484|        405|00:00:06|+0.57|0.59|0.1551|
+|x|         29|         15|         40|    -10.31250000|        418|00:00:06|+0.57|0.58|0.1571|
+|x|         22|         15|         40|    -10.24242424|        431|00:00:06|+0.57|0.58|0.1619|
+|x|         17|         15|         40|    -10.08823529|        444|00:00:06|+0.57|0.58|0.1742|
+|x|         37|         15|         40|    -10.05714286|        457|00:00:06|+0.57|0.58|0.1737|
+|x|         18|         15|         40|    -10.08333333|        470|00:00:06|+0.57|0.58|0.1708|
+|x|         25|         15|         40|    -10.13513514|        483|00:00:06|+0.57|0.58|0.1735|
+|x|         15|         15|         40|    -10.10526316|        496|00:00:06|+0.56|0.57|0.1784|
+|x|          8|         15|         40|    -10.15384615|        509|00:00:06|+0.57|0.58|0.1757|
+|-|          2|          3|         40|    -10.12500000|        522|00:00:06|+0.85|0.85|0.0988|
++-+-----------+-----------+-----------+----------------+-----------+--------+-----+----+------+
+Best-so-far configuration:          40    mean value:     -10.13636364
+Description of the best-so-far configuration:
+   .ID. NumStates S0 RWM0 ATT0   REP0 VEL0 CLE0 CLR0 NumConnections0 N0x0 C0x0   P0x0 B0x0 W0x0 BI0x0 WI0x0 L0x0 N0x1 C0x1   P0x1 B0x1 W0x1 BI0x1 WI0x1 L0x1 N0x2 C0x2 P0x2 B0x2 W0x2 BI0x2 WI0x2 L0x2 N0x3 C0x3 P0x3 B0x3 W0x3 BI0x3 WI0x3 L0x3 S1 RWM1 ATT1 REP1 VEL1 CLE1 CLR1 NumConnections1 N1x0 C1x0   P1x0 B1x0 W1x0 BI1x0 WI1x0 L1x0 N1x1 C1x1 P1x1 B1x1 W1x1 BI1x1   WI1x1 L1x1 N1x2 C1x2   P1x2 B1x2 W1x2 BI1x2 WI1x2 L1x2 N1x3 C1x3 P1x3 B1x3 W1x3 BI1x3 WI1x3 L1x3 S2 RWM2 ATT2 REP2 VEL2 CLE2 CLR2 NumConnections2 N2x0 C2x0 P2x0 B2x0   W2x0 BI2x0 WI2x0 L2x0 N2x1 C2x1  P2x1 B2x1 W2x1 BI2x1 WI2x1 L2x1 N2x2 C2x2 P2x2 B2x2 W2x2 BI2x2 WI2x2 L2x2 N2x3 C2x3 P2x3 B2x3 W2x3 BI2x3 WI2x3 L2x3 S3 RWM3 ATT3   REP3 VEL3 CLE3 CLR3 NumConnections3 N3x0 C3x0   P3x0 B3x0 W3x0 BI3x0 WI3x0 L3x0 N3x1 C3x1 P3x1 B3x1    W3x1 BI3x1 WI3x1 L3x1 N3x2 C3x2 P3x2 B3x2 W3x2 BI3x2 WI3x2 L3x2 N3x3 C3x3 P3x3 B3x3 W3x3 BI3x3 WI3x3 L3x3 .PARENT.
+40   40         4  5   NA   NA 2.7861 <NA>    0 <NA>               2    1    7 0.1362   NA   NA    NA    NA    1    0    5 0.1964   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  8   NA   NA   NA  1.0    6    5               3    2    1 0.0772   NA   NA    NA    NA <NA>    0    4   NA   NA   NA     8 12.4486 <NA>    1    1 0.5404   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  9   NA   NA   NA  1.0    6    2               2    2    3   NA    9 3.6061    NA    NA <NA>    2    2 0.877   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  5   NA   NA 3.2203 <NA>    0 <NA>               2    0    7 0.5175   NA   NA    NA    NA    6    0    3   NA    6 13.0787    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>        1
+
+# 2026-11-08 10:08:14 EST: Elite configurations (first number is the configuration ID; listed from best to worst according to the sum of ranks):
+   NumStates S0 RWM0 ATT0   REP0 VEL0 CLE0 CLR0 NumConnections0 N0x0 C0x0   P0x0 B0x0 W0x0 BI0x0 WI0x0 L0x0 N0x1 C0x1   P0x1 B0x1 W0x1 BI0x1 WI0x1 L0x1 N0x2 C0x2   P0x2 B0x2 W0x2 BI0x2 WI0x2 L0x2 N0x3 C0x3 P0x3 B0x3 W0x3 BI0x3 WI0x3 L0x3 S1 RWM1 ATT1 REP1 VEL1 CLE1 CLR1 NumConnections1 N1x0 C1x0   P1x0 B1x0 W1x0 BI1x0   WI1x0 L1x0 N1x1 C1x1 P1x1 B1x1 W1x1 BI1x1   WI1x1 L1x1 N1x2 C1x2   P1x2 B1x2 W1x2 BI1x2 WI1x2 L1x2 N1x3 C1x3 P1x3 B1x3   W1x3 BI1x3 WI1x3 L1x3 S2 RWM2 ATT2 REP2 VEL2 CLE2 CLR2 NumConnections2 N2x0 C2x0 P2x0 B2x0   W2x0 BI2x0 WI2x0 L2x0 N2x1 C2x1   P2x1 B2x1 W2x1 BI2x1 WI2x1 L2x1 N2x2 C2x2   P2x2 B2x2 W2x2 BI2x2 WI2x2 L2x2 N2x3 C2x3 P2x3 B2x3 W2x3 BI2x3 WI2x3 L2x3   S3 RWM3 ATT3   REP3 VEL3 CLE3 CLR3 NumConnections3 N3x0 C3x0   P3x0 B3x0 W3x0 BI3x0 WI3x0 L3x0 N3x1 C3x1 P3x1 B3x1    W3x1 BI3x1 WI3x1 L3x1 N3x2 C3x2 P3x2 B3x2 W3x2 BI3x2 WI3x2 L3x2 N3x3 C3x3 P3x3 B3x3 W3x3 BI3x3 WI3x3 L3x3
+40         4  5   NA   NA 2.7861 <NA>    0 <NA>               2    1    7 0.1362   NA   NA    NA    NA    1    0    5 0.1964   NA   NA    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  8   NA   NA   NA  1.0    6    5               3    2    1 0.0772   NA   NA    NA      NA <NA>    0    4   NA   NA   NA     8 12.4486 <NA>    1    1 0.5404   NA   NA    NA    NA <NA>   NA <NA>   NA   NA     NA    NA    NA <NA>  9   NA   NA   NA  1.0    6    2               2    2    3   NA    9 3.6061    NA    NA <NA>    2    2 0.8770   NA   NA    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>    5   NA   NA 3.2203 <NA>    0 <NA>               2    0    7 0.5175   NA   NA    NA    NA    6    0    3   NA    6 13.0787    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>
+1          3  5   NA   NA 3.1197 <NA>    0 <NA>               2    1    2 0.4866   NA   NA    NA    NA <NA>    0    7 0.5692   NA   NA    NA    NA    5   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  1   NA   NA   NA <NA>    0 <NA>               1    1    4     NA   NA   NA     4 15.3860 <NA>   NA <NA>   NA   NA   NA    NA      NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA     NA    NA    NA <NA>  9   NA   NA   NA  1.0    4    2               3    3    3   NA    8 6.8115    NA    NA <NA>    3    2 0.8735   NA   NA    NA    NA <NA>    3    5 0.9674   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA> <NA>   NA   NA     NA <NA> <NA> <NA>              NA   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA      NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>
+59         3  5   NA   NA 3.3524 <NA>    0 <NA>               3    1    7 0.9841   NA   NA    NA    NA    4    2    5 0.6025   NA   NA    NA    NA <NA>    1    7 0.3996   NA   NA    NA    NA    6   NA <NA>   NA   NA   NA    NA    NA <NA>  8   NA   NA   NA  1.0    6    5               4    3    4     NA   NA   NA     4 18.4332 <NA>    0    4   NA   NA   NA     6 11.8030 <NA>    0    1 0.7477   NA   NA    NA    NA <NA>    0    3   NA    9 9.9137    NA    NA <NA>  9   NA   NA   NA  1.0    6    2               3    2    3   NA    1 0.5235    NA    NA <NA>    2    2 0.6439   NA   NA    NA    NA <NA>    3    5 0.8146   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA> <NA>   NA   NA     NA <NA> <NA> <NA>              NA   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA      NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>
+# 2026-11-08 10:08:14 EST: Iteration 6 of 10
+# experimentsUsed: 2728
+# remainingBudget: 3272
+# currentBudget: 654
+# nbConfigurations: 17
+# Markers:
+     x No test is performed.
+     c Configurations are discarded only due to capping.
+     - The test is performed and some configurations are discarded.
+     = The test is performed but no configuration is discarded.
+     ! The test is performed and configurations could be discarded but elite configurations are preserved.
+     . Alive configurations were already evaluated on this instance and nothing is discarded.
+     : All alive configurations are elite, but some need to be evaluated on this instance.
+
++-+-----------+-----------+-----------+----------------+-----------+--------+-----+----+------+
+| |   Instance|      Alive|       Best|       Mean best| Exp so far|  W time|  rho|KenW|  Qvar|
++-+-----------+-----------+-----------+----------------+-----------+--------+-----+----+------+
+|x|         45|         17|         40|    -10.00000000|         17|00:00:07|   NA|  NA|    NA|
+|x|         16|         17|         40|    -11.50000000|         31|00:00:06|+0.59|0.79|0.0721|
+|x|         34|         17|         40|    -12.66666667|         45|00:00:06|+0.35|0.56|0.2094|
+|x|          6|         17|         40|    -11.50000000|         59|00:00:06|+0.47|0.60|0.1887|
+|x|         14|         17|         40|    -11.00000000|         73|00:00:07|+0.51|0.61|0.1989|
+|x|          8|         17|         40|    -11.16666667|         87|00:00:06|+0.55|0.62|0.1753|
+|x|         37|         17|         40|    -10.85714286|        101|00:00:06|+0.54|0.60|0.1700|
+|x|         26|         17|         40|    -11.12500000|        115|00:00:06|+0.54|0.59|0.1770|
+|x|          4|         17|         40|    -10.88888889|        129|00:00:06|+0.53|0.58|0.1919|
+|x|         24|         17|         40|    -10.80000000|        143|00:00:06|+0.54|0.59|0.1847|
+|x|         18|         17|         40|    -10.81818182|        157|00:00:06|+0.55|0.59|0.1746|
+|x|         15|         17|         40|    -10.66666667|        171|00:00:06|+0.55|0.59|0.1658|
+|x|         31|         17|         40|    -10.76923077|        185|00:00:06|+0.56|0.59|0.1638|
+|x|         42|         17|         40|    -11.07142857|        199|00:00:06|+0.56|0.59|0.1752|
+|x|         41|         17|         40|    -10.93333333|        213|00:00:06|+0.56|0.59|0.1800|
+|x|          9|         17|         40|    -10.93750000|        227|00:00:05|+0.57|0.60|0.1743|
+|x|         19|         17|         40|    -10.82352941|        241|00:00:06|+0.57|0.60|0.1737|
+|x|         25|         17|         40|    -10.88888889|        255|00:00:06|+0.58|0.60|0.1686|
+|x|          1|         17|         40|    -10.84210526|        269|00:00:06|+0.58|0.60|0.1871|
+|x|         39|         17|         40|    -10.90000000|        283|00:00:05|+0.57|0.59|0.1820|
+|x|         28|         17|         40|    -10.52380952|        297|00:00:05|+0.57|0.59|0.2029|
+|x|         43|         17|         40|    -10.50000000|        311|00:00:06|+0.58|0.60|0.1969|
+|x|         30|         17|         40|    -10.52173913|        325|00:00:06|+0.58|0.60|0.1918|
+|x|         36|         17|         40|    -10.50000000|        339|00:00:06|+0.58|0.60|0.1974|
+|x|         17|         17|         40|    -10.28000000|        353|00:00:06|+0.58|0.59|0.2162|
+|x|         40|         17|         40|    -10.23076923|        368|00:00:06|+0.57|0.59|0.2137|
+|x|         21|         17|         40|    -10.22222222|        382|00:00:06|+0.58|0.59|0.2091|
+|x|         13|         17|         40|    -10.17857143|        396|00:00:06|+0.58|0.60|0.2061|
+|x|         27|         17|         40|    -10.10344828|        410|00:00:06|+0.59|0.60|0.2068|
+|x|         29|         17|         40|    -10.00000000|        424|00:00:06|+0.59|0.61|0.2030|
+|x|         22|         17|         40|    -9.935483871|        438|00:00:06|+0.60|0.61|0.2033|
+|x|         38|         17|         40|    -9.968750000|        452|00:00:06|+0.60|0.61|0.1982|
+|x|         33|         17|         40|    -9.818181818|        466|00:00:05|+0.60|0.62|0.2003|
+|x|         12|         17|         40|    -9.911764706|        480|00:00:05|+0.60|0.61|0.1975|
+|x|         10|         17|         40|    -9.857142857|        494|00:00:06|+0.60|0.61|0.1955|
+|x|         44|         17|         40|    -9.944444444|        508|00:00:05|+0.61|0.62|0.1917|
+|x|          3|         17|         40|    -10.00000000|        522|00:00:05|+0.61|0.62|0.1889|
+|x|          5|         17|         40|    -10.07894737|        536|00:00:05|+0.61|0.62|0.1913|
+|x|          7|         17|         40|    -10.00000000|        550|00:00:05|+0.61|0.62|0.1878|
+|-|         35|          4|         40|    -10.05000000|        564|00:00:06|+0.75|0.76|0.1747|
++-+-----------+-----------+-----------+----------------+-----------+--------+-----+----+------+
+Best-so-far configuration:          40    mean value:     -10.13333333
+Description of the best-so-far configuration:
+   .ID. NumStates S0 RWM0 ATT0   REP0 VEL0 CLE0 CLR0 NumConnections0 N0x0 C0x0   P0x0 B0x0 W0x0 BI0x0 WI0x0 L0x0 N0x1 C0x1   P0x1 B0x1 W0x1 BI0x1 WI0x1 L0x1 N0x2 C0x2 P0x2 B0x2 W0x2 BI0x2 WI0x2 L0x2 N0x3 C0x3 P0x3 B0x3 W0x3 BI0x3 WI0x3 L0x3 S1 RWM1 ATT1 REP1 VEL1 CLE1 CLR1 NumConnections1 N1x0 C1x0   P1x0 B1x0 W1x0 BI1x0 WI1x0 L1x0 N1x1 C1x1 P1x1 B1x1 W1x1 BI1x1   WI1x1 L1x1 N1x2 C1x2   P1x2 B1x2 W1x2 BI1x2 WI1x2 L1x2 N1x3 C1x3 P1x3 B1x3 W1x3 BI1x3 WI1x3 L1x3 S2 RWM2 ATT2 REP2 VEL2 CLE2 CLR2 NumConnections2 N2x0 C2x0 P2x0 B2x0   W2x0 BI2x0 WI2x0 L2x0 N2x1 C2x1  P2x1 B2x1 W2x1 BI2x1 WI2x1 L2x1 N2x2 C2x2 P2x2 B2x2 W2x2 BI2x2 WI2x2 L2x2 N2x3 C2x3 P2x3 B2x3 W2x3 BI2x3 WI2x3 L2x3 S3 RWM3 ATT3   REP3 VEL3 CLE3 CLR3 NumConnections3 N3x0 C3x0   P3x0 B3x0 W3x0 BI3x0 WI3x0 L3x0 N3x1 C3x1 P3x1 B3x1    W3x1 BI3x1 WI3x1 L3x1 N3x2 C3x2 P3x2 B3x2 W3x2 BI3x2 WI3x2 L3x2 N3x3 C3x3 P3x3 B3x3 W3x3 BI3x3 WI3x3 L3x3 .PARENT.
+40   40         4  5   NA   NA 2.7861 <NA>    0 <NA>               2    1    7 0.1362   NA   NA    NA    NA    1    0    5 0.1964   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  8   NA   NA   NA  1.0    6    5               3    2    1 0.0772   NA   NA    NA    NA <NA>    0    4   NA   NA   NA     8 12.4486 <NA>    1    1 0.5404   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  9   NA   NA   NA  1.0    6    2               2    2    3   NA    9 3.6061    NA    NA <NA>    2    2 0.877   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  5   NA   NA 3.2203 <NA>    0 <NA>               2    0    7 0.5175   NA   NA    NA    NA    6    0    3   NA    6 13.0787    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>        1
+
+# 2026-11-08 10:12:30 EST: Elite configurations (first number is the configuration ID; listed from best to worst according to the sum of ranks):
+   NumStates S0 RWM0 ATT0   REP0 VEL0 CLE0 CLR0 NumConnections0 N0x0 C0x0   P0x0 B0x0 W0x0 BI0x0 WI0x0 L0x0 N0x1 C0x1   P0x1 B0x1 W0x1 BI0x1 WI0x1 L0x1 N0x2 C0x2   P0x2 B0x2 W0x2 BI0x2 WI0x2 L0x2 N0x3 C0x3 P0x3 B0x3 W0x3 BI0x3 WI0x3 L0x3 S1 RWM1 ATT1 REP1 VEL1 CLE1 CLR1 NumConnections1 N1x0 C1x0   P1x0 B1x0 W1x0 BI1x0   WI1x0 L1x0 N1x1 C1x1  P1x1 B1x1 W1x1 BI1x1   WI1x1 L1x1 N1x2 C1x2   P1x2 B1x2 W1x2 BI1x2 WI1x2 L1x2 N1x3 C1x3 P1x3 B1x3   W1x3 BI1x3 WI1x3 L1x3 S2 RWM2 ATT2 REP2 VEL2 CLE2 CLR2 NumConnections2 N2x0 C2x0 P2x0 B2x0   W2x0 BI2x0 WI2x0 L2x0 N2x1 C2x1   P2x1 B2x1 W2x1 BI2x1 WI2x1 L2x1 N2x2 C2x2   P2x2 B2x2 W2x2 BI2x2 WI2x2 L2x2 N2x3 C2x3 P2x3 B2x3 W2x3 BI2x3 WI2x3 L2x3   S3 RWM3 ATT3   REP3 VEL3 CLE3 CLR3 NumConnections3 N3x0 C3x0   P3x0 B3x0 W3x0 BI3x0 WI3x0 L3x0 N3x1 C3x1 P3x1 B3x1    W3x1 BI3x1 WI3x1 L3x1 N3x2 C3x2 P3x2 B3x2 W3x2 BI3x2 WI3x2 L3x2 N3x3 C3x3 P3x3 B3x3 W3x3 BI3x3 WI3x3 L3x3
+40         4  5   NA   NA 2.7861 <NA>    0 <NA>               2    1    7 0.1362   NA   NA    NA    NA    1    0    5 0.1964   NA   NA    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  8   NA   NA   NA  1.0    6    5               3    2    1 0.0772   NA   NA    NA      NA <NA>    0    4    NA   NA   NA     8 12.4486 <NA>    1    1 0.5404   NA   NA    NA    NA <NA>   NA <NA>   NA   NA     NA    NA    NA <NA>  9   NA   NA   NA  1.0    6    2               2    2    3   NA    9 3.6061    NA    NA <NA>    2    2 0.8770   NA   NA    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>    5   NA   NA 3.2203 <NA>    0 <NA>               2    0    7 0.5175   NA   NA    NA    NA    6    0    3   NA    6 13.0787    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>
+1          3  5   NA   NA 3.1197 <NA>    0 <NA>               2    1    2 0.4866   NA   NA    NA    NA <NA>    0    7 0.5692   NA   NA    NA    NA    5   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  1   NA   NA   NA <NA>    0 <NA>               1    1    4     NA   NA   NA     4 15.3860 <NA>   NA <NA>    NA   NA   NA    NA      NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA     NA    NA    NA <NA>  9   NA   NA   NA  1.0    4    2               3    3    3   NA    8 6.8115    NA    NA <NA>    3    2 0.8735   NA   NA    NA    NA <NA>    3    5 0.9674   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA> <NA>   NA   NA     NA <NA> <NA> <NA>              NA   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA      NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>
+59         3  5   NA   NA 3.3524 <NA>    0 <NA>               3    1    7 0.9841   NA   NA    NA    NA    4    2    5 0.6025   NA   NA    NA    NA <NA>    1    7 0.3996   NA   NA    NA    NA    6   NA <NA>   NA   NA   NA    NA    NA <NA>  8   NA   NA   NA  1.0    6    5               4    3    4     NA   NA   NA     4 18.4332 <NA>    0    4    NA   NA   NA     6 11.8030 <NA>    0    1 0.7477   NA   NA    NA    NA <NA>    0    3   NA    9 9.9137    NA    NA <NA>  9   NA   NA   NA  1.0    6    2               3    2    3   NA    1 0.5235    NA    NA <NA>    2    2 0.6439   NA   NA    NA    NA <NA>    3    5 0.8146   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA> <NA>   NA   NA     NA <NA> <NA> <NA>              NA   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA      NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>
+80         3  5   NA   NA 3.9732 <NA>    0 <NA>               1    0    2 0.7130   NA   NA    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  1   NA   NA   NA <NA>    0 <NA>               2    1    4     NA   NA   NA     7 13.8649 <NA>    3    1 0.821   NA   NA    NA      NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA     NA    NA    NA <NA>  9   NA   NA   NA  1.0    4    2               1    3    3   NA    5 6.9707    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA> <NA>   NA   NA     NA <NA> <NA> <NA>              NA   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA      NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>
+# 2026-11-08 10:12:30 EST: Iteration 7 of 10
+# experimentsUsed: 3292
+# remainingBudget: 2708
+# currentBudget: 677
+# nbConfigurations: 18
+# Markers:
+     x No test is performed.
+     c Configurations are discarded only due to capping.
+     - The test is performed and some configurations are discarded.
+     = The test is performed but no configuration is discarded.
+     ! The test is performed and configurations could be discarded but elite configurations are preserved.
+     . Alive configurations were already evaluated on this instance and nothing is discarded.
+     : All alive configurations are elite, but some need to be evaluated on this instance.
+
++-+-----------+-----------+-----------+----------------+-----------+--------+-----+----+------+
+| |   Instance|      Alive|       Best|       Mean best| Exp so far|  W time|  rho|KenW|  Qvar|
++-+-----------+-----------+-----------+----------------+-----------+--------+-----+----+------+
+|x|         46|         18|         40|    -9.000000000|         18|00:00:08|   NA|  NA|    NA|
+|x|         21|         18|         40|    -9.500000000|         32|00:00:06|+0.75|0.87|0.1096|
+|x|         14|         18|         40|    -9.333333333|         46|00:00:05|+0.83|0.89|0.1244|
+|x|          9|         18|         40|    -9.750000000|         60|00:00:05|+0.85|0.89|0.1028|
+|x|          4|         18|         40|    -9.600000000|         74|00:00:06|+0.86|0.88|0.1008|
+|x|         45|         18|         40|    -9.666666667|         88|00:00:05|+0.87|0.89|0.0941|
+|x|         11|         18|         40|    -9.857142857|        104|00:00:07|+0.84|0.86|0.1267|
+|x|         17|         18|         40|    -9.250000000|        118|00:00:06|+0.84|0.86|0.1307|
+|x|         26|         18|         40|    -9.666666667|        132|00:00:06|+0.84|0.86|0.1328|
+|x|         43|         18|         40|    -9.700000000|        146|00:00:05|+0.85|0.87|0.1311|
+|x|         13|         18|         40|    -9.636363636|        160|00:00:06|+0.85|0.87|0.1352|
+|x|         31|         18|         40|    -9.833333333|        174|00:00:06|+0.86|0.87|0.1307|
+|x|         38|         18|         40|    -9.923076923|        188|00:00:06|+0.87|0.88|0.1246|
+|x|          3|         18|         40|    -10.07142857|        202|00:00:05|+0.86|0.87|0.1211|
+|x|          8|         18|         40|    -10.20000000|        216|00:00:05|+0.86|0.87|0.1163|
+|x|          1|         18|         40|    -10.18750000|        230|00:00:05|+0.87|0.88|0.1116|
+|x|         12|         18|         40|    -10.35294118|        244|00:00:06|+0.87|0.88|0.1181|
+|x|         22|         18|         40|    -10.22222222|        258|00:00:06|+0.87|0.88|0.1180|
+|x|         36|         18|         40|    -10.21052632|        272|00:00:06|+0.88|0.88|0.1186|
+|x|         16|         18|         40|    -10.35000000|        286|00:00:06|+0.88|0.88|0.1216|
+|x|         15|         18|         40|    -10.28571429|        300|00:00:06|+0.87|0.88|0.1213|
+|x|         44|         18|         40|    -10.40909091|        314|00:00:06|+0.87|0.87|0.1260|
+|x|         25|         18|         40|    -10.47826087|        328|00:00:06|+0.87|0.88|0.1234|
+|x|         32|         18|         40|    -10.37500000|        344|00:00:07|+0.87|0.88|0.1197|
+|x|         28|         18|         40|    -10.08000000|        358|00:00:06|+0.87|0.88|0.1287|
+|x|          6|         18|         40|    -10.00000000|        372|00:00:06|+0.88|0.88|0.1258|
+|x|         23|         18|         40|    -10.11111111|        388|00:00:06|+0.88|0.88|0.1228|
+|x|         30|         18|         40|    -10.14285714|        402|00:00:06|+0.88|0.89|0.1212|
+|x|          2|         18|         40|    -10.10344828|        417|00:00:06|+0.88|0.89|0.1182|
+|x|         37|         18|         40|    -10.06666667|        431|00:00:06|+0.88|0.89|0.1161|
+|x|         18|         18|         40|    -10.09677419|        445|00:00:06|+0.88|0.89|0.1139|
+|x|         29|         18|         40|    -10.00000000|        459|00:00:05|+0.88|0.89|0.1148|
+|x|         19|         18|         40|    -9.969696970|        473|00:00:06|+0.88|0.89|0.1138|
+|x|         35|         18|         40|    -10.02941176|        487|00:00:06|+0.88|0.89|0.1125|
+|x|         41|         18|         40|    -10.00000000|        501|00:00:06|+0.89|0.89|0.1134|
+|x|         33|         18|         40|    -9.861111111|        515|00:00:05|+0.88|0.89|0.1191|
+|x|         39|         18|         40|    -9.918918919|        529|00:00:06|+0.89|0.89|0.1192|
+|x|         20|         18|         40|    -10.00000000|        544|00:00:06|+0.88|0.89|0.1183|
+|x|         10|         18|         40|    -9.948717949|        558|00:00:05|+0.88|0.88|0.1218|
+|-|         27|          5|         40|    -9.900000000|        572|00:00:06|+0.68|0.68|0.2197|
++-+-----------+-----------+-----------+----------------+-----------+--------+-----+----+------+
+Best-so-far configuration:          40    mean value:     -10.10869565
+Description of the best-so-far configuration:
+   .ID. NumStates S0 RWM0 ATT0   REP0 VEL0 CLE0 CLR0 NumConnections0 N0x0 C0x0   P0x0 B0x0 W0x0 BI0x0 WI0x0 L0x0 N0x1 C0x1   P0x1 B0x1 W0x1 BI0x1 WI0x1 L0x1 N0x2 C0x2 P0x2 B0x2 W0x2 BI0x2 WI0x2 L0x2 N0x3 C0x3 P0x3 B0x3 W0x3 BI0x3 WI0x3 L0x3 S1 RWM1 ATT1 REP1 VEL1 CLE1 CLR1 NumConnections1 N1x0 C1x0   P1x0 B1x0 W1x0 BI1x0 WI1x0 L1x0 N1x1 C1x1 P1x1 B1x1 W1x1 BI1x1   WI1x1 L1x1 N1x2 C1x2   P1x2 B1x2 W1x2 BI1x2 WI1x2 L1x2 N1x3 C1x3 P1x3 B1x3 W1x3 BI1x3 WI1x3 L1x3 S2 RWM2 ATT2 REP2 VEL2 CLE2 CLR2 NumConnections2 N2x0 C2x0 P2x0 B2x0   W2x0 BI2x0 WI2x0 L2x0 N2x1 C2x1  P2x1 B2x1 W2x1 BI2x1 WI2x1 L2x1 N2x2 C2x2 P2x2 B2x2 W2x2 BI2x2 WI2x2 L2x2 N2x3 C2x3 P2x3 B2x3 W2x3 BI2x3 WI2x3 L2x3 S3 RWM3 ATT3   REP3 VEL3 CLE3 CLR3 NumConnections3 N3x0 C3x0   P3x0 B3x0 W3x0 BI3x0 WI3x0 L3x0 N3x1 C3x1 P3x1 B3x1    W3x1 BI3x1 WI3x1 L3x1 N3x2 C3x2 P3x2 B3x2 W3x2 BI3x2 WI3x2 L3x2 N3x3 C3x3 P3x3 B3x3 W3x3 BI3x3 WI3x3 L3x3 .PARENT.
+40   40         4  5   NA   NA 2.7861 <NA>    0 <NA>               2    1    7 0.1362   NA   NA    NA    NA    1    0    5 0.1964   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  8   NA   NA   NA  1.0    6    5               3    2    1 0.0772   NA   NA    NA    NA <NA>    0    4   NA   NA   NA     8 12.4486 <NA>    1    1 0.5404   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  9   NA   NA   NA  1.0    6    2               2    2    3   NA    9 3.6061    NA    NA <NA>    2    2 0.877   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  5   NA   NA 3.2203 <NA>    0 <NA>               2    0    7 0.5175   NA   NA    NA    NA    6    0    3   NA    6 13.0787    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>        1
+
+# 2026-11-08 10:16:41 EST: Elite configurations (first number is the configuration ID; listed from best to worst according to the sum of ranks):
+   NumStates S0 RWM0 ATT0   REP0 VEL0 CLE0 CLR0 NumConnections0 N0x0 C0x0   P0x0 B0x0 W0x0 BI0x0 WI0x0 L0x0 N0x1 C0x1   P0x1 B0x1 W0x1 BI0x1 WI0x1 L0x1 N0x2 C0x2   P0x2 B0x2 W0x2 BI0x2 WI0x2 L0x2 N0x3 C0x3 P0x3 B0x3 W0x3 BI0x3 WI0x3 L0x3 S1 RWM1 ATT1 REP1 VEL1 CLE1 CLR1 NumConnections1 N1x0 C1x0   P1x0 B1x0 W1x0 BI1x0   WI1x0 L1x0 N1x1 C1x1  P1x1 B1x1 W1x1 BI1x1   WI1x1 L1x1 N1x2 C1x2   P1x2 B1x2 W1x2 BI1x2 WI1x2 L1x2 N1x3 C1x3 P1x3 B1x3   W1x3 BI1x3 WI1x3 L1x3 S2 RWM2 ATT2 REP2 VEL2 CLE2 CLR2 NumConnections2 N2x0 C2x0 P2x0 B2x0   W2x0 BI2x0 WI2x0 L2x0 N2x1 C2x1   P2x1 B2x1 W2x1 BI2x1 WI2x1 L2x1 N2x2 C2x2   P2x2 B2x2 W2x2 BI2x2 WI2x2 L2x2 N2x3 C2x3 P2x3 B2x3 W2x3 BI2x3 WI2x3 L2x3   S3 RWM3 ATT3   REP3 VEL3 CLE3 CLR3 NumConnections3 N3x0 C3x0   P3x0 B3x0 W3x0 BI3x0 WI3x0 L3x0 N3x1 C3x1 P3x1 B3x1    W3x1 BI3x1 WI3x1 L3x1 N3x2 C3x2 P3x2 B3x2 W3x2 BI3x2 WI3x2 L3x2 N3x3 C3x3 P3x3 B3x3 W3x3 BI3x3 WI3x3 L3x3
+40         4  5   NA   NA 2.7861 <NA>    0 <NA>               2    1    7 0.1362   NA   NA    NA    NA    1    0    5 0.1964   NA   NA    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  8   NA   NA   NA  1.0    6    5               3    2    1 0.0772   NA   NA    NA      NA <NA>    0    4    NA   NA   NA     8 12.4486 <NA>    1    1 0.5404   NA   NA    NA    NA <NA>   NA <NA>   NA   NA     NA    NA    NA <NA>  9   NA   NA   NA  1.0    6    2               2    2    3   NA    9 3.6061    NA    NA <NA>    2    2 0.8770   NA   NA    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>    5   NA   NA 3.2203 <NA>    0 <NA>               2    0    7 0.5175   NA   NA    NA    NA    6    0    3   NA    6 13.0787    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>
+80         3  5   NA   NA 3.9732 <NA>    0 <NA>               1    0    2 0.7130   NA   NA    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  1   NA   NA   NA <NA>    0 <NA>               2    1    4     NA   NA   NA     7 13.8649 <NA>    3    1 0.821   NA   NA    NA      NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA     NA    NA    NA <NA>  9   NA   NA   NA  1.0    4    2               1    3    3   NA    5 6.9707    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA> <NA>   NA   NA     NA <NA> <NA> <NA>              NA   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA      NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>
+59         3  5   NA   NA 3.3524 <NA>    0 <NA>               3    1    7 0.9841   NA   NA    NA    NA    4    2    5 0.6025   NA   NA    NA    NA <NA>    1    7 0.3996   NA   NA    NA    NA    6   NA <NA>   NA   NA   NA    NA    NA <NA>  8   NA   NA   NA  1.0    6    5               4    3    4     NA   NA   NA     4 18.4332 <NA>    0    4    NA   NA   NA     6 11.8030 <NA>    0    1 0.7477   NA   NA    NA    NA <NA>    0    3   NA    9 9.9137    NA    NA <NA>  9   NA   NA   NA  1.0    6    2               3    2    3   NA    1 0.5235    NA    NA <NA>    2    2 0.6439   NA   NA    NA    NA <NA>    3    5 0.8146   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA> <NA>   NA   NA     NA <NA> <NA> <NA>              NA   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA      NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>
+1          3  5   NA   NA 3.1197 <NA>    0 <NA>               2    1    2 0.4866   NA   NA    NA    NA <NA>    0    7 0.5692   NA   NA    NA    NA    5   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  1   NA   NA   NA <NA>    0 <NA>               1    1    4     NA   NA   NA     4 15.3860 <NA>   NA <NA>    NA   NA   NA    NA      NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA     NA    NA    NA <NA>  9   NA   NA   NA  1.0    4    2               3    3    3   NA    8 6.8115    NA    NA <NA>    3    2 0.8735   NA   NA    NA    NA <NA>    3    5 0.9674   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA> <NA>   NA   NA     NA <NA> <NA> <NA>              NA   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA      NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>
+93         3  5   NA   NA 3.6947 <NA>    0 <NA>               1    2    7 0.5466   NA   NA    NA    NA    1   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  8   NA   NA   NA  1.0    6    5               3    1    1 0.0080   NA   NA    NA      NA <NA>    2    4    NA   NA   NA    10 16.5901 <NA>    1    1 0.7753   NA   NA    NA    NA <NA>   NA <NA>   NA   NA     NA    NA    NA <NA>  9   NA   NA   NA  1.0    6    2               3    1    3   NA    3 0.6882    NA    NA <NA>    2    2 0.8896   NA   NA    NA    NA <NA>    2    1 0.6537   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA> <NA>   NA   NA     NA <NA> <NA> <NA>              NA   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA      NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>
+# 2026-11-08 10:16:41 EST: Iteration 8 of 10
+# experimentsUsed: 3864
+# remainingBudget: 2136
+# currentBudget: 712
+# nbConfigurations: 20
+# Markers:
+     x No test is performed.
+     c Configurations are discarded only due to capping.
+     - The test is performed and some configurations are discarded.
+     = The test is performed but no configuration is discarded.
+     ! The test is performed and configurations could be discarded but elite configurations are preserved.
+     . Alive configurations were already evaluated on this instance and nothing is discarded.
+     : All alive configurations are elite, but some need to be evaluated on this instance.
+
++-+-----------+-----------+-----------+----------------+-----------+--------+-----+----+------+
+| |   Instance|      Alive|       Best|       Mean best| Exp so far|  W time|  rho|KenW|  Qvar|
++-+-----------+-----------+-----------+----------------+-----------+--------+-----+----+------+
+|x|         47|         20|         93|    -11.00000000|         20|00:00:09|   NA|  NA|    NA|
+|x|         16|         20|         40|    -11.00000000|         35|00:00:06|+0.92|0.96|0.2169|
+|x|         14|         20|         40|    -10.33333333|         50|00:00:06|+0.88|0.92|0.1682|
+|x|         26|         20|         93|    -10.50000000|         65|00:00:06|+0.89|0.92|0.1265|
+|x|         24|         20|         93|    -10.80000000|         81|00:00:07|+0.91|0.93|0.1013|
+|x|         30|         20|         93|    -10.50000000|         96|00:00:06|+0.87|0.89|0.0996|
+|x|         36|         20|         93|    -10.71428571|        111|00:00:06|+0.84|0.87|0.0992|
+|x|         15|         20|         93|    -11.00000000|        126|00:00:06|+0.83|0.86|0.0916|
+|x|          6|         20|         93|    -10.77777778|        141|00:00:06|+0.85|0.87|0.0891|
+|x|         45|         20|         93|    -11.00000000|        156|00:00:06|+0.85|0.87|0.0829|
+|x|         35|         20|         93|    -10.81818182|        171|00:00:06|+0.87|0.88|0.0792|
+|x|         10|         20|        105|    -10.50000000|        186|00:00:06|+0.87|0.88|0.0841|
+|x|         40|         20|        105|    -10.46153846|        202|00:00:06|+0.86|0.87|0.0833|
+|x|         25|         20|        104|    -11.07142857|        217|00:00:06|+0.86|0.87|0.0843|
+|x|          1|         20|        104|    -11.20000000|        232|00:00:06|+0.87|0.87|0.0834|
+|x|         21|         20|        104|    -11.25000000|        247|00:00:06|+0.87|0.88|0.0815|
+|x|         18|         20|        104|    -11.05882353|        262|00:00:06|+0.87|0.87|0.0821|
+|x|          3|         20|        104|    -11.00000000|        277|00:00:06|+0.87|0.88|0.0804|
+|x|          5|         20|        104|    -11.21052632|        293|00:00:06|+0.87|0.88|0.0814|
+|x|         12|         20|        104|    -11.15000000|        308|00:00:05|+0.87|0.88|0.0836|
+|x|         13|         20|        105|    -10.66666667|        323|00:00:05|+0.87|0.87|0.0876|
+|x|         27|         20|        105|    -10.63636364|        338|00:00:05|+0.87|0.88|0.0882|
+|x|         29|         20|        105|    -10.69565217|        353|00:00:06|+0.87|0.88|0.0872|
+|x|         23|         20|        105|    -10.66666667|        368|00:00:06|+0.87|0.88|0.0851|
+|x|         17|         20|        105|    -10.72000000|        383|00:00:05|+0.87|0.88|0.0879|
+|x|         32|         20|        105|    -10.69230769|        398|00:00:05|+0.87|0.88|0.0858|
+|x|         34|         20|        105|    -10.62962963|        414|00:00:07|+0.87|0.88|0.0889|
+|x|         22|         20|        105|    -10.67857143|        429|00:00:06|+0.87|0.88|0.0907|
+|x|         43|         20|        105|    -10.75862069|        444|00:00:06|+0.88|0.88|0.0890|
+|x|          7|         20|        105|    -10.80000000|        460|00:00:06|+0.88|0.88|0.0892|
+|x|          8|         20|        105|    -10.77419355|        475|00:00:06|+0.88|0.88|0.0886|
+|x|         38|         20|        105|    -10.78125000|        490|00:00:06|+0.88|0.88|0.0867|
+|x|         31|         20|        105|    -10.78787879|        505|00:00:06|+0.88|0.89|0.0853|
+|x|         44|         20|        105|    -10.94117647|        520|00:00:06|+0.88|0.89|0.0879|
+|x|          2|         20|        105|    -11.00000000|        535|00:00:05|+0.88|0.88|0.0872|
+|x|         33|         20|        105|    -11.00000000|        550|00:00:06|+0.88|0.88|0.0918|
+|x|         39|         20|        105|    -11.13513514|        565|00:00:05|+0.87|0.87|0.0927|
+|x|         20|         20|        105|    -11.15789474|        580|00:00:06|+0.87|0.87|0.0916|
+|x|          9|         20|        105|    -11.17948718|        595|00:00:06|+0.87|0.87|0.0905|
+|-|         37|          7|        105|    -11.15000000|        610|00:00:06|+0.70|0.71|0.1919|
++-+-----------+-----------+-----------+----------------+-----------+--------+-----+----+------+
+Best configuration for the instances in this race: 105
+Best-so-far configuration:          40    mean value:     -10.08510638
+Description of the best-so-far configuration:
+   .ID. NumStates S0 RWM0 ATT0   REP0 VEL0 CLE0 CLR0 NumConnections0 N0x0 C0x0   P0x0 B0x0 W0x0 BI0x0 WI0x0 L0x0 N0x1 C0x1   P0x1 B0x1 W0x1 BI0x1 WI0x1 L0x1 N0x2 C0x2 P0x2 B0x2 W0x2 BI0x2 WI0x2 L0x2 N0x3 C0x3 P0x3 B0x3 W0x3 BI0x3 WI0x3 L0x3 S1 RWM1 ATT1 REP1 VEL1 CLE1 CLR1 NumConnections1 N1x0 C1x0   P1x0 B1x0 W1x0 BI1x0 WI1x0 L1x0 N1x1 C1x1 P1x1 B1x1 W1x1 BI1x1   WI1x1 L1x1 N1x2 C1x2   P1x2 B1x2 W1x2 BI1x2 WI1x2 L1x2 N1x3 C1x3 P1x3 B1x3 W1x3 BI1x3 WI1x3 L1x3 S2 RWM2 ATT2 REP2 VEL2 CLE2 CLR2 NumConnections2 N2x0 C2x0 P2x0 B2x0   W2x0 BI2x0 WI2x0 L2x0 N2x1 C2x1  P2x1 B2x1 W2x1 BI2x1 WI2x1 L2x1 N2x2 C2x2 P2x2 B2x2 W2x2 BI2x2 WI2x2 L2x2 N2x3 C2x3 P2x3 B2x3 W2x3 BI2x3 WI2x3 L2x3 S3 RWM3 ATT3   REP3 VEL3 CLE3 CLR3 NumConnections3 N3x0 C3x0   P3x0 B3x0 W3x0 BI3x0 WI3x0 L3x0 N3x1 C3x1 P3x1 B3x1    W3x1 BI3x1 WI3x1 L3x1 N3x2 C3x2 P3x2 B3x2 W3x2 BI3x2 WI3x2 L3x2 N3x3 C3x3 P3x3 B3x3 W3x3 BI3x3 WI3x3 L3x3 .PARENT.
+40   40         4  5   NA   NA 2.7861 <NA>    0 <NA>               2    1    7 0.1362   NA   NA    NA    NA    1    0    5 0.1964   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  8   NA   NA   NA  1.0    6    5               3    2    1 0.0772   NA   NA    NA    NA <NA>    0    4   NA   NA   NA     8 12.4486 <NA>    1    1 0.5404   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  9   NA   NA   NA  1.0    6    2               2    2    3   NA    9 3.6061    NA    NA <NA>    2    2 0.877   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  5   NA   NA 3.2203 <NA>    0 <NA>               2    0    7 0.5175   NA   NA    NA    NA    6    0    3   NA    6 13.0787    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>        1
+
+# 2026-11-08 10:21:01 EST: Elite configurations (first number is the configuration ID; listed from best to worst according to the sum of ranks):
+    NumStates S0 RWM0 ATT0   REP0 VEL0 CLE0 CLR0 NumConnections0 N0x0 C0x0   P0x0 B0x0 W0x0 BI0x0 WI0x0 L0x0 N0x1 C0x1   P0x1 B0x1 W0x1 BI0x1 WI0x1 L0x1 N0x2 C0x2   P0x2 B0x2 W0x2 BI0x2 WI0x2 L0x2 N0x3 C0x3 P0x3 B0x3 W0x3 BI0x3 WI0x3 L0x3 S1 RWM1 ATT1 REP1 VEL1 CLE1 CLR1 NumConnections1 N1x0 C1x0   P1x0 B1x0 W1x0 BI1x0   WI1x0 L1x0 N1x1 C1x1  P1x1 B1x1 W1x1 BI1x1   WI1x1 L1x1 N1x2 C1x2   P1x2 B1x2 W1x2 BI1x2 WI1x2 L1x2 N1x3 C1x3 P1x3 B1x3    W1x3 BI1x3 WI1x3 L1x3 S2 RWM2 ATT2 REP2 VEL2 CLE2 CLR2 NumConnections2 N2x0 C2x0 P2x0 B2x0   W2x0 BI2x0 WI2x0 L2x0 N2x1 C2x1   P2x1 B2x1 W2x1 BI2x1 WI2x1 L2x1 N2x2 C2x2   P2x2 B2x2 W2x2 BI2x2 WI2x2 L2x2 N2x3 C2x3 P2x3 B2x3 W2x3 BI2x3 WI2x3 L2x3   S3 RWM3 ATT3   REP3 VEL3 CLE3 CLR3 NumConnections3 N3x0 C3x0   P3x0 B3x0 W3x0 BI3x0 WI3x0 L3x0 N3x1 C3x1 P3x1 B3x1    W3x1 BI3x1 WI3x1 L3x1 N3x2 C3x2 P3x2 B3x2 W3x2 BI3x2 WI3x2 L3x2 N3x3 C3x3 P3x3 B3x3 W3x3 BI3x3 WI3x3 L3x3
+40          4  5   NA   NA 2.7861 <NA>    0 <NA>               2    1    7 0.1362   NA   NA    NA    NA    1    0    5 0.1964   NA   NA    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  8   NA   NA   NA  1.0    6    5               3    2    1 0.0772   NA   NA    NA      NA <NA>    0    4    NA   NA   NA     8 12.4486 <NA>    1    1 0.5404   NA   NA    NA    NA <NA>   NA <NA>   NA   NA      NA    NA    NA <NA>  9   NA   NA   NA  1.0    6    2               2    2    3   NA    9 3.6061    NA    NA <NA>    2    2 0.8770   NA   NA    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>    5   NA   NA 3.2203 <NA>    0 <NA>               2    0    7 0.5175   NA   NA    NA    NA    6    0    3   NA    6 13.0787    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>
+80          3  5   NA   NA 3.9732 <NA>    0 <NA>               1    0    2 0.7130   NA   NA    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  1   NA   NA   NA <NA>    0 <NA>               2    1    4     NA   NA   NA     7 13.8649 <NA>    3    1 0.821   NA   NA    NA      NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA      NA    NA    NA <NA>  9   NA   NA   NA  1.0    4    2               1    3    3   NA    5 6.9707    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA> <NA>   NA   NA     NA <NA> <NA> <NA>              NA   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA      NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>
+59          3  5   NA   NA 3.3524 <NA>    0 <NA>               3    1    7 0.9841   NA   NA    NA    NA    4    2    5 0.6025   NA   NA    NA    NA <NA>    1    7 0.3996   NA   NA    NA    NA    6   NA <NA>   NA   NA   NA    NA    NA <NA>  8   NA   NA   NA  1.0    6    5               4    3    4     NA   NA   NA     4 18.4332 <NA>    0    4    NA   NA   NA     6 11.8030 <NA>    0    1 0.7477   NA   NA    NA    NA <NA>    0    3   NA    9  9.9137    NA    NA <NA>  9   NA   NA   NA  1.0    6    2               3    2    3   NA    1 0.5235    NA    NA <NA>    2    2 0.6439   NA   NA    NA    NA <NA>    3    5 0.8146   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA> <NA>   NA   NA     NA <NA> <NA> <NA>              NA   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA      NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>
+1           3  5   NA   NA 3.1197 <NA>    0 <NA>               2    1    2 0.4866   NA   NA    NA    NA <NA>    0    7 0.5692   NA   NA    NA    NA    5   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  1   NA   NA   NA <NA>    0 <NA>               1    1    4     NA   NA   NA     4 15.3860 <NA>   NA <NA>    NA   NA   NA    NA      NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA      NA    NA    NA <NA>  9   NA   NA   NA  1.0    4    2               3    3    3   NA    8 6.8115    NA    NA <NA>    3    2 0.8735   NA   NA    NA    NA <NA>    3    5 0.9674   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA> <NA>   NA   NA     NA <NA> <NA> <NA>              NA   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA      NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>
+93          3  5   NA   NA 3.6947 <NA>    0 <NA>               1    2    7 0.5466   NA   NA    NA    NA    1   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  8   NA   NA   NA  1.0    6    5               3    1    1 0.0080   NA   NA    NA      NA <NA>    2    4    NA   NA   NA    10 16.5901 <NA>    1    1 0.7753   NA   NA    NA    NA <NA>   NA <NA>   NA   NA      NA    NA    NA <NA>  9   NA   NA   NA  1.0    6    2               3    1    3   NA    3 0.6882    NA    NA <NA>    2    2 0.8896   NA   NA    NA    NA <NA>    2    1 0.6537   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA> <NA>   NA   NA     NA <NA> <NA> <NA>              NA   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA      NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>
+105         3  5   NA   NA 3.8291 <NA>    0 <NA>               3    1    7 0.4778   NA   NA    NA    NA    4    1    7 0.2596   NA   NA    NA    NA    3    2    7 0.9268   NA   NA    NA    NA    6   NA <NA>   NA   NA   NA    NA    NA <NA>  8   NA   NA   NA  1.0    6    5               4    3    7 0.2540   NA   NA    NA      NA    6    1    4    NA   NA   NA     5 16.6136 <NA>    2    1 0.4704   NA   NA    NA    NA <NA>    2    3   NA    4 11.1566    NA    NA <NA>  9   NA   NA   NA  1.0    6    2               2    1    3   NA    2 7.0577    NA    NA <NA>    0    2 0.8738   NA   NA    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA> <NA>   NA   NA     NA <NA> <NA> <NA>              NA   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA      NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>
+104         4  5   NA   NA 1.4977 <NA>    0 <NA>               2    1    7 0.4984   NA   NA    NA    NA    3    0    5 0.8425   NA   NA    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  8   NA   NA   NA  1.0    0    5               3    1    1 0.3519   NA   NA    NA      NA <NA>    0    4    NA   NA   NA     6 19.1716 <NA>    0    1 0.3293   NA   NA    NA    NA <NA>   NA <NA>   NA   NA      NA    NA    NA <NA>  9   NA   NA   NA  1.0    6    2               1    2    3   NA    9 3.2530    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>    5   NA   NA 3.6890 <NA>    0 <NA>               1    0    7 0.6894   NA   NA    NA    NA    6   NA <NA>   NA   NA      NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>
+# 2026-11-08 10:21:01 EST: Iteration 9 of 10
+# experimentsUsed: 4474
+# remainingBudget: 1526
+# currentBudget: 763
+# nbConfigurations: 22
+# Markers:
+     x No test is performed.
+     c Configurations are discarded only due to capping.
+     - The test is performed and some configurations are discarded.
+     = The test is performed but no configuration is discarded.
+     ! The test is performed and configurations could be discarded but elite configurations are preserved.
+     . Alive configurations were already evaluated on this instance and nothing is discarded.
+     : All alive configurations are elite, but some need to be evaluated on this instance.
+
++-+-----------+-----------+-----------+----------------+-----------+--------+-----+----+------+
+| |   Instance|      Alive|       Best|       Mean best| Exp so far|  W time|  rho|KenW|  Qvar|
++-+-----------+-----------+-----------+----------------+-----------+--------+-----+----+------+
+|x|         48|         22|        105|    -16.00000000|         22|00:00:10|   NA|  NA|    NA|
+|x|         18|         22|        105|    -14.00000000|         37|00:00:07|+0.92|0.96|0.1438|
+|x|          8|         22|        105|    -12.66666667|         52|00:00:06|+0.93|0.95|0.1175|
+|x|          4|         22|        105|    -12.25000000|         69|00:00:07|+0.89|0.91|0.1269|
+|x|         44|         22|        105|    -13.00000000|         84|00:00:07|+0.89|0.91|0.1293|
+|x|         35|         22|        105|    -12.83333333|         99|00:00:06|+0.90|0.92|0.1122|
+|x|         16|         22|        105|    -12.00000000|        114|00:00:06|+0.90|0.92|0.1170|
+|x|         10|         22|        105|    -11.87500000|        129|00:00:06|+0.90|0.91|0.1125|
+|x|         39|         22|        105|    -12.33333333|        144|00:00:06|+0.91|0.92|0.1044|
+|x|         31|         22|        105|    -12.20000000|        159|00:00:06|+0.91|0.92|0.0992|
+|x|         11|         22|        105|    -12.27272727|        176|00:00:07|+0.91|0.92|0.0958|
+|x|          3|         22|        105|    -12.16666667|        191|00:00:06|+0.91|0.92|0.0988|
+|x|         32|         22|        105|    -12.00000000|        206|00:00:06|+0.91|0.92|0.0964|
+|x|         46|         22|        105|    -11.78571429|        223|00:00:08|+0.92|0.92|0.0926|
+|x|         45|         22|        105|    -11.73333333|        238|00:00:07|+0.92|0.92|0.0920|
+|x|         47|         22|        105|    -11.62500000|        253|00:00:06|+0.91|0.91|0.0980|
+|x|          5|         22|        105|    -11.76470588|        268|00:00:06|+0.91|0.91|0.0964|
+|x|         15|         22|        105|    -11.66666667|        283|00:00:06|+0.90|0.91|0.0953|
+|x|         24|         22|        105|    -11.63157895|        298|00:00:06|+0.90|0.91|0.0971|
+|x|         14|         22|        119|    -11.75000000|        313|00:00:06|+0.90|0.90|0.0999|
+|x|         36|         22|        119|    -11.85714286|        328|00:00:06|+0.90|0.90|0.1010|
+|x|          9|         22|        119|    -11.81818182|        343|00:00:06|+0.90|0.90|0.0983|
+|x|         28|         22|        119|    -11.73913043|        360|00:00:07|+0.89|0.90|0.1041|
+|x|          2|         22|        119|    -11.79166667|        375|00:00:06|+0.89|0.90|0.1016|
+|x|          1|         22|        119|    -11.76000000|        390|00:00:06|+0.90|0.90|0.0997|
+|x|         37|         22|        119|    -11.88461538|        405|00:00:07|+0.90|0.90|0.0987|
+|x|         41|         22|        119|    -11.88888889|        422|00:00:07|+0.90|0.90|0.0972|
+|x|         19|         22|        119|    -11.82142857|        439|00:00:07|+0.90|0.90|0.0984|
+|x|         22|         22|        105|    -11.44827586|        454|00:00:06|+0.90|0.90|0.0980|
+|x|         43|         22|        105|    -11.50000000|        469|00:00:06|+0.90|0.90|0.0972|
+|x|         25|         22|        105|    -11.45161290|        484|00:00:06|+0.90|0.90|0.0964|
+|x|         34|         22|        105|    -11.37500000|        499|00:00:06|+0.90|0.90|0.0988|
+|x|          6|         22|        105|    -11.36363636|        514|00:00:06|+0.90|0.90|0.1001|
+|x|         13|         22|        105|    -11.29411765|        529|00:00:06|+0.90|0.90|0.1008|
+|x|         26|         22|        105|    -11.28571429|        544|00:00:06|+0.90|0.90|0.1025|
+|x|         42|         22|        119|    -11.75000000|        562|00:00:08|+0.90|0.90|0.1025|
+|x|         27|         22|        119|    -11.70270270|        577|00:00:06|+0.90|0.90|0.1029|
+|x|         29|         22|        119|    -11.71052632|        592|00:00:06|+0.90|0.90|0.1028|
+|x|         20|         22|        119|    -11.82051282|        607|00:00:06|+0.90|0.90|0.1013|
+|-|         23|          8|        119|    -11.77500000|        622|00:00:06|+0.68|0.69|0.2126|
++-+-----------+-----------+-----------+----------------+-----------+--------+-----+----+------+
+Best configuration for the instances in this race: 119
+Best-so-far configuration:         105    mean value:     -11.20833333
+Description of the best-so-far configuration:
+    .ID. NumStates S0 RWM0 ATT0   REP0 VEL0 CLE0 CLR0 NumConnections0 N0x0 C0x0   P0x0 B0x0 W0x0 BI0x0 WI0x0 L0x0 N0x1 C0x1   P0x1 B0x1 W0x1 BI0x1 WI0x1 L0x1 N0x2 C0x2   P0x2 B0x2 W0x2 BI0x2 WI0x2 L0x2 N0x3 C0x3 P0x3 B0x3 W0x3 BI0x3 WI0x3 L0x3 S1 RWM1 ATT1 REP1 VEL1 CLE1 CLR1 NumConnections1 N1x0 C1x0  P1x0 B1x0 W1x0 BI1x0 WI1x0 L1x0 N1x1 C1x1 P1x1 B1x1 W1x1 BI1x1   WI1x1 L1x1 N1x2 C1x2   P1x2 B1x2 W1x2 BI1x2 WI1x2 L1x2 N1x3 C1x3 P1x3 B1x3    W1x3 BI1x3 WI1x3 L1x3 S2 RWM2 ATT2 REP2 VEL2 CLE2 CLR2 NumConnections2 N2x0 C2x0 P2x0 B2x0   W2x0 BI2x0 WI2x0 L2x0 N2x1 C2x1   P2x1 B2x1 W2x1 BI2x1 WI2x1 L2x1 N2x2 C2x2 P2x2 B2x2 W2x2 BI2x2 WI2x2 L2x2 N2x3 C2x3 P2x3 B2x3 W2x3 BI2x3 WI2x3 L2x3   S3 RWM3 ATT3 REP3 VEL3 CLE3 CLR3 NumConnections3 N3x0 C3x0 P3x0 B3x0 W3x0 BI3x0 WI3x0 L3x0 N3x1 C3x1 P3x1 B3x1 W3x1 BI3x1 WI3x1 L3x1 N3x2 C3x2 P3x2 B3x2 W3x2 BI3x2 WI3x2 L3x2 N3x3 C3x3 P3x3 B3x3 W3x3 BI3x3 WI3x3 L3x3 .PARENT.
+105  105         3  5   NA   NA 3.8291 <NA>    0 <NA>               3    1    7 0.4778   NA   NA    NA    NA    4    1    7 0.2596   NA   NA    NA    NA    3    2    7 0.9268   NA   NA    NA    NA    6   NA <NA>   NA   NA   NA    NA    NA <NA>  8   NA   NA   NA  1.0    6    5               4    3    7 0.254   NA   NA    NA    NA    6    1    4   NA   NA   NA     5 16.6136 <NA>    2    1 0.4704   NA   NA    NA    NA <NA>    2    3   NA    4 11.1566    NA    NA <NA>  9   NA   NA   NA  1.0    6    2               2    1    3   NA    2 7.0577    NA    NA <NA>    0    2 0.8738   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA> <NA>   NA   NA   NA <NA> <NA> <NA>              NA   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>       59
+
+# 2026-11-08 10:25:43 EST: Elite configurations (first number is the configuration ID; listed from best to worst according to the sum of ranks):
+    NumStates S0 RWM0 ATT0   REP0 VEL0 CLE0 CLR0 NumConnections0 N0x0 C0x0   P0x0 B0x0 W0x0 BI0x0 WI0x0 L0x0 N0x1 C0x1   P0x1 B0x1 W0x1 BI0x1 WI0x1 L0x1 N0x2 C0x2   P0x2 B0x2 W0x2 BI0x2 WI0x2 L0x2 N0x3 C0x3 P0x3 B0x3 W0x3 BI0x3 WI0x3 L0x3 S1 RWM1 ATT1 REP1 VEL1 CLE1 CLR1 NumConnections1 N1x0 C1x0   P1x0 B1x0 W1x0 BI1x0   WI1x0 L1x0 N1x1 C1x1  P1x1 B1x1 W1x1 BI1x1   WI1x1 L1x1 N1x2 C1x2   P1x2 B1x2 W1x2 BI1x2 WI1x2 L1x2 N1x3 C1x3 P1x3 B1x3    W1x3 BI1x3 WI1x3 L1x3 S2 RWM2 ATT2 REP2 VEL2 CLE2 CLR2 NumConnections2 N2x0 C2x0 P2x0 B2x0   W2x0 BI2x0 WI2x0 L2x0 N2x1 C2x1   P2x1 B2x1 W2x1 BI2x1 WI2x1 L2x1 N2x2 C2x2   P2x2 B2x2 W2x2 BI2x2 WI2x2 L2x2 N2x3 C2x3 P2x3 B2x3 W2x3 BI2x3 WI2x3 L2x3   S3 RWM3 ATT3   REP3 VEL3 CLE3 CLR3 NumConnections3 N3x0 C3x0   P3x0 B3x0 W3x0 BI3x0 WI3x0 L3x0 N3x1 C3x1 P3x1 B3x1    W3x1 BI3x1 WI3x1 L3x1 N3x2 C3x2 P3x2 B3x2 W3x2 BI3x2 WI3x2 L3x2 N3x3 C3x3 P3x3 B3x3 W3x3 BI3x3 WI3x3 L3x3
+105         3  5   NA   NA 3.8291 <NA>    0 <NA>               3    1    7 0.4778   NA   NA    NA    NA    4    1    7 0.2596   NA   NA    NA    NA    3    2    7 0.9268   NA   NA    NA    NA    6   NA <NA>   NA   NA   NA    NA    NA <NA>  8   NA   NA   NA  1.0    6    5               4    3    7 0.2540   NA   NA    NA      NA    6    1    4    NA   NA   NA     5 16.6136 <NA>    2    1 0.4704   NA   NA    NA    NA <NA>    2    3   NA    4 11.1566    NA    NA <NA>  9   NA   NA   NA  1.0    6    2               2    1    3   NA    2 7.0577    NA    NA <NA>    0    2 0.8738   NA   NA    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA> <NA>   NA   NA     NA <NA> <NA> <NA>              NA   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA      NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>
+104         4  5   NA   NA 1.4977 <NA>    0 <NA>               2    1    7 0.4984   NA   NA    NA    NA    3    0    5 0.8425   NA   NA    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  8   NA   NA   NA  1.0    0    5               3    1    1 0.3519   NA   NA    NA      NA <NA>    0    4    NA   NA   NA     6 19.1716 <NA>    0    1 0.3293   NA   NA    NA    NA <NA>   NA <NA>   NA   NA      NA    NA    NA <NA>  9   NA   NA   NA  1.0    6    2               1    2    3   NA    9 3.2530    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>    5   NA   NA 3.6890 <NA>    0 <NA>               1    0    7 0.6894   NA   NA    NA    NA    6   NA <NA>   NA   NA      NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>
+40          4  5   NA   NA 2.7861 <NA>    0 <NA>               2    1    7 0.1362   NA   NA    NA    NA    1    0    5 0.1964   NA   NA    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  8   NA   NA   NA  1.0    6    5               3    2    1 0.0772   NA   NA    NA      NA <NA>    0    4    NA   NA   NA     8 12.4486 <NA>    1    1 0.5404   NA   NA    NA    NA <NA>   NA <NA>   NA   NA      NA    NA    NA <NA>  9   NA   NA   NA  1.0    6    2               2    2    3   NA    9 3.6061    NA    NA <NA>    2    2 0.8770   NA   NA    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>    5   NA   NA 3.2203 <NA>    0 <NA>               2    0    7 0.5175   NA   NA    NA    NA    6    0    3   NA    6 13.0787    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>
+93          3  5   NA   NA 3.6947 <NA>    0 <NA>               1    2    7 0.5466   NA   NA    NA    NA    1   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  8   NA   NA   NA  1.0    6    5               3    1    1 0.0080   NA   NA    NA      NA <NA>    2    4    NA   NA   NA    10 16.5901 <NA>    1    1 0.7753   NA   NA    NA    NA <NA>   NA <NA>   NA   NA      NA    NA    NA <NA>  9   NA   NA   NA  1.0    6    2               3    1    3   NA    3 0.6882    NA    NA <NA>    2    2 0.8896   NA   NA    NA    NA <NA>    2    1 0.6537   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA> <NA>   NA   NA     NA <NA> <NA> <NA>              NA   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA      NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>
+80          3  5   NA   NA 3.9732 <NA>    0 <NA>               1    0    2 0.7130   NA   NA    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  1   NA   NA   NA <NA>    0 <NA>               2    1    4     NA   NA   NA     7 13.8649 <NA>    3    1 0.821   NA   NA    NA      NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA      NA    NA    NA <NA>  9   NA   NA   NA  1.0    4    2               1    3    3   NA    5 6.9707    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA> <NA>   NA   NA     NA <NA> <NA> <NA>              NA   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA      NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>
+59          3  5   NA   NA 3.3524 <NA>    0 <NA>               3    1    7 0.9841   NA   NA    NA    NA    4    2    5 0.6025   NA   NA    NA    NA <NA>    1    7 0.3996   NA   NA    NA    NA    6   NA <NA>   NA   NA   NA    NA    NA <NA>  8   NA   NA   NA  1.0    6    5               4    3    4     NA   NA   NA     4 18.4332 <NA>    0    4    NA   NA   NA     6 11.8030 <NA>    0    1 0.7477   NA   NA    NA    NA <NA>    0    3   NA    9  9.9137    NA    NA <NA>  9   NA   NA   NA  1.0    6    2               3    2    3   NA    1 0.5235    NA    NA <NA>    2    2 0.6439   NA   NA    NA    NA <NA>    3    5 0.8146   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA> <NA>   NA   NA     NA <NA> <NA> <NA>              NA   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA      NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>
+1           3  5   NA   NA 3.1197 <NA>    0 <NA>               2    1    2 0.4866   NA   NA    NA    NA <NA>    0    7 0.5692   NA   NA    NA    NA    5   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  1   NA   NA   NA <NA>    0 <NA>               1    1    4     NA   NA   NA     4 15.3860 <NA>   NA <NA>    NA   NA   NA    NA      NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA      NA    NA    NA <NA>  9   NA   NA   NA  1.0    4    2               3    3    3   NA    8 6.8115    NA    NA <NA>    3    2 0.8735   NA   NA    NA    NA <NA>    3    5 0.9674   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA> <NA>   NA   NA     NA <NA> <NA> <NA>              NA   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA      NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>
+119         3  5   NA   NA 3.9281 <NA>    0 <NA>               3    0    7 0.0182   NA   NA    NA    NA    1    2    5 0.5882   NA   NA    NA    NA <NA>    0    1 0.6060   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  8   NA   NA   NA  1.0    6    5               3    2    1 0.2906   NA   NA    NA      NA <NA>    1    4    NA   NA   NA     8  2.1981 <NA>    1    1 0.1643   NA   NA    NA    NA <NA>   NA <NA>   NA   NA      NA    NA    NA <NA>  9   NA   NA   NA  1.0    6    2               1    2    3   NA    9 9.2829    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA> <NA>   NA   NA     NA <NA> <NA> <NA>              NA   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA      NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>
+# 2026-11-08 10:25:43 EST: Iteration 10 of 10
+# experimentsUsed: 5096
+# remainingBudget: 904
+# currentBudget: 904
+# nbConfigurations: 26
+# Markers:
+     x No test is performed.
+     c Configurations are discarded only due to capping.
+     - The test is performed and some configurations are discarded.
+     = The test is performed but no configuration is discarded.
+     ! The test is performed and configurations could be discarded but elite configurations are preserved.
+     . Alive configurations were already evaluated on this instance and nothing is discarded.
+     : All alive configurations are elite, but some need to be evaluated on this instance.
+
++-+-----------+-----------+-----------+----------------+-----------+--------+-----+----+------+
+| |   Instance|      Alive|       Best|       Mean best| Exp so far|  W time|  rho|KenW|  Qvar|
++-+-----------+-----------+-----------+----------------+-----------+--------+-----+----+------+
+|x|         49|         26|        119|    -15.00000000|         26|00:00:12|   NA|  NA|    NA|
+|x|         10|         26|        119|    -14.00000000|         44|00:00:08|+0.87|0.93|0.1260|
+|x|         24|         26|        119|    -14.66666667|         62|00:00:08|+0.90|0.93|0.0963|
+|x|          1|         26|        119|    -13.75000000|         80|00:00:08|+0.90|0.93|0.0972|
+|x|         17|         26|        119|    -12.80000000|         99|00:00:09|+0.90|0.92|0.0978|
+|x|         29|         26|        131|    -13.00000000|        117|00:00:08|+0.91|0.93|0.0934|
+|x|         43|         26|        131|    -12.57142857|        135|00:00:08|+0.90|0.91|0.1035|
+|x|         18|         26|        131|    -12.62500000|        153|00:00:08|+0.90|0.91|0.0980|
+|x|         46|         26|        131|    -12.66666667|        171|00:00:08|+0.90|0.91|0.0977|
+|x|         39|         26|        131|    -12.60000000|        189|00:00:08|+0.90|0.91|0.0960|
+|x|         25|         26|        119|    -12.36363636|        207|00:00:08|+0.90|0.91|0.0930|
+|x|         22|         26|        131|    -12.16666667|        225|00:00:08|+0.90|0.91|0.0957|
+|x|         47|         26|        131|    -12.30769231|        243|00:00:08|+0.90|0.91|0.0952|
+|x|         14|         26|        131|    -12.57142857|        261|00:00:08|+0.90|0.91|0.0974|
+|x|         19|         26|        131|    -12.46666667|        279|00:00:07|+0.90|0.91|0.0970|
+|x|         41|         26|        131|    -12.43750000|        297|00:00:07|+0.90|0.91|0.0968|
+|x|          5|         26|        131|    -12.47058824|        315|00:00:07|+0.90|0.90|0.1019|
+|x|         15|         26|        131|    -12.38888889|        333|00:00:07|+0.89|0.90|0.1025|
+|x|          9|         26|        131|    -12.47368421|        351|00:00:07|+0.90|0.90|0.0998|
+|x|         44|         26|        131|    -12.50000000|        369|00:00:07|+0.90|0.90|0.1004|
+|x|          3|         26|        131|    -12.52380952|        387|00:00:07|+0.89|0.90|0.1038|
+|x|         28|         26|        131|    -12.45454545|        405|00:00:07|+0.89|0.90|0.1063|
+|x|         32|         26|        131|    -12.30434783|        423|00:00:07|+0.89|0.90|0.1078|
+|x|         13|         26|        131|    -12.08333333|        441|00:00:07|+0.89|0.89|0.1090|
+|x|         37|         26|        131|    -12.16000000|        459|00:00:07|+0.89|0.89|0.1071|
+|x|         40|         26|        131|    -12.07692308|        478|00:00:08|+0.89|0.89|0.1071|
+|x|         23|         26|        131|    -11.96296296|        496|00:00:08|+0.89|0.89|0.1102|
+|x|         34|         26|        131|    -11.92857143|        514|00:00:08|+0.89|0.89|0.1119|
+|x|         33|         26|        119|    -11.86206897|        533|00:00:08|+0.88|0.89|0.1145|
+|x|         16|         26|        119|    -11.80000000|        551|00:00:08|+0.88|0.89|0.1155|
+|x|         27|         26|        119|    -11.74193548|        569|00:00:08|+0.88|0.89|0.1154|
+|x|         21|         26|        119|    -11.78125000|        588|00:00:08|+0.89|0.89|0.1134|
+|x|          4|         26|        131|    -11.75757576|        606|00:00:08|+0.89|0.89|0.1129|
+|x|          6|         26|        131|    -11.85294118|        624|00:00:08|+0.88|0.89|0.1158|
+|x|         20|         26|        131|    -11.85714286|        642|00:00:08|+0.88|0.89|0.1144|
+|x|         30|         26|        131|    -11.88888889|        661|00:00:08|+0.89|0.89|0.1127|
+|x|         11|         26|        131|    -11.83783784|        679|00:00:08|+0.89|0.89|0.1117|
+|x|         42|         26|        131|    -11.84210526|        697|00:00:08|+0.89|0.89|0.1128|
+|x|         12|         26|        119|    -11.84615385|        716|00:00:08|+0.88|0.89|0.1139|
+|-|         26|          9|        119|    -11.90000000|        734|00:00:08|+0.66|0.67|0.2323|
++-+-----------+-----------+-----------+----------------+-----------+--------+-----+----+------+
+Best configuration for the instances in this race: 119
+Best-so-far configuration:         105    mean value:     -11.24489796
+Description of the best-so-far configuration:
+    .ID. NumStates S0 RWM0 ATT0   REP0 VEL0 CLE0 CLR0 NumConnections0 N0x0 C0x0   P0x0 B0x0 W0x0 BI0x0 WI0x0 L0x0 N0x1 C0x1   P0x1 B0x1 W0x1 BI0x1 WI0x1 L0x1 N0x2 C0x2   P0x2 B0x2 W0x2 BI0x2 WI0x2 L0x2 N0x3 C0x3 P0x3 B0x3 W0x3 BI0x3 WI0x3 L0x3 S1 RWM1 ATT1 REP1 VEL1 CLE1 CLR1 NumConnections1 N1x0 C1x0  P1x0 B1x0 W1x0 BI1x0 WI1x0 L1x0 N1x1 C1x1 P1x1 B1x1 W1x1 BI1x1   WI1x1 L1x1 N1x2 C1x2   P1x2 B1x2 W1x2 BI1x2 WI1x2 L1x2 N1x3 C1x3 P1x3 B1x3    W1x3 BI1x3 WI1x3 L1x3 S2 RWM2 ATT2 REP2 VEL2 CLE2 CLR2 NumConnections2 N2x0 C2x0 P2x0 B2x0   W2x0 BI2x0 WI2x0 L2x0 N2x1 C2x1   P2x1 B2x1 W2x1 BI2x1 WI2x1 L2x1 N2x2 C2x2 P2x2 B2x2 W2x2 BI2x2 WI2x2 L2x2 N2x3 C2x3 P2x3 B2x3 W2x3 BI2x3 WI2x3 L2x3   S3 RWM3 ATT3 REP3 VEL3 CLE3 CLR3 NumConnections3 N3x0 C3x0 P3x0 B3x0 W3x0 BI3x0 WI3x0 L3x0 N3x1 C3x1 P3x1 B3x1 W3x1 BI3x1 WI3x1 L3x1 N3x2 C3x2 P3x2 B3x2 W3x2 BI3x2 WI3x2 L3x2 N3x3 C3x3 P3x3 B3x3 W3x3 BI3x3 WI3x3 L3x3 .PARENT.
+105  105         3  5   NA   NA 3.8291 <NA>    0 <NA>               3    1    7 0.4778   NA   NA    NA    NA    4    1    7 0.2596   NA   NA    NA    NA    3    2    7 0.9268   NA   NA    NA    NA    6   NA <NA>   NA   NA   NA    NA    NA <NA>  8   NA   NA   NA  1.0    6    5               4    3    7 0.254   NA   NA    NA    NA    6    1    4   NA   NA   NA     5 16.6136 <NA>    2    1 0.4704   NA   NA    NA    NA <NA>    2    3   NA    4 11.1566    NA    NA <NA>  9   NA   NA   NA  1.0    6    2               2    1    3   NA    2 7.0577    NA    NA <NA>    0    2 0.8738   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA> <NA>   NA   NA   NA <NA> <NA> <NA>              NA   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>       59
+
+# 2026-11-08 10:31:12 EST: Elite configurations (first number is the configuration ID; listed from best to worst according to the sum of ranks):
+    NumStates S0 RWM0 ATT0   REP0 VEL0 CLE0 CLR0 NumConnections0 N0x0 C0x0   P0x0 B0x0 W0x0 BI0x0 WI0x0 L0x0 N0x1 C0x1   P0x1 B0x1 W0x1 BI0x1 WI0x1 L0x1 N0x2 C0x2   P0x2 B0x2 W0x2 BI0x2 WI0x2 L0x2 N0x3 C0x3 P0x3 B0x3 W0x3 BI0x3 WI0x3 L0x3 S1 RWM1 ATT1 REP1 VEL1 CLE1 CLR1 NumConnections1 N1x0 C1x0   P1x0 B1x0 W1x0 BI1x0   WI1x0 L1x0 N1x1 C1x1  P1x1 B1x1 W1x1 BI1x1   WI1x1 L1x1 N1x2 C1x2   P1x2 B1x2 W1x2 BI1x2 WI1x2 L1x2 N1x3 C1x3 P1x3 B1x3    W1x3 BI1x3 WI1x3 L1x3 S2 RWM2 ATT2 REP2 VEL2 CLE2 CLR2 NumConnections2 N2x0 C2x0 P2x0 B2x0   W2x0 BI2x0 WI2x0 L2x0 N2x1 C2x1   P2x1 B2x1 W2x1 BI2x1 WI2x1 L2x1 N2x2 C2x2   P2x2 B2x2 W2x2 BI2x2 WI2x2 L2x2 N2x3 C2x3 P2x3 B2x3 W2x3 BI2x3 WI2x3 L2x3   S3 RWM3 ATT3   REP3 VEL3 CLE3 CLR3 NumConnections3 N3x0 C3x0   P3x0 B3x0 W3x0 BI3x0 WI3x0 L3x0 N3x1 C3x1 P3x1 B3x1    W3x1 BI3x1 WI3x1 L3x1 N3x2 C3x2 P3x2 B3x2 W3x2 BI3x2 WI3x2 L3x2 N3x3 C3x3 P3x3 B3x3 W3x3 BI3x3 WI3x3 L3x3
+105         3  5   NA   NA 3.8291 <NA>    0 <NA>               3    1    7 0.4778   NA   NA    NA    NA    4    1    7 0.2596   NA   NA    NA    NA    3    2    7 0.9268   NA   NA    NA    NA    6   NA <NA>   NA   NA   NA    NA    NA <NA>  8   NA   NA   NA  1.0    6    5               4    3    7 0.2540   NA   NA    NA      NA    6    1    4    NA   NA   NA     5 16.6136 <NA>    2    1 0.4704   NA   NA    NA    NA <NA>    2    3   NA    4 11.1566    NA    NA <NA>  9   NA   NA   NA  1.0    6    2               2    1    3   NA    2 7.0577    NA    NA <NA>    0    2 0.8738   NA   NA    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA> <NA>   NA   NA     NA <NA> <NA> <NA>              NA   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA      NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>
+104         4  5   NA   NA 1.4977 <NA>    0 <NA>               2    1    7 0.4984   NA   NA    NA    NA    3    0    5 0.8425   NA   NA    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  8   NA   NA   NA  1.0    0    5               3    1    1 0.3519   NA   NA    NA      NA <NA>    0    4    NA   NA   NA     6 19.1716 <NA>    0    1 0.3293   NA   NA    NA    NA <NA>   NA <NA>   NA   NA      NA    NA    NA <NA>  9   NA   NA   NA  1.0    6    2               1    2    3   NA    9 3.2530    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>    5   NA   NA 3.6890 <NA>    0 <NA>               1    0    7 0.6894   NA   NA    NA    NA    6   NA <NA>   NA   NA      NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>
+40          4  5   NA   NA 2.7861 <NA>    0 <NA>               2    1    7 0.1362   NA   NA    NA    NA    1    0    5 0.1964   NA   NA    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  8   NA   NA   NA  1.0    6    5               3    2    1 0.0772   NA   NA    NA      NA <NA>    0    4    NA   NA   NA     8 12.4486 <NA>    1    1 0.5404   NA   NA    NA    NA <NA>   NA <NA>   NA   NA      NA    NA    NA <NA>  9   NA   NA   NA  1.0    6    2               2    2    3   NA    9 3.6061    NA    NA <NA>    2    2 0.8770   NA   NA    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>    5   NA   NA 3.2203 <NA>    0 <NA>               2    0    7 0.5175   NA   NA    NA    NA    6    0    3   NA    6 13.0787    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>
+93          3  5   NA   NA 3.6947 <NA>    0 <NA>               1    2    7 0.5466   NA   NA    NA    NA    1   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  8   NA   NA   NA  1.0    6    5               3    1    1 0.0080   NA   NA    NA      NA <NA>    2    4    NA   NA   NA    10 16.5901 <NA>    1    1 0.7753   NA   NA    NA    NA <NA>   NA <NA>   NA   NA      NA    NA    NA <NA>  9   NA   NA   NA  1.0    6    2               3    1    3   NA    3 0.6882    NA    NA <NA>    2    2 0.8896   NA   NA    NA    NA <NA>    2    1 0.6537   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA> <NA>   NA   NA     NA <NA> <NA> <NA>              NA   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA      NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>
+80          3  5   NA   NA 3.9732 <NA>    0 <NA>               1    0    2 0.7130   NA   NA    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  1   NA   NA   NA <NA>    0 <NA>               2    1    4     NA   NA   NA     7 13.8649 <NA>    3    1 0.821   NA   NA    NA      NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA      NA    NA    NA <NA>  9   NA   NA   NA  1.0    4    2               1    3    3   NA    5 6.9707    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA> <NA>   NA   NA     NA <NA> <NA> <NA>              NA   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA      NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>
+59          3  5   NA   NA 3.3524 <NA>    0 <NA>               3    1    7 0.9841   NA   NA    NA    NA    4    2    5 0.6025   NA   NA    NA    NA <NA>    1    7 0.3996   NA   NA    NA    NA    6   NA <NA>   NA   NA   NA    NA    NA <NA>  8   NA   NA   NA  1.0    6    5               4    3    4     NA   NA   NA     4 18.4332 <NA>    0    4    NA   NA   NA     6 11.8030 <NA>    0    1 0.7477   NA   NA    NA    NA <NA>    0    3   NA    9  9.9137    NA    NA <NA>  9   NA   NA   NA  1.0    6    2               3    2    3   NA    1 0.5235    NA    NA <NA>    2    2 0.6439   NA   NA    NA    NA <NA>    3    5 0.8146   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA> <NA>   NA   NA     NA <NA> <NA> <NA>              NA   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA      NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>
+1           3  5   NA   NA 3.1197 <NA>    0 <NA>               2    1    2 0.4866   NA   NA    NA    NA <NA>    0    7 0.5692   NA   NA    NA    NA    5   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  1   NA   NA   NA <NA>    0 <NA>               1    1    4     NA   NA   NA     4 15.3860 <NA>   NA <NA>    NA   NA   NA    NA      NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA      NA    NA    NA <NA>  9   NA   NA   NA  1.0    4    2               3    3    3   NA    8 6.8115    NA    NA <NA>    3    2 0.8735   NA   NA    NA    NA <NA>    3    5 0.9674   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA> <NA>   NA   NA     NA <NA> <NA> <NA>              NA   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA      NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>
+119         3  5   NA   NA 3.9281 <NA>    0 <NA>               3    0    7 0.0182   NA   NA    NA    NA    1    2    5 0.5882   NA   NA    NA    NA <NA>    0    1 0.6060   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  8   NA   NA   NA  1.0    6    5               3    2    1 0.2906   NA   NA    NA      NA <NA>    1    4    NA   NA   NA     8  2.1981 <NA>    1    1 0.1643   NA   NA    NA    NA <NA>   NA <NA>   NA   NA      NA    NA    NA <NA>  9   NA   NA   NA  1.0    6    2               1    2    3   NA    9 9.2829    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA> <NA>   NA   NA     NA <NA> <NA> <NA>              NA   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA      NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>
+131         3  5   NA   NA 2.0604 <NA>    0 <NA>               2    2    7 0.2043   NA   NA    NA    NA    3    1    5 0.9157   NA   NA    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  8   NA   NA   NA  1.0    0    5               2    0    1 0.1272   NA   NA    NA      NA <NA>    3    4    NA   NA   NA     7 17.3749 <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA      NA    NA    NA <NA>  9   NA   NA   NA  1.0    6    2               2    0    3   NA   10 5.1386    NA    NA <NA>    2    2 0.4462   NA   NA    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA> <NA>   NA   NA     NA <NA> <NA> <NA>              NA   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA      NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>
+# Total CPU user time: 2675.07, CPU sys time: 62.549, Wall-clock time: 2727.553
+# 2026-11-08 10:31:12 EST: Starting post-selection:
+# Configurations selected: 105, 104, 40, 93, 80, 59, 1, 119, 131, 2, 3, 4, 5, 6, 7, 8.
+# Pending instances: 1, 1, 1, 1, 1, 1, 1, 3, 10, 10, 10, 10, 10, 10, 10, 10.
+# 2026-11-08 10:31:13 EST: seed: 260998519
+# Configurations: 16
+# Available experiments: 170
+# minSurvival: 1
+# Markers:
+     x No test is performed.
+     c Configurations are discarded only due to capping.
+     - The test is performed and some configurations are discarded.
+     = The test is performed but no configuration is discarded.
+     ! The test is performed and configurations could be discarded but elite configurations are preserved.
+     . Alive configurations were already evaluated on this instance and nothing is discarded.
+     : All alive configurations are elite, but some need to be evaluated on this instance.
+
++-+-----------+-----------+-----------+----------------+-----------+--------+-----+----+------+
+| |   Instance|      Alive|       Best|       Mean best| Exp so far|  W time|  rho|KenW|  Qvar|
++-+-----------+-----------+-----------+----------------+-----------+--------+-----+----+------+
+|.|         16|         16|        104|    -15.00000000|          0|00:00:00|   NA|  NA|    NA|
+|.|          4|         16|        104|    -12.50000000|          0|00:00:00|+0.85|0.92|0.1229|
+|x|         41|         16|        104|    -12.33333333|          7|00:00:03|+0.88|0.92|0.1061|
+|.|          1|         16|        104|    -12.50000000|          7|00:00:00|+0.90|0.92|0.0885|
+|.|         33|         16|        104|    -11.20000000|          7|00:00:00|+0.86|0.89|0.1298|
+|x|         36|         16|        104|    -11.83333333|          8|00:00:00|+0.85|0.88|0.1416|
+|.|         34|         16|        104|    -11.71428571|          8|00:00:00|+0.86|0.88|0.1376|
+|.|         24|         16|        104|    -11.62500000|          8|00:00:00|+0.87|0.89|0.1276|
+|x|          8|         16|        119|    -12.11111111|          9|00:00:00|+0.87|0.89|0.1233|
+|x|         31|         16|        119|    -12.00000000|         10|00:00:00|+0.88|0.89|0.1177|
+|.|         22|         16|        119|    -11.72727273|         10|00:00:00|+0.87|0.88|0.1166|
+|.|         39|         16|        119|    -11.91666667|         10|00:00:00|+0.88|0.89|0.1107|
+|x|         43|         16|        105|    -11.15384615|         17|00:00:03|+0.88|0.89|0.1092|
+|.|          5|         16|        105|    -11.35714286|         17|00:00:00|+0.87|0.88|0.1160|
+|x|         48|         16|        105|    -11.66666667|         25|00:00:04|+0.87|0.88|0.1193|
+|.|         14|         16|        105|    -11.50000000|         25|00:00:00|+0.88|0.88|0.1213|
+|.|         23|         16|        105|    -11.41176471|         25|00:00:00|+0.87|0.88|0.1233|
+|.|         19|         16|        105|    -11.33333333|         25|00:00:00|+0.88|0.88|0.1195|
+|.|         15|         16|        105|    -11.26315789|         25|00:00:00|+0.87|0.88|0.1176|
+|.|         37|         16|        105|    -11.20000000|         25|00:00:00|+0.88|0.88|0.1146|
+|.|         40|         16|        105|    -11.14285714|         25|00:00:00|+0.87|0.88|0.1179|
+|.|         32|         16|        105|    -11.09090909|         25|00:00:00|+0.88|0.88|0.1163|
+|x|         45|         16|        104|    -11.73913043|         33|00:00:04|+0.88|0.88|0.1145|
+|.|         18|         16|        104|    -11.58333333|         33|00:00:00|+0.88|0.88|0.1121|
+|.|         12|         16|        104|    -11.52000000|         33|00:00:00|+0.88|0.88|0.1136|
+|.|         20|         16|        104|    -11.50000000|         33|00:00:00|+0.88|0.88|0.1117|
+|.|         17|         16|        104|    -11.44444444|         33|00:00:00|+0.88|0.89|0.1122|
+|.|         27|         16|        104|    -11.35714286|         33|00:00:00|+0.88|0.89|0.1112|
+|x|         44|         16|        119|    -11.96551724|         40|00:00:04|+0.88|0.89|0.1125|
+|x|         38|         16|        119|    -12.13333333|         42|00:00:01|+0.89|0.89|0.1101|
+|x|         35|         16|        119|    -12.09677419|         43|00:00:00|+0.89|0.89|0.1082|
+|.|         29|         16|        119|    -12.09375000|         43|00:00:00|+0.89|0.89|0.1064|
+|.|         21|         16|        119|    -12.12121212|         43|00:00:00|+0.89|0.89|0.1064|
+|.|         11|         16|        119|    -12.14705882|         43|00:00:00|+0.89|0.89|0.1064|
+|.|          9|         16|        119|    -12.11428571|         43|00:00:00|+0.89|0.89|0.1048|
+|x|          2|         16|        119|    -12.13888889|         44|00:00:00|+0.89|0.89|0.1028|
+|x|         49|         16|        119|    -12.21621622|         51|00:00:03|+0.89|0.89|0.1010|
+|.|          6|         16|        119|    -12.10526316|         51|00:00:00|+0.89|0.89|0.1012|
+|.|          3|         16|        119|    -12.00000000|         51|00:00:00|+0.89|0.89|0.1013|
+|x|         42|         16|        131|    -11.85000000|         58|00:00:04|+0.89|0.89|0.1018|
+|.|         25|         16|        131|    -11.80487805|         58|00:00:00|+0.89|0.89|0.1001|
+|.|         30|         16|        131|    -11.83333333|         58|00:00:00|+0.89|0.89|0.0984|
+|.|         26|         16|        131|    -11.74418605|         58|00:00:00|+0.89|0.89|0.0987|
+|.|         28|         16|        131|    -11.72727273|         58|00:00:00|+0.89|0.89|0.1032|
+|x|          7|         16|        131|    -11.84444444|         60|00:00:01|+0.89|0.89|0.1032|
+|.|         13|         16|        131|    -11.73913043|         60|00:00:00|+0.89|0.89|0.1040|
+|x|         47|         16|        131|    -11.78723404|         67|00:00:03|+0.89|0.89|0.1035|
+|.|         10|         16|        131|    -11.72916667|         67|00:00:00|+0.89|0.89|0.1031|
+|-|         46|          3|        119|    -12.00000000|         74|00:00:04|+0.00|0.02|0.6345|
+|=|         50|          3|        131|    -11.80000000|         77|00:00:01|+0.01|0.03|0.6310|
+|=|         51|          3|        119|    -12.05882353|         80|00:00:01|+0.01|0.03|0.6279|
+|=|         52|          3|        119|    -12.05769231|         83|00:00:01|+0.01|0.03|0.6298|
+|=|         53|          3|        119|    -12.00000000|         86|00:00:01|+0.01|0.03|0.6348|
+|=|         54|          3|        119|    -11.96296296|         89|00:00:01|+0.01|0.03|0.6314|
+|=|         55|          3|        119|    -11.96363636|         92|00:00:01|+0.02|0.03|0.6285|
+|=|         56|          3|        119|    -11.89285714|         95|00:00:01|+0.01|0.03|0.6340|
+|=|         57|          3|        119|    -11.91228070|         98|00:00:01|+0.02|0.03|0.6307|
+|=|         58|          3|        131|    -11.74137931|        101|00:00:01|+0.02|0.04|0.6283|
+|=|         59|          3|        131|    -11.72881356|        104|00:00:01|+0.01|0.03|0.6336|
+|=|         60|          3|        119|    -11.88333333|        107|00:00:01|+0.02|0.03|0.6311|
+|=|         61|          3|        131|    -11.72131148|        110|00:00:01|+0.02|0.04|0.6287|
+|=|         62|          3|        119|    -11.85483871|        113|00:00:01|+0.02|0.04|0.6320|
+|=|         63|          3|        119|    -11.92063492|        116|00:00:01|+0.02|0.04|0.6308|
+|=|         64|          3|        119|    -11.93750000|        119|00:00:01|+0.02|0.04|0.6320|
+|=|         65|          3|        119|    -11.98461538|        122|00:00:01|+0.03|0.04|0.6295|
+|=|         66|          3|        119|    -11.95454545|        125|00:00:01|+0.02|0.04|0.6311|
+|=|         67|          3|        119|    -12.04477612|        128|00:00:01|+0.03|0.04|0.6292|
+|=|         68|          3|        119|    -12.00000000|        131|00:00:01|+0.03|0.04|0.6294|
+|-|         69|          2|        119|    -12.07246377|        134|00:00:01|-0.01|0.00|0.4337|
+|=|         70|          2|        119|    -12.07142857|        136|00:00:01|-0.01|0.00|0.4344|
+|=|         71|          2|        119|    -12.05633803|        138|00:00:01|-0.01|0.00|0.4356|
+|=|         72|          2|        119|    -12.09722222|        140|00:00:01|-0.01|0.00|0.4362|
+|=|         73|          2|        119|    -12.08219178|        142|00:00:01|-0.01|0.00|0.4374|
+|=|         74|          2|        119|    -12.12162162|        144|00:00:00|-0.01|0.00|0.4384|
+|=|         75|          2|        119|    -12.14666667|        146|00:00:00|-0.01|0.00|0.4391|
+|=|         76|          2|        119|    -12.09210526|        148|00:00:01|-0.01|0.00|0.4400|
+|=|         77|          2|        119|    -12.06493506|        150|00:00:01|-0.01|0.00|0.4407|
+|=|         78|          2|        119|    -12.02564103|        152|00:00:01|-0.01|0.00|0.4416|
+|=|         79|          2|        131|    -11.75949367|        154|00:00:01|-0.01|0.00|0.4422|
+|=|         80|          2|        131|    -11.78750000|        156|00:00:01|-0.01|0.00|0.4427|
+|=|         81|          2|        131|    -11.76543210|        158|00:00:01|-0.01|0.00|0.4437|
+|=|         82|          2|        131|    -11.79268293|        160|00:00:01|-0.01|0.00|0.4382|
+|=|         83|          2|        131|    -11.78313253|        162|00:00:01|-0.01|0.00|0.4387|
+|=|         84|          2|        131|    -11.78571429|        164|00:00:01|-0.01|0.00|0.4397|
+|=|         85|          2|        119|    -12.03529412|        166|00:00:01|-0.01|0.00|0.4405|
+|=|         86|          2|        119|    -12.02325581|        168|00:00:01|-0.01|0.00|0.4411|
+|=|         87|          2|        119|    -12.02298851|        170|00:00:01|-0.01|0.00|0.4360|
++-+-----------+-----------+-----------+----------------+-----------+--------+-----+----+------+
+Best-so-far configuration:         119    mean value:     -12.02298851
+Description of the best-so-far configuration:
+    .ID. NumStates S0 RWM0 ATT0   REP0 VEL0 CLE0 CLR0 NumConnections0 N0x0 C0x0   P0x0 B0x0 W0x0 BI0x0 WI0x0 L0x0 N0x1 C0x1   P0x1 B0x1 W0x1 BI0x1 WI0x1 L0x1 N0x2 C0x2  P0x2 B0x2 W0x2 BI0x2 WI0x2 L0x2 N0x3 C0x3 P0x3 B0x3 W0x3 BI0x3 WI0x3 L0x3 S1 RWM1 ATT1 REP1 VEL1 CLE1 CLR1 NumConnections1 N1x0 C1x0   P1x0 B1x0 W1x0 BI1x0 WI1x0 L1x0 N1x1 C1x1 P1x1 B1x1 W1x1 BI1x1  WI1x1 L1x1 N1x2 C1x2   P1x2 B1x2 W1x2 BI1x2 WI1x2 L1x2 N1x3 C1x3 P1x3 B1x3 W1x3 BI1x3 WI1x3 L1x3 S2 RWM2 ATT2 REP2 VEL2 CLE2 CLR2 NumConnections2 N2x0 C2x0 P2x0 B2x0   W2x0 BI2x0 WI2x0 L2x0 N2x1 C2x1 P2x1 B2x1 W2x1 BI2x1 WI2x1 L2x1 N2x2 C2x2 P2x2 B2x2 W2x2 BI2x2 WI2x2 L2x2 N2x3 C2x3 P2x3 B2x3 W2x3 BI2x3 WI2x3 L2x3   S3 RWM3 ATT3 REP3 VEL3 CLE3 CLR3 NumConnections3 N3x0 C3x0 P3x0 B3x0 W3x0 BI3x0 WI3x0 L3x0 N3x1 C3x1 P3x1 B3x1 W3x1 BI3x1 WI3x1 L3x1 N3x2 C3x2 P3x2 B3x2 W3x2 BI3x2 WI3x2 L3x2 N3x3 C3x3 P3x3 B3x3 W3x3 BI3x3 WI3x3 L3x3 .PARENT.
+119  119         3  5   NA   NA 3.9281 <NA>    0 <NA>               3    0    7 0.0182   NA   NA    NA    NA    1    2    5 0.5882   NA   NA    NA    NA <NA>    0    1 0.606   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  8   NA   NA   NA  1.0    6    5               3    2    1 0.2906   NA   NA    NA    NA <NA>    1    4   NA   NA   NA     8 2.1981 <NA>    1    1 0.1643   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  9   NA   NA   NA  1.0    6    2               1    2    3   NA    9 9.2829    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA> <NA>   NA   NA   NA <NA> <NA> <NA>              NA   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>       40
+
+# 2026-11-08 10:32:44 EST: Elite configurations (first number is the configuration ID; listed from best to worst according to the sum of ranks):
+    NumStates S0 RWM0 ATT0   REP0 VEL0 CLE0 CLR0 NumConnections0 N0x0 C0x0   P0x0 B0x0 W0x0 BI0x0 WI0x0 L0x0 N0x1 C0x1   P0x1 B0x1 W0x1 BI0x1 WI0x1 L0x1 N0x2 C0x2  P0x2 B0x2 W0x2 BI0x2 WI0x2 L0x2 N0x3 C0x3 P0x3 B0x3 W0x3 BI0x3 WI0x3 L0x3 S1 RWM1 ATT1 REP1 VEL1 CLE1 CLR1 NumConnections1 N1x0 C1x0   P1x0 B1x0 W1x0 BI1x0 WI1x0 L1x0 N1x1 C1x1 P1x1 B1x1 W1x1 BI1x1   WI1x1 L1x1 N1x2 C1x2   P1x2 B1x2 W1x2 BI1x2 WI1x2 L1x2 N1x3 C1x3 P1x3 B1x3 W1x3 BI1x3 WI1x3 L1x3 S2 RWM2 ATT2 REP2 VEL2 CLE2 CLR2 NumConnections2 N2x0 C2x0 P2x0 B2x0   W2x0 BI2x0 WI2x0 L2x0 N2x1 C2x1   P2x1 B2x1 W2x1 BI2x1 WI2x1 L2x1 N2x2 C2x2 P2x2 B2x2 W2x2 BI2x2 WI2x2 L2x2 N2x3 C2x3 P2x3 B2x3 W2x3 BI2x3 WI2x3 L2x3   S3 RWM3 ATT3 REP3 VEL3 CLE3 CLR3 NumConnections3 N3x0 C3x0 P3x0 B3x0 W3x0 BI3x0 WI3x0 L3x0 N3x1 C3x1 P3x1 B3x1 W3x1 BI3x1 WI3x1 L3x1 N3x2 C3x2 P3x2 B3x2 W3x2 BI3x2 WI3x2 L3x2 N3x3 C3x3 P3x3 B3x3 W3x3 BI3x3 WI3x3 L3x3
+119         3  5   NA   NA 3.9281 <NA>    0 <NA>               3    0    7 0.0182   NA   NA    NA    NA    1    2    5 0.5882   NA   NA    NA    NA <NA>    0    1 0.606   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  8   NA   NA   NA  1.0    6    5               3    2    1 0.2906   NA   NA    NA    NA <NA>    1    4   NA   NA   NA     8  2.1981 <NA>    1    1 0.1643   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  9   NA   NA   NA  1.0    6    2               1    2    3   NA    9 9.2829    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA> <NA>   NA   NA   NA <NA> <NA> <NA>              NA   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>
+131         3  5   NA   NA 2.0604 <NA>    0 <NA>               2    2    7 0.2043   NA   NA    NA    NA    3    1    5 0.9157   NA   NA    NA    NA <NA>   NA <NA>    NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  8   NA   NA   NA  1.0    0    5               2    0    1 0.1272   NA   NA    NA    NA <NA>    3    4   NA   NA   NA     7 17.3749 <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  9   NA   NA   NA  1.0    6    2               2    0    3   NA   10 5.1386    NA    NA <NA>    2    2 0.4462   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA> <NA>   NA   NA   NA <NA> <NA> <NA>              NA   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>
+# Total CPU user time: 2764.82, CPU sys time: 64.355, Wall-clock time: 2818.812
+# Best configurations (first number is the configuration ID; listed from best to worst according to the sum of ranks):
+    NumStates S0 RWM0 ATT0   REP0 VEL0 CLE0 CLR0 NumConnections0 N0x0 C0x0   P0x0 B0x0 W0x0 BI0x0 WI0x0 L0x0 N0x1 C0x1   P0x1 B0x1 W0x1 BI0x1 WI0x1 L0x1 N0x2 C0x2  P0x2 B0x2 W0x2 BI0x2 WI0x2 L0x2 N0x3 C0x3 P0x3 B0x3 W0x3 BI0x3 WI0x3 L0x3 S1 RWM1 ATT1 REP1 VEL1 CLE1 CLR1 NumConnections1 N1x0 C1x0   P1x0 B1x0 W1x0 BI1x0 WI1x0 L1x0 N1x1 C1x1 P1x1 B1x1 W1x1 BI1x1   WI1x1 L1x1 N1x2 C1x2   P1x2 B1x2 W1x2 BI1x2 WI1x2 L1x2 N1x3 C1x3 P1x3 B1x3 W1x3 BI1x3 WI1x3 L1x3 S2 RWM2 ATT2 REP2 VEL2 CLE2 CLR2 NumConnections2 N2x0 C2x0 P2x0 B2x0   W2x0 BI2x0 WI2x0 L2x0 N2x1 C2x1   P2x1 B2x1 W2x1 BI2x1 WI2x1 L2x1 N2x2 C2x2 P2x2 B2x2 W2x2 BI2x2 WI2x2 L2x2 N2x3 C2x3 P2x3 B2x3 W2x3 BI2x3 WI2x3 L2x3   S3 RWM3 ATT3 REP3 VEL3 CLE3 CLR3 NumConnections3 N3x0 C3x0 P3x0 B3x0 W3x0 BI3x0 WI3x0 L3x0 N3x1 C3x1 P3x1 B3x1 W3x1 BI3x1 WI3x1 L3x1 N3x2 C3x2 P3x2 B3x2 W3x2 BI3x2 WI3x2 L3x2 N3x3 C3x3 P3x3 B3x3 W3x3 BI3x3 WI3x3 L3x3
+119         3  5   NA   NA 3.9281 <NA>    0 <NA>               3    0    7 0.0182   NA   NA    NA    NA    1    2    5 0.5882   NA   NA    NA    NA <NA>    0    1 0.606   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  8   NA   NA   NA  1.0    6    5               3    2    1 0.2906   NA   NA    NA    NA <NA>    1    4   NA   NA   NA     8  2.1981 <NA>    1    1 0.1643   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  9   NA   NA   NA  1.0    6    2               1    2    3   NA    9 9.2829    NA    NA <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA> <NA>   NA   NA   NA <NA> <NA> <NA>              NA   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>
+131         3  5   NA   NA 2.0604 <NA>    0 <NA>               2    2    7 0.2043   NA   NA    NA    NA    3    1    5 0.9157   NA   NA    NA    NA <NA>   NA <NA>    NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  8   NA   NA   NA  1.0    0    5               2    0    1 0.1272   NA   NA    NA    NA <NA>    3    4   NA   NA   NA     7 17.3749 <NA>   NA <NA>     NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>  9   NA   NA   NA  1.0    6    2               2    0    3   NA   10 5.1386    NA    NA <NA>    2    2 0.4462   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA> <NA>   NA   NA   NA <NA> <NA> <NA>              NA   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>   NA <NA>   NA   NA   NA    NA    NA <NA>
+# Best configurations as commandlines (first number is the configuration ID; listed from best to worst according to the sum of ranks):
+119 --nstates 3 --s0 5 --rep0 3.9281 --cle0 0 --n0 3 --n0x0 0 --c0x0 7 --p0x0 0.0182 --l0x0 1 --n0x1 2 --c0x1 5 --p0x1 0.5882 --n0x2 0 --c0x2 1 --p0x2 0.606 --s1 8 --vel1 1.0 --cle1 6 --clr1 5 --n1 3 --n1x0 2 --c1x0 1 --p1x0 0.2906 --n1x1 1 --c1x1 4 --p1x1 8 --w1x1 2.1981 --n1x2 1 --c1x2 1 --p1x2 0.1643 --s2 9 --vel2 1.0 --cle2 6 --clr2 2 --n2 1 --n2x0 2 --c2x0 3 --p2x0 9 --w2x0 9.2829
+131 --nstates 3 --s0 5 --rep0 2.0604 --cle0 0 --n0 2 --n0x0 2 --c0x0 7 --p0x0 0.2043 --l0x0 3 --n0x1 1 --c0x1 5 --p0x1 0.9157 --s1 8 --vel1 1.0 --cle1 0 --clr1 5 --n1 2 --n1x0 0 --c1x0 1 --p1x0 0.1272 --n1x1 3 --c1x1 4 --p1x1 7 --w1x1 17.3749 --s2 9 --vel2 1.0 --cle2 6 --clr2 2 --n2 2 --n2x0 0 --c2x0 3 --p2x0 10 --w2x0 5.1386 --n2x1 2 --c2x1 2 --p2x1 0.4462
+
+
+# Testing of elite configurations: 1 
+# Testing iteration configurations: FALSE 
+# 2026-11-08 10:32:44 EST: No test instances, skip testing

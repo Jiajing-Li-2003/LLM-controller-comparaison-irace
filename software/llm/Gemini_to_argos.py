@@ -25,15 +25,20 @@ MANDATORY FORMAT:
 FSM: --nstates N --s0 B [params0] [--n0 T --n0x0 D --c0x0 C --p0x0 P --w0x0 W] --s1 B [params1] [--n1 T --n1x0 D --c1x0 C --p1x0 P --w1x0 W]
 
 ═══ BEHAVIORS (--sI B) ═══
-  0 = Exploration    → MANDATORY params: --rwmI [1..100]  --cleI [0..3]
-  1 = Stop           → MANDATORY params: --cleI [0..3]
-  2 = Phototaxis     → MANDATORY params: --cleI [0..3]
-  3 = AntiPhototaxis → MANDATORY params: --cleI [0..3]
-  4 = Attraction     → MANDATORY params: --attI [1..10]   --cleI [0..3]
-  5 = Repulsion      → MANDATORY params: --repI [1..10]   --cleI [0..3]
+  0 = Exploration    (req: --rwmI [1..100]  --cleI [0..6])
+  1 = Stop           (req: --cleI [0..6])
+  2 = Phototaxis     (req: --cleI [0..6])
+  3 = AntiPhototaxis (req: --cleI [0..6])
+  4 = Attraction     (req: --attI [1..10]   --cleI [0..6])
+  5 = Repulsion      (req: --repI [1..10]   --cleI [0..6])
+  6 = Spiral         (req: --spdI [1..10]   --cleI [0..6])
+  8 = GoToColor      (req: --velI [1..10]   --clrI [0..6]  --cleI [0..6])
+  9 = GoAwayColor    (req: --velI [1..10]   --clrI [0..6]  --cleI [0..6])
+  10 = FlockCenter   (req: --fcI [1..10]    --cleI [0..6])
+  11 = ZigZag        (req: --zfrI [1..20]   --cleI [0..6])
 
-═══ LED COLORS (--cleI) ═══
-  0=none  1=red  2=green  3=blue
+═══ LED COLORS (--cleI / --clrI) ═══
+  0=none  1=red  2=green  3=blue  4=yellow  5=magenta  6=cyan
 
 ═══ TRANSITIONS (from state I to state J) ═══
   --nI T       = number of transitions leaving state I (0 = none)
@@ -57,14 +62,6 @@ Thinking:
 - State 2: Repulsion (blue). 0 transitions.
 FSM: --nstates 3 --s0 0 --rwm0 10 --cle0 2 --n0 1 --n0x0 0 --c0x0 0 --p0x0 1.0 --s1 1 --cle1 1 --n1 1 --n1x0 1 --c1x0 3 --p1x0 1.0 --w1x0 3 --s2 5 --rep2 5 --cle2 3 --n2 0
 
-Phrase: "The robots explore in green. If they see the black floor, they stop in red. Then, if they detect 4 or more neighbors, they repel each other in blue. Finally, if they step on the white floor, they attract each other with no LEDs."
-Thinking:
-- 4 states needed.
-- State 0: Exploration (green). 1 transition: black floor -> State 1. (Index for State 1 is 0).
-- State 1: Stop (red). 1 transition: NeighborsCount >= 4 -> State 2. (Index for State 2 is 1).
-- State 2: Repulsion (blue). 1 transition: white floor -> State 3. (Index for State 3 is 2).
-- State 3: Attraction (no LEDs). 0 transitions.
-FSM: --nstates 4 --s0 0 --rwm0 10 --cle0 2 --n0 1 --n0x0 0 --c0x0 0 --p0x0 1.0 --s1 1 --cle1 1 --n1 1 --n1x0 1 --c1x0 3 --p1x0 1.0 --w1x0 4 --s2 5 --rep2 5 --cle2 3 --n2 1 --n2x0 2 --c2x0 2 --p2x0 1.0 --s3 4 --att3 5 --cle3 0 --n3 0
 """
 
 # ─── API Gemini Call ──────────────────────────────────────────────────────────

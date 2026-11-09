@@ -27,9 +27,14 @@ FSM: --nstates N --s0 B [params0] [--n0 T --n0x0 D --c0x0 C --p0x0 P --w0x0 W] -
   3 = AntiPhototaxis → MANDATORY params: --cleI [0..3]
   4 = Attraction     → MANDATORY params: --attI [1..10]   --cleI [0..3]
   5 = Repulsion      → MANDATORY params: --repI [1..10]   --cleI [0..3]
+  6 = Spiral         (req: --spdI [1..10]   --cleI [0..6])
+  8 = GoToColor      (req: --velI [1..10]   --clrI [0..6]  --cleI [0..6])
+  9 = GoAwayColor    (req: --velI [1..10]   --clrI [0..6]  --cleI [0..6])
+  10 = FlockCenter   (req: --fcI [1..10]    --cleI [0..6])
+  11 = ZigZag        (req: --zfrI [1..20]   --cleI [0..6])
 
-═══ LED COLORS (--cleI) ═══
-  0=none  1=red  2=green  3=blue
+═══ LED COLORS (--cleI / --clrI) ═══
+  0=none  1=red  2=green  3=blue  4=yellow  5=magenta  6=cyan
 
 ═══ TRANSITIONS (from state I to state J) ═══
   --nI T       = number of transitions leaving state I (0 = none)
@@ -50,7 +55,7 @@ Thinking:
 - State 2: Repulsion (blue). 0 transitions.
 FSM: --nstates 3 --s0 0 --rwm0 10 --cle0 2 --n0 1 --n0x0 0 --c0x0 0 --p0x0 1.0 --s1 1 --cle1 1 --n1 1 --n1x0 1 --c1x0 3 --p1x0 1.0 --w1x0 3 --s2 5 --rep2 5 --cle2 3 --n2 0
 """
-# ─── Local LLM Call (Ollama) ────────────────────────────────────────────────
+# ─── Local LLM Call (Mistral) ────────────────────────────────────────────────
 def get_fsm_from_llm(description: str) -> str:
     prompt = SYSTEM_PROMPT + "\n\nUser: " + description
 

@@ -108,12 +108,21 @@ namespace argos {
             case 9:
                 cNewBehaviour = new AutoMoDeBehaviourGoAwayColor();
                 break;
+			case 6:
+                cNewBehaviour = new AutoMoDeBehaviourSpiral();
+                break;
+            case 10:
+                cNewBehaviour = new AutoMoDeBehaviourFlockCenter();
+                break;
+            case 11:
+                cNewBehaviour = new AutoMoDeBehaviourZigZag();
+                break;
 		}
 		cNewBehaviour->SetIndex(unBehaviourIndex);
 		cNewBehaviour->SetIdentifier(unBehaviourIdentifier);
 
 		// Checking for parameters
-        std::string vecPossibleParameters[] = {"rwm", "att", "rep", "cle", "clr", "vel"};
+        std::string vecPossibleParameters[] = {"rwm", "att", "rep", "cle", "clr", "vel", "spd", "fc", "zfr"};
 		UInt8 unNumberPossibleParameters = sizeof(vecPossibleParameters) / sizeof(vecPossibleParameters[0]);
 		for (UInt8 i = 0; i < unNumberPossibleParameters; i++) {
 			std::string strCurrentParameter = vecPossibleParameters[i];

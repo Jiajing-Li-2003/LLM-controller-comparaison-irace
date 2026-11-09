@@ -508,6 +508,30 @@ modules/AutoMoDeBehaviourExploration.cpp.s:
 	cd /home/ubuntu/mandarina-supp/software/argos3-installation/automode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/automode.dir/build.make src/CMakeFiles/automode.dir/modules/AutoMoDeBehaviourExploration.cpp.s
 .PHONY : modules/AutoMoDeBehaviourExploration.cpp.s
 
+modules/AutoMoDeBehaviourFlockCenter.o: modules/AutoMoDeBehaviourFlockCenter.cpp.o
+.PHONY : modules/AutoMoDeBehaviourFlockCenter.o
+
+# target to build an object file
+modules/AutoMoDeBehaviourFlockCenter.cpp.o:
+	cd /home/ubuntu/mandarina-supp/software/argos3-installation/automode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/automode.dir/build.make src/CMakeFiles/automode.dir/modules/AutoMoDeBehaviourFlockCenter.cpp.o
+.PHONY : modules/AutoMoDeBehaviourFlockCenter.cpp.o
+
+modules/AutoMoDeBehaviourFlockCenter.i: modules/AutoMoDeBehaviourFlockCenter.cpp.i
+.PHONY : modules/AutoMoDeBehaviourFlockCenter.i
+
+# target to preprocess a source file
+modules/AutoMoDeBehaviourFlockCenter.cpp.i:
+	cd /home/ubuntu/mandarina-supp/software/argos3-installation/automode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/automode.dir/build.make src/CMakeFiles/automode.dir/modules/AutoMoDeBehaviourFlockCenter.cpp.i
+.PHONY : modules/AutoMoDeBehaviourFlockCenter.cpp.i
+
+modules/AutoMoDeBehaviourFlockCenter.s: modules/AutoMoDeBehaviourFlockCenter.cpp.s
+.PHONY : modules/AutoMoDeBehaviourFlockCenter.s
+
+# target to generate assembly for a file
+modules/AutoMoDeBehaviourFlockCenter.cpp.s:
+	cd /home/ubuntu/mandarina-supp/software/argos3-installation/automode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/automode.dir/build.make src/CMakeFiles/automode.dir/modules/AutoMoDeBehaviourFlockCenter.cpp.s
+.PHONY : modules/AutoMoDeBehaviourFlockCenter.cpp.s
+
 modules/AutoMoDeBehaviourGoAwayColor.o: modules/AutoMoDeBehaviourGoAwayColor.cpp.o
 .PHONY : modules/AutoMoDeBehaviourGoAwayColor.o
 
@@ -604,6 +628,30 @@ modules/AutoMoDeBehaviourRepulsion.cpp.s:
 	cd /home/ubuntu/mandarina-supp/software/argos3-installation/automode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/automode.dir/build.make src/CMakeFiles/automode.dir/modules/AutoMoDeBehaviourRepulsion.cpp.s
 .PHONY : modules/AutoMoDeBehaviourRepulsion.cpp.s
 
+modules/AutoMoDeBehaviourSpiral.o: modules/AutoMoDeBehaviourSpiral.cpp.o
+.PHONY : modules/AutoMoDeBehaviourSpiral.o
+
+# target to build an object file
+modules/AutoMoDeBehaviourSpiral.cpp.o:
+	cd /home/ubuntu/mandarina-supp/software/argos3-installation/automode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/automode.dir/build.make src/CMakeFiles/automode.dir/modules/AutoMoDeBehaviourSpiral.cpp.o
+.PHONY : modules/AutoMoDeBehaviourSpiral.cpp.o
+
+modules/AutoMoDeBehaviourSpiral.i: modules/AutoMoDeBehaviourSpiral.cpp.i
+.PHONY : modules/AutoMoDeBehaviourSpiral.i
+
+# target to preprocess a source file
+modules/AutoMoDeBehaviourSpiral.cpp.i:
+	cd /home/ubuntu/mandarina-supp/software/argos3-installation/automode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/automode.dir/build.make src/CMakeFiles/automode.dir/modules/AutoMoDeBehaviourSpiral.cpp.i
+.PHONY : modules/AutoMoDeBehaviourSpiral.cpp.i
+
+modules/AutoMoDeBehaviourSpiral.s: modules/AutoMoDeBehaviourSpiral.cpp.s
+.PHONY : modules/AutoMoDeBehaviourSpiral.s
+
+# target to generate assembly for a file
+modules/AutoMoDeBehaviourSpiral.cpp.s:
+	cd /home/ubuntu/mandarina-supp/software/argos3-installation/automode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/automode.dir/build.make src/CMakeFiles/automode.dir/modules/AutoMoDeBehaviourSpiral.cpp.s
+.PHONY : modules/AutoMoDeBehaviourSpiral.cpp.s
+
 modules/AutoMoDeBehaviourStop.o: modules/AutoMoDeBehaviourStop.cpp.o
 .PHONY : modules/AutoMoDeBehaviourStop.o
 
@@ -627,6 +675,30 @@ modules/AutoMoDeBehaviourStop.s: modules/AutoMoDeBehaviourStop.cpp.s
 modules/AutoMoDeBehaviourStop.cpp.s:
 	cd /home/ubuntu/mandarina-supp/software/argos3-installation/automode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/automode.dir/build.make src/CMakeFiles/automode.dir/modules/AutoMoDeBehaviourStop.cpp.s
 .PHONY : modules/AutoMoDeBehaviourStop.cpp.s
+
+modules/AutoMoDeBehaviourZigZag.o: modules/AutoMoDeBehaviourZigZag.cpp.o
+.PHONY : modules/AutoMoDeBehaviourZigZag.o
+
+# target to build an object file
+modules/AutoMoDeBehaviourZigZag.cpp.o:
+	cd /home/ubuntu/mandarina-supp/software/argos3-installation/automode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/automode.dir/build.make src/CMakeFiles/automode.dir/modules/AutoMoDeBehaviourZigZag.cpp.o
+.PHONY : modules/AutoMoDeBehaviourZigZag.cpp.o
+
+modules/AutoMoDeBehaviourZigZag.i: modules/AutoMoDeBehaviourZigZag.cpp.i
+.PHONY : modules/AutoMoDeBehaviourZigZag.i
+
+# target to preprocess a source file
+modules/AutoMoDeBehaviourZigZag.cpp.i:
+	cd /home/ubuntu/mandarina-supp/software/argos3-installation/automode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/automode.dir/build.make src/CMakeFiles/automode.dir/modules/AutoMoDeBehaviourZigZag.cpp.i
+.PHONY : modules/AutoMoDeBehaviourZigZag.cpp.i
+
+modules/AutoMoDeBehaviourZigZag.s: modules/AutoMoDeBehaviourZigZag.cpp.s
+.PHONY : modules/AutoMoDeBehaviourZigZag.s
+
+# target to generate assembly for a file
+modules/AutoMoDeBehaviourZigZag.cpp.s:
+	cd /home/ubuntu/mandarina-supp/software/argos3-installation/automode/build && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/automode.dir/build.make src/CMakeFiles/automode.dir/modules/AutoMoDeBehaviourZigZag.cpp.s
+.PHONY : modules/AutoMoDeBehaviourZigZag.cpp.s
 
 modules/AutoMoDeCondition.o: modules/AutoMoDeCondition.cpp.o
 .PHONY : modules/AutoMoDeCondition.o
@@ -896,6 +968,9 @@ help:
 	@echo "... modules/AutoMoDeBehaviourExploration.o"
 	@echo "... modules/AutoMoDeBehaviourExploration.i"
 	@echo "... modules/AutoMoDeBehaviourExploration.s"
+	@echo "... modules/AutoMoDeBehaviourFlockCenter.o"
+	@echo "... modules/AutoMoDeBehaviourFlockCenter.i"
+	@echo "... modules/AutoMoDeBehaviourFlockCenter.s"
 	@echo "... modules/AutoMoDeBehaviourGoAwayColor.o"
 	@echo "... modules/AutoMoDeBehaviourGoAwayColor.i"
 	@echo "... modules/AutoMoDeBehaviourGoAwayColor.s"
@@ -908,9 +983,15 @@ help:
 	@echo "... modules/AutoMoDeBehaviourRepulsion.o"
 	@echo "... modules/AutoMoDeBehaviourRepulsion.i"
 	@echo "... modules/AutoMoDeBehaviourRepulsion.s"
+	@echo "... modules/AutoMoDeBehaviourSpiral.o"
+	@echo "... modules/AutoMoDeBehaviourSpiral.i"
+	@echo "... modules/AutoMoDeBehaviourSpiral.s"
 	@echo "... modules/AutoMoDeBehaviourStop.o"
 	@echo "... modules/AutoMoDeBehaviourStop.i"
 	@echo "... modules/AutoMoDeBehaviourStop.s"
+	@echo "... modules/AutoMoDeBehaviourZigZag.o"
+	@echo "... modules/AutoMoDeBehaviourZigZag.i"
+	@echo "... modules/AutoMoDeBehaviourZigZag.s"
 	@echo "... modules/AutoMoDeCondition.o"
 	@echo "... modules/AutoMoDeCondition.i"
 	@echo "... modules/AutoMoDeCondition.s"

@@ -1,0 +1,338 @@
+## Reasoning
+
+The champion (score 16801.76) uses a 3-state FSM with:
+- State 0: ZigZag (zfr=60) → transitions to state 1 when neighbours > 4
+- State 1: Spiral (spd=27) → transitions to state 1 (itself? no, D=1 from state 1 with 3 states means state 2) when sees green (clr=2), and to state 3 when floor is black
+- State 2: Exploration (rwm=26) → transitions to state 0 when sees yellow (clr=4), and to state 3 when floor is black
+
+Wait, let me re-read. With 3 states (0,1,2):
+- From state 1: D=1 means the other states excluding 1 are [0,2], so D=1 → state 2. D=3 means... wait D is indexed among OTHER states.
+
+With 3 states, from state 1 the others are [0, 2]: D=0→state 0, D=1→state 2. But D=3 is invalid? Let me re-check: "With 3 states, leaving state 1 the others are [0, 2]: D=0 targets state 0, D=1 targets state 2." So D=3 in --n1x1 seems wrong but this is the champion, so maybe D is just an index into all states excluding current.
+
+Actually looking at state 2: --n2x0 0 --c2x0 7 → D=0 means first other state = state 0. --n2x1 3 → D=3... that's odd. Maybe D can be any valid index and wraps? I'll trust the champion as-is.
+
+The mission is **aggregation** (minimise score = robots outside target region). Wait, re-reading: score increases by 1 for every robot outside the **target region** (blue-walled strip). So robots need to go to and stay in the blue-walled strip.
+
+The floor in both strips is BLACK, and GRAY in between. The target has BLUE walls. GoToColor with blue (clr=3) would navigate toward blue walls. GoAwayColor with green (clr=2) would move away from green walls.
+
+The champion uses:
+- ZigZag to explore
+- Spiral when many neighbours detected
+- Exploration with low turning rate
+
+But it's scoring 16801 which isn't great for aggregation in the target zone. Let me think about better strategies:
+
+1. **Go toward blue walls** (B=8, clr=3) - directly navigate to target
+2. **Stay on black floor** - once in target strip (black floor), stop or stay
+3. **Go away from green** (B=9, clr=2) - move away from wrong strip
+
+Key insight: Floor is BLACK in both strips, GRAY in between. So floor color alone can't distinguish the two strips. But WALL COLOR can: blue walls = target, green walls = wrong strip.
+
+Strategy: Go toward blue (clr=3), and when you see blue walls strongly, stay/stop. Use GoAwayColor from green to avoid wrong strip.
+
+Let me design several machines:
+
+**Machine 1 (Champion - exact copy)**
+
+**Machine 2 (Exploit champion - tweak params)**
+- Same topology, adjust thresholds slightly
+
+**Machine 3 (New strategy - GoToBlue)**
+- State 0: GoToColor blue (clr=3) - head toward target
+- State 1: Stop when on black floor (in target strip)
+- Transition: if floor black → stop; if floor gray → keep moving
+
+**Machine 4: GoToBlue + GoAwayGreen**
+- State 0: GoToColor blue → move toward blue walls
+- State 1: GoAwayColor green → flee green walls  
+- Transitions based on floor/color perception
+
+**Machine 5: Attraction + GoToBlue**
+
+Let me generate 14 machines:
+
+FSM 1: Champion (exact)
+FSM 2-5: Exploitations of champion
+FSM 6-14: Exploration with new strategies
+
+For the color encoding: clr=1=red, clr=2=green, clr=3=blue, clr=4=yellow, clr=5=magenta, clr=6=cyan. The arena walls are BLUE (target) and GREEN (wrong). So clr=3=blue, clr=2=green.
+
+**Strategy A**: GoToColor(blue) as main behavior, stop on black floor
+**Strategy B**: GoAwayColor(green) + stop on black
+**Strategy C**: GoToColor(blue) + attraction to group (flock toward target)
+**Strategy D**: Exploration until seeing blue, then GoToColor(blue), stop on black
+
+For C7 (perceive color): l=3 for blue, l=2 for green.
+
+Let me construct the machines carefully:
+
+```
+FSM 3: 2 states
+- s0: GoToColor blue (B=8, clr=3)
+  - if floor black (C=0) with p=0.9 → stay (s1)
+  - if sees green (C=7, l=2) with p=0.7 → s1 (GoAwayGreen)... 
+
+Wait, 2 states, from s0 others are [s1], D=0 always.
+```
+
+Let me be more careful:
+
+**2-state machine**: states 0 and 1. From s0, only destination is D=0 (→s1). From s1, only destination is D=0 (→s0).
+
+**3-state machine**: states 0,1,2. From s0, others are [1,2]: D=0→s1, D=1→s2. From s1, others are [0,2]: D=0→s0, D=1→s2. From s2, others are [0,1]: D=0→s0, D=1→s1.
+
+Now designing:
+
+**FSM 3**: 2 states - GoToBlue then Stop
+- s0: B=8 (GoToColor), clr=3 (blue), vel=1.0
+  - n=2 transitions
+  - t0: floor black (C=0), p=0.8 → s1 (stop)
+  - t1: floor gray (C=1), p=0.1 → s0... can't self-transition
+  Actually with 2 states from s0 D must be 0 (→s1). So both transitions go to s1.
+  
+- s1: B=1 (Stop)
+  - n=1 transition: floor gray (C=1), p=0.9 → s0 (GoToBlue)
+
+**FSM 4**: 3 states - GoToBlue, Stop on black, GoAwayGreen if needed
+- s0: GoToColor blue (B=8, clr=3)
+  - floor black → s1 (stop)
+  - sees green wall → s2 (GoAwayGreen)
+- s1: Stop
+  - floor gray → s0
+  - sees green → s2
+- s2: GoAwayColor green (B=9, clr=2)
+  - floor black → s1
+  - sees blue → s0
+
+**FSM 5**: 3 states - Exploration, GoToBlue, Stop
+- s0: Exploration
+  - sees blue (C=7, l=3) → s1 (GoToBlue)
+  - p(random) small → s1
+- s1: GoToColor blue
+  - floor black → s2 (stop)
+- s2: Stop
+  - floor gray → s0
+
+**FSM 6**: 2 states - GoAwayGreen + Stop
+- s0: GoAwayColor green (B=9, clr=2)
+  - floor black → s1
+- s1: Stop  
+  - floor gray → s0
+  - sees green → s0
+
+**FSM 7**: 3 states - FlockCenter + GoToBlue + Stop
+- s0: FlockCenter
+  - sees blue → s1
+- s1: GoToColor blue
+  - floor black → s2
+- s2: Stop
+  - floor gray → s0
+
+**FSM 8**: Champion topology with different params
+
+**FSM 9**: 3 states - ZigZag, GoToBlue, Stop (simplification of champion idea)
+
+**FSM 10**: 2 states - GoToBlue always, with neighbor-based transitions
+
+**FSM 11**: 4 states with attraction + GoToBlue + stop
+
+**FSM 12**: Exploit rank-2 machine
+
+**FSM 13**: GoToBlue with multiple transitions
+
+**FSM 14**: Exploit champion with tweaked params
+
+Let me now write them all out properly:
+
+```
+FSM 2 (exploit champion - higher neighbour threshold):
+--nstates 3 --s0 11 --cle0 6 --zfr0 60 --n0 1 --n0x0 1 --c0x0 3 --p0x0 5 --w0x0 1.4387 --s1 6 --cle1 4 --spd1 27 --n1 2 --n1x0 1 --c1x0 7 --p1x0 0.9853 --l1x0 2 --n1x1 3 --c1x1 0 --p1x1 0.4195 --s2 0 --rwm2 26 --cle2 0 --n2 2 --n2x0 0 --c2x0 7 --p2x0 0.5193 --l2x0 4 --n2x1 3 --c2x1 0 --p2x1 0.4744
+```
+
+Wait, in champion: `--n1x1 3 --c1x1 0 --p1x1 0.4195` - D=3 from state 1 with 3 states. Let me check: from state 1, others are [0, 2]. D=0→s0, D=1→s2. D=3 is out of range... But the simulator accepted it and it's the champion. Maybe it maps to the closest valid index or wraps? I'll keep D=3 as-is in copies.
+
+Actually wait - re-reading: "With 3 states, leaving state 1 the others are [0, 2]: D=0 targets state 0, D=1 targets state 2." So D=3 is invalid but perhaps the simulator just treats it as an index into [0,2] and takes D%2=1→state 2? Or maybe it's just treated as 1? I'll keep the champion as-is and for my new machines use valid D values.
+
+Similarly `--n2x0 0 --c2x0 7` and `--n2x1 3` from state 2. Others are [0,1]. D=0→s0, D=1→s1. D=3 → probably wraps to D=3%2=1→s1? 
+
+I'll just copy the champion exactly and use valid values in my new machines.
+
+Now let me write all 14:
+
+FSM 1: Champion (exact copy)
+FSM 2: Champion with p0x0=5 (neighbour threshold) instead of 4
+FSM 3: Champion with spd1=35, rwm2=30
+FSM 4: Champion with zfr0=80, p1x0=0.8
+FSM 5: 2-state GoToBlue/Stop
+FSM 6: 3-state GoToBlue + GoAwayGreen + Stop
+FSM 7: 3-state GoToBlue + Stop + Exploration
+FSM 8: 2-state GoAwayGreen + Stop
+FSM 9: 3-state Attraction + GoToBlue + Stop
+FSM 10: 3-state ZigZag + GoToBlue + Stop
+FSM 11: 4-state with GoToBlue, Stop, Exploration, GoAwayGreen
+FSM 12: 2-state FlockCenter + GoToBlue
+FSM 13: 3-state Exploration + GoToBlue + Stop (rich transitions)
+FSM 14: 2-state GoToBlue with neighbor conditions
+
+Let me write these carefully, ensuring all parameters are correct:
+
+For GoToColor (B=8): requires --vel<I> 1.0 and --clr<I>
+For GoAwayColor (B=9): requires --vel<I> 1.0 and --clr<I>
+clr=3 is blue (target walls), clr=2 is green (wrong walls)
+
+Let me also check: in condition C=7 (perceive color), l=3 is blue, l=2 is green.
+
+**FSM 5**: 2 states
+- s0: GoToColor blue (B=8, clr=3)
+  - C=0 (floor black), p=0.85 → s1
+- s1: Stop (B=1)
+  - C=1 (floor gray), p=0.9 → s0
+  - C=7 (sees green, l=2), p=0.8 → s0
+
+```
+--nstates 2 --s0 8 --vel0 1.0 --cle0 5 --clr0 3 --n0 1 --n0x0 0 --c0x0 0 --p0x0 0.85 --s1 1 --cle1 5 --n1 2 --n1x0 0 --c1x0 1 --p1x0 0.9 --n1x1 0 --c1x1 7 --p1x1 0.8 --l1x1 2
+```
+
+Wait, from s1, D=0 is the only other state (s0). Both transitions go to s0. That's fine.
+
+**FSM 6**: 3 states
+- s0: GoToColor blue (B=8, clr=3)
+  - C=0 (floor black), p=0.9 → s1 (D=0, since from s0, others=[s1,s2], D=0→s1)
+  - C=7 (sees green l=2), p=0.8 → s2 (D=1→s2)
+- s1: Stop (B=1)
+  - C=1 (floor gray), p=0.9 → s0 (D=0→s0)
+  - C=7 (sees green l=2), p=0.9 → s2 (D=1→s2)
+- s2: GoAwayColor green (B=9, clr=2)
+  - C=0 (floor black), p=0.9 → s1 (D=1→s1, from s2 others=[s0,s1])
+  - C=7 (sees blue l=3), p=0.8 → s0 (D=0→s0)
+
+```
+--nstates 3 --s0 8 --vel0 1.0 --cle0 5 --clr0 3 --n0 2 --n0x0 0 --c0x0 0 --p0x0 0.9 --n0x1 1 --c0x1 7 --p0x1 0.8 --l0x1 2 --s1 1 --cle1 5 --n1 2 --n1x0 0 --c1x0 1 --p1x0 0.9 --n1x1 1 --c1x1 7 --p1x1 0.9 --l1x1 2 --s2 9 --vel2 1.0 --cle2 0 --clr2 2 --n2 2 --n2x0 1 --c2x0 0 --p2x0 0.9 --n2x1 0 --c2x1 7 --p2x1 0.8 --l2x1 3
+```
+
+**FSM 7**: 3 states - Exploration, GoToBlue, Stop
+- s0: Exploration (B=0, rwm=50)
+  - C=7 (sees blue l=3), p=0.9 → s1 (D=0→s1)
+  - C=5 (random), p=0.01 → s1
+- s1: GoToColor blue (B=8, clr=3)
+  - C=0 (floor black), p=0.9 → s2 (D=1→s2)
+- s2: Stop (B=1)
+  - C=1 (floor gray), p=0.9 → s0 (D=1→s1... wait)
+
+From s2, others=[s0,s1]: D=0→s0, D=1→s1.
+
+- s2: Stop
+  - C=1 (floor gray), p=0.9 → s0 (D=0)
+  - C=7 (sees green l=2), p=0.8 → s1 (D=1→GoToBlue to escape)
+
+```
+--nstates 3 --s0 0 --rwm0 50 --cle0 0 --n0 2 --n0x0 0 --c0x0 7 --p0x0 0.9 --l0x0 3 --n0x1 0 --c0x1 5 --p0x1 0.01 --s1 8 --vel1 1.0 --cle1 5 --clr1 3 --n1 1 --n1x0 1 --c1x0 0 --p1x0 0.9 --s2 1 --cle2 5 --n2 2 --n2x0 0 --c2x0 1 --p2x0 0.9 --n2x1 1 --c2x1 7 --p2x1 0.8 --l2x1 2
+```
+
+Wait, from s0, n0x0 and n0x1 both go to D=0→s1. That's fine (both transitions lead to s1).
+
+Actually --n0x0 and --n0x1 both have D=0 from state 0. Both go to state 1. That's redundant but valid.
+
+**FSM 8**: 2 states - GoAwayGreen + Stop
+- s0: GoAwayColor green (B=9, clr=2)
+  - C=0 (floor black), p=0.8 → s1
+  - C=7 (sees blue l=3), p=0.9 → s1
+- s1: Stop (B=1)
+  - C=1 (floor gray), p=0.9 → s0
+  - C=7 (sees green l=2), p=0.8 → s0
+
+```
+--nstates 2 --s0 9 --vel0 1.0 --cle0 0 --clr0 2 --n0 2 --n0x0 0 --c0x0 0 --p0x0 0.8 --n0x1 0 --c0x1 7 --p0x1 0.9 --l0x1 3 --s1 1 --cle1 0 --n1 2 --n1x0 0 --c1x0 1 --p1x0 0.9 --n1x1 0 --c1x1 7 --p1x1 0.8 --l1x1 2
+```
+
+**FSM 9**: 3 states - Attraction + GoToBlue + Stop
+- s0: Attraction (B=4, att=3.0)
+  - C=7 (sees blue l=3), p=0.8 → s1 (D=0→s1)
+  - C=0 (floor black), p=0.7 → s2 (D=1→s2)
+- s1: GoToColor blue (B=8, clr=3)
+  - C=0 (floor black), p=0.9 → s2 (D=1→s2, from s1 others=[s0,s2])
+- s2: Stop (B=1)
+  - C=1 (floor gray), p=0.9 → s0 (D=0→s0, from s2 others=[s0,s1])
+  - C=7 (sees green l=2), p=0.7 → s1 (D=1→s1)
+
+```
+--nstates 3 --s0 4 --att0 3.0 --cle0 5 --n0 2 --n0x0 0 --c0x0 7 --p0x0 0.8 --l0x0 3 --n0x1 1 --c0x1 0 --p0x1 0.7 --s1 8 --vel1 1.0 --cle1 5 --clr1 3 --n1 1 --n1x0 1 --c1x0 0 --p1x0 0.9 --s2 1 --cle2 5 --n2 2 --n2x0 0 --c2x0 1 --p2x0 0.9 --n2x1 1 --c2x1 7 --p2x1 0.7 --l2x1 2
+```
+
+**FSM 10**: 3 states - ZigZag + GoToBlue + Stop (champion-inspired but different)
+- s0: ZigZag (B=11, zfr=40)
+  - C=7 (sees blue l=3), p=0.9 → s1 (D=0→s1)
+- s1: GoToColor blue (B=8, clr=3)
+  - C=0 (floor black), p=0.85 → s2 (D=1→s2)
+  - C=7 (sees green l=2), p=0.7 → s0 (D=0→s0... wait)
+
+From s1, others=[s0,s2]: D=0→s0, D=1→s2.
+
+- s1: GoToColor blue
+  - C=0 (floor black), p=0.85 → s2 (D=1)
+  - C=7 (sees green l=2), p=0.7 → s0 (D=0)
+- s2: Stop
+  - C=1 (floor gray), p=0.9 → s0 (D=0→s0, from s2 others=[s0,s1])
+  - C=7 (sees green), p=0.8 → s1 (D=1→s1)
+
+```
+--nstates 3 --s0 11 --zfr0 40 --cle0 6 --n0 1 --n0x0 0 --c0x0 7 --p0x0 0.9 --l0x0 3 --s1 8 --vel1 1.0 --cle1 5 --clr1 3 --n1 2 --n1x0 1 --c1x0 0 --p1x0 0.85 --n1x1 0 --c1x1 7 --p1x1 0.7 --l1x1 2 --s2 1 --cle2 5 --n2 2 --n2x0 0 --c2x0 1 --p2x0 0.9 --n2x1 1 --c2x1 7 --p2x1 0.8 --l2x1 2
+```
+
+**FSM 11**: 4 states - GoToBlue, Stop, GoAwayGreen, Exploration
+- s0: GoToColor blue (B=8, clr=3)
+  - C=0 (floor black), p=0.9 → s1 (D=0, from s0 others=[s1,s2,s3])
+  - C=7 (sees green l=2), p=0.8 → s2 (D=1→s2)
+- s1: Stop (B=1)
+  - C=1 (floor gray), p=0.9 → s0 (D=0→s0, from s1 others=[s0,s2,s3])
+  - C=7 (sees green l=2), p=0.8 → s2 (D=1→s2)
+- s2: GoAwayColor green (B=9, clr=2)
+  - C=0 (floor black), p=0.9 → s1 (D=1→s1, from s2 others=[s0,s1,s3])
+  - C=7 (sees blue l=3), p=0.8 → s0 (D=0→s0)
+- s3: Exploration (B=0, rwm=30)
+  - C=7 (sees blue l=3), p=0.8 → s0 (D=0→s0, from s3 others=[s0,s1,s2])
+  - C=5 (random), p=0.02 → s0 (D=0→s0)
+
+Wait s3 never gets entered unless something transitions to it. Let me add a transition from s1 to s3 if floor gray for too long... Actually let me simplify:
+
+- s1: Stop
+  - C=1 (floor gray), p=0.9 → s3 (exploration) (D=2→s3)
+  - C=7 (sees green), p=0.8 → s2 (D=1→s2)
+- s3: Exploration
+  - C=7 (sees blue), p=0.8 → s0 (D=0→s0)
+  - C=0 (floor black), p=0.6 → s1 (D=1→s1)
+
+```
+--nstates 4 --s0 8 --vel0 1.0 --cle0 5 --clr0 3 --n0 2 --n0x0 0 --c0x0 0 --p0x0 0.9 --n0x1 1 --c0x1 7 --p0x1 0.8 --l0x1 2 --s1 1 --cle1 5 --n1 2 --n1x0 2 --c1x0 1 --p1x0 0.9 --n1x1 1 --c1x1 7 --p1x1 0.8 --l1x1 2 --s2 9 --vel2 1.0 --cle2 0 --clr2 2 --n2 2 --n2x0 1 --c2x0 0 --p2x0 0.9 --n2x1 0 --c2x1 7 --p2x1 0.8 --l2x1 3 --s3 0 --rwm3 30 --cle3 0 --n3 2 --n3x0 0 --c3x0 7 --p3x0 0.8 --l3x0 3 --n3x1 1 --c3x1 0 --p3x1 0.6
+```
+
+From s1, others=[s0,s2,s3]: D=0→s0, D=1→s2, D=2→s3. 
+From s2, others=[s0,s1,s3]: D=0→s0, D=1→s1, D=2→s3.
+From s3, others=[s0,s1,s2]: D=0→s0, D=1→s1, D=2→s2.
+
+So --n1x0 2 → D=2 → s3. Good.
+--n2x0 1 → D=1 → s1. Good.
+--n3x0 0 → D=0 → s0. Good.
+--n3x1 1 → D=1 → s1. Good.
+
+**FSM 12**: 2 states - FlockCenter + GoToBlue
+- s0: FlockCenter (B=10, fc=50)
+  - C=7 (sees blue l=3), p=0.8 → s1
+  - C=0 (floor black), p=0.5 → s1
+- s1: GoToColor blue (B=8, clr=3)
+  - C=0 (floor black), p=0.7 → s0 (stay there?)
+
+Hmm, with 2 states this is tricky. Let me think differently:
+- s0: GoToColor blue → stop when on black
+- s1: Stop → explore when on gray
+
+Actually let me make:
+- s0: FlockCenter
+  - sees blue → go to s1 (GoToBlue)
+- s1: GoToColor blue
+  - floor black → s0 (attract others? or stop)
+
+But FlockCenter when on black floor would pull robots off the target. Better:
+
+- s0: Go
